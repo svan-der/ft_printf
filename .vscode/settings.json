@@ -1,0 +1,17 @@
+{
+	"files.associations": {
+		"libft.h": "c",
+		"list.h": "c",
+		"bitset": "c",
+		"initializer_list": "c",
+		"iterator": "c",
+		"list": "c",
+		"memory": "c",
+		"string": "c",
+		"utility": "c",
+		"fndm.h": "c",
+		"locale": "c",
+		"ios": "c",
+		"libdefs.h": "c"
+	}
+}

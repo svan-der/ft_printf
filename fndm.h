@@ -6,15 +6,15 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/12 15:28:18 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/12 15:55:00 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/10/15 14:06:34 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FNDM_H
 # define FNDM_H
-# include "ft_printf.h"
-# include "includes/libdefs.h"
-# include "includes/list.h"
+# include	"ft_printf.h"
+# include	"libft/includes/libdefs.h"
+# include	"libft/includes/list.h"
 
 /* conversion specifier union */
 typedef union	u_input
@@ -22,7 +22,7 @@ typedef union	u_input
 	char		c;
 	char		*s;
 	void		*p;
-	t_llong			di;
+	t_llong		di;
 	t_ull		oux;
 	t_ldb		*fl;
 }				t_input;
