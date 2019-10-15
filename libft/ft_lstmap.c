@@ -6,11 +6,11 @@
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/02/24 18:46:22 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/12 15:52:10 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/10/15 13:33:18 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "list.h"
+#include "includes/list.h"
 
 t_list		*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
 {

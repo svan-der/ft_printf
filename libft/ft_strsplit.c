@@ -6,11 +6,11 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/02/14 19:03:45 by svan-der       #+#    #+#                */
-/*   Updated: 2019/02/21 16:51:57 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/10/15 14:04:33 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "includes/libft.h"
 
 char		**ft_strsplit(char const *s, char c)
 {
@@ -30,7 +30,7 @@ char		**ft_strsplit(char const *s, char c)
 		ret[i] = ft_find_word(s, c);
 		if (ret[i] == NULL)
 		{
-			ft_strarrdel(&ret);
+			ft_strarrdel(&ret, sizeof(ret));
 			return (NULL);
 		}
 		i++;

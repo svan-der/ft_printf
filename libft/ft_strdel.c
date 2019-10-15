@@ -5,12 +5,27 @@
 /*                                                     +:+                    */
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/01/22 18:35:39 by svan-der      #+#    #+#                 */
-/*   Updated: 2019/02/20 15:56:26 by svan-der      ########   odam.nl         */
+/*   Created: 2019/01/22 18:35:39 by svan-der       #+#    #+#                */
+/*   Updated: 2019/10/15 13:46:38 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "includes/libft.h"
+
+void	ft_strclr(char *s)
+{
+	int i;
+
+	i = 0;
+	if (s)
+	{
+		while (s[i] != '\0')
+		{
+			s[i] = '\0';
+			i++;
+		}
+	}
+}
 
 void	ft_strdel(char **as)
 {

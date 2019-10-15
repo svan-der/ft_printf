@@ -5,10 +5,21 @@
 /*                                                     +:+                    */
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/01/29 16:17:19 by svan-der      #+#    #+#                 */
-/*   Updated: 2019/02/25 13:30:20 by svan-der      ########   odam.nl         */
+/*   Created: 2019/01/29 16:17:19 by svan-der       #+#    #+#                */
+/*   Updated: 2019/10/15 13:55:38 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "includes/libft.h"
+
+int		ft_toupper(int c)
+{
+	if (c >= 97 && c <= 122)
+	{
+		c = c - 32;
+	}
+	return (c);
+}
 
 int		ft_tolower(int c)
 {

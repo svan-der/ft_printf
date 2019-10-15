@@ -6,11 +6,11 @@
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/02/22 11:32:22 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/12 15:52:16 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/10/15 13:33:22 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "list.h"
+#include "includes/list.h"
 
 t_list		*ft_lstnew(void const *content, size_t content_size)
 {

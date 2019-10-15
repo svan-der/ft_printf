@@ -5,12 +5,26 @@
 /*                                                     +:+                    */
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/01/20 12:19:38 by svan-der      #+#    #+#                 */
-/*   Updated: 2019/02/25 13:25:52 by svan-der      ########   odam.nl         */
+/*   Created: 2019/01/20 12:19:38 by svan-der       #+#    #+#                */
+/*   Updated: 2019/10/15 14:31:46 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "includes/libft.h"
+
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
+
+void	ft_putendl(char const *s)
+{
+	char *str;
+
+	str = (char*)s;
+	ft_putstr(str);
+	ft_putchar('\n');
+}
 
 void	ft_putstr(char const *s)
 {

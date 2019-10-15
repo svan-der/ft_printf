@@ -6,7 +6,7 @@
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/02/21 16:38:44 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/12 15:49:08 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/10/15 15:55:59 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 int					ft_strequ(char const *s1, char const *s2);
 int					ft_strnequ(char const *s1, char const *s2, size_t n);
 int					ft_isdigit(int c);
+int					ft_isdigit_base(char c, unsigned int base);
 int					ft_isalpha(int c);
 int					ft_isascii(int c);
 int					ft_isalnum(int c);
@@ -60,6 +61,8 @@ char				*ft_strnstr(const char *haystack, const char *needle,
 								size_t len);
 char				*ft_strsub(char const *s, unsigned int start, size_t len);
 char				*ft_strchr(const char *s, int c);
+int					ft_strchri(const char *str, char c);
+size_t				ft_strchrni(const char *str, char c);
 size_t				ft_strlcat(char *dst, const char *src, size_t size);
 char				*ft_itoa(int n);
 void				*ft_memmove(void *dst, const void *src, size_t len);
@@ -68,10 +71,11 @@ void				ft_putendl_fd(char const *s, int fd);
 char				*ft_strrchr(const char *s, int c);
 char				*ft_strjoin(char const *s1, char const *s2);
 int					ft_atoi(const char *str);
+int					ft_atoi_base(const char *str, unsigned int base);
 char				*ft_strtrim(char const *s);
 char				**ft_strsplit(char const *s, char c);
 void				ft_strdel(char **as);
-void				ft_strarrdel(char ***str);
+void				ft_strarrdel(char ***str, size_t size);
 size_t				ft_count_words(char const *s, char c);
 char				*ft_find_word(char const *s, char c);
 int					ft_whitespace(char c);

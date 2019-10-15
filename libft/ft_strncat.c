@@ -5,12 +5,12 @@
 /*                                                     +:+                    */
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/01/30 12:27:49 by svan-der      #+#    #+#                 */
-/*   Updated: 2019/02/20 16:05:33 by svan-der      ########   odam.nl         */
+/*   Created: 2019/01/30 12:27:49 by svan-der       #+#    #+#                */
+/*   Updated: 2019/10/15 13:53:42 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "includes/libft.h"
 
 char	*ft_strncat(char *s1, const char *s2, size_t n)
 {

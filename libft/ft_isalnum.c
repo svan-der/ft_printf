@@ -5,8 +5,8 @@
 /*                                                     +:+                    */
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/01/28 17:26:59 by svan-der      #+#    #+#                 */
-/*   Updated: 2019/02/25 13:29:34 by svan-der      ########   odam.nl         */
+/*   Created: 2019/01/28 17:26:59 by svan-der       #+#    #+#                */
+/*   Updated: 2019/10/15 13:38:42 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,4 +18,11 @@ int		ft_isalnum(int c)
 		return (1);
 	else
 		return (0);
+}
+
+int		ft_isalpha(int c)
+{
+	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+		return (1);
+	return (0);
 }

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_strtrimm.c                                      :+:    :+:            */
+/*   ft_strtrim.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/02/13 20:34:35 by svan-der      #+#    #+#                 */
-/*   Updated: 2019/02/21 16:07:57 by svan-der      ########   odam.nl         */
+/*   Created: 2019/02/13 20:34:35 by svan-der       #+#    #+#                */
+/*   Updated: 2019/10/15 13:55:04 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "includes/libft.h"
 
 char	*ft_strtrim(char const *s)
 {

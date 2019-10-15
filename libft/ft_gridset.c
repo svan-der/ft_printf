@@ -6,11 +6,11 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 12:41:41 by svan-der       #+#    #+#                */
-/*   Updated: 2019/05/16 12:45:56 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/10/15 13:30:01 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "includes/libft.h"
 
 void		ft_gridset(void **grid, char c, size_t y, size_t x)
 {

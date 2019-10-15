@@ -5,12 +5,21 @@
 /*                                                     +:+                    */
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/01/20 14:22:39 by svan-der      #+#    #+#                 */
-/*   Updated: 2019/02/20 16:01:36 by svan-der      ########   odam.nl         */
+/*   Created: 2019/01/20 14:22:39 by svan-der       #+#    #+#                */
+/*   Updated: 2019/10/15 14:01:31 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "includes/libft.h"
+
+void	ft_putendl_fd(char const *s, int fd)
+{
+	char *str;
+
+	str = (char*)s;
+	ft_putstr_fd(str, fd);
+	ft_putchar_fd('\n', fd);
+}
 
 void	ft_putstr_fd(char const *s, int fd)
 {
