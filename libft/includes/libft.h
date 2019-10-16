@@ -6,7 +6,7 @@
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/02/21 16:38:44 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/15 15:55:59 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/10/16 14:40:03 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ char				*ft_strrchr(const char *s, int c);
 char				*ft_strjoin(char const *s1, char const *s2);
 int					ft_atoi(const char *str);
 int					ft_atoi_base(const char *str, unsigned int base);
+int					ft_atoip(const char *str, int *dest);
+int					ft_atoip_base(const char *str, unsigned int base, int *dest);
 char				*ft_strtrim(char const *s);
 char				**ft_strsplit(char const *s, char c);
 void				ft_strdel(char **as);

@@ -6,12 +6,13 @@
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/28 10:53:12 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/15 16:11:11 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/10/16 14:59:16 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/libft.h"
 #include "includes/libdefs.h"
+#include <stdio.h>
 
 int		ft_isdigit_base(char c, unsigned int base)
 {
@@ -19,7 +20,7 @@ int		ft_isdigit_base(char c, unsigned int base)
 		return (0);
 	if (base == 1)
 		return (c == '1');
-	return (ft_memchr(HEX, c, base));
+	return (!!ft_memchr(HEX, c, base));
 }
 
 int		ft_isdigit(int c)

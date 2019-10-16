@@ -6,7 +6,7 @@
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/02/11 17:56:39 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/15 16:12:46 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/10/16 14:34:44 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "includes/libdefs.h"
 #include <stdio.h>
 
-int		ft_atoi_base(const char *str, unsigned int base)
+int		ft_atoip_base(const char *str, unsigned int base, int *dest)
 {
 	int res;
 	int i;
@@ -38,7 +38,21 @@ int		ft_atoi_base(const char *str, unsigned int base)
 		res += (base == 1) ? 1 : ft_strchri(HEX, str[i]);
 		i++;
 	}
-	return (res);
+	*dest = res;
+	return (i);
+}
+
+int		ft_atoip(const char *str, int *dest)
+{
+	return (ft_atoip_base(str, 10, dest));
+}
+
+int		ft_atoi_base(const char *str, unsigned int base)
+{
+	int		ret;
+
+	ft_atoip_base(str, base, &ret);
+	return (ret);
 }
 
 int		ft_atoi(const char *str)
@@ -71,12 +85,14 @@ int		ft_atoi(const char *str)
 int		main(void)
 {
 	char *str;
+	int s1;
 	int res;
 
 	str = "167";
 	//res = ft_atoi_base(str, 10);
-	res = ft_atoi_base(str, 1);
+	res = ft_atoip(str, &s1);
 	printf("result: %d\n", res);
+	printf("string is: %d\n", s1);
 	//ft_printf("mine: %#s\n", str);
 	//printf("real printf: %s\n", str);
 	return (1);
