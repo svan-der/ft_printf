@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/15 11:23:28 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/16 14:38:17 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/10/17 15:48:57 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,9 @@ static void	set_flags(t_format *fmt, const char *str, t_flags *flag)
 static void	argi_minfw_prec(t_format *fmt, const char *str, t_spec *spec)
 {
 	int		i;
-	int		num;
 
 	i = fmt->index;
-	num = 0;
-	spec->argi = 0;
-	spec->min_fw = num;
+	spec->min_fw = 0;
 	spec->prec = 0;
 	spec->prec_set = (str[i] == '.');
 	i += spec->prec_set;
@@ -98,13 +95,6 @@ static int	print_arg(t_format *fmt, const char *str, va_list ap)
 	adj_len(fmt, str, &spec);
 	spec.c = str[fmt->index];
 	fmt->index++;
-	if (spec.argi > fmt->argc)
-	{
-		if (!get_arg(&spec, fmt, 0, ap).p)
-			return (0);
-		if (!process(fmt, str, ap))
-			return (0);
-	}
 	alst = &fmt->buffer;
 	while (*alst != tail)
 		alst = &(*alst)->next;
@@ -123,7 +113,7 @@ int			process(t_format *fmt, const char *str, va_list ap)
 	{
 		j = i + ft_strchrni(str + i, '%');
 		if (j - i)
-			if (!ft_lstaddnew(&fmt->buffer, str + i, j - i, 1))
+			if (!ft_lstaddnew(&fmt->buffer, str + i, j - i))
 				return (0);
 		fmt->index = j;
 		if (str[j] == '%')

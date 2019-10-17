@@ -1,0 +1,91 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   dispatch.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
+/*   Updated: 2019/10/17 16:21:09 by svan-der      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "fndm.h"
+
+/* gets the right argument */
+t_input			get_arg(t_spec *spec, t_byte fl, va_list ap)
+{
+	if (fl == 1)
+	{
+		if(spec->mod == L)
+			va_arg(ap, t_ldb);
+		else
+			va_arg(ap, double);
+		return ((t_input)&spec->ldb_reg); 
+	}
+	return (va_arg(ap, t_input));
+ }
+
+/* processes string arguments */
+static t_list 	print_csp(char c, t_input val, t_spec *spec, t_flags *flag)
+{
+	static char *const	chars = " !\"#$%&\'()*+,-./0123456789:;<=>?@\
+	ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+	//char				*mem; 
+	char				*str;
+	size_t				size;
+	
+	(void)flag;
+	if (c == 'c' || c == '%')
+	{
+		if (c == 'c')
+			str = (c == 'c' && val.c > 64) ? &chars[val.c - 31] : &chars[val.c - 32];
+		else 
+			str = "%";
+		size = 1;
+	}
+	if (c == 's')
+	{
+		str = val.s;
+		if (spec->prec_set)
+			size = ft_min_size(ft_strlen(val.s), spec->prec);
+		else
+			size = ft_strlen(val.s);
+	}
+	else
+	{
+		//str = ft_strcpy(&str, mem);
+		size = ft_utoap_base(&str, val.oux, 16, &(t_ntoa){{.hash = 0x20}, 0});
+	}
+	return ((t_list){str, size, NULL});
+}
+
+/**
+  * searches and executes corresponding function of the conversion specifier
+  * saves the address and value of the argument in val variable
+*/ 
+int				dispatch(t_list **tail, t_format *fmt, t_spec *spec, va_list ap)
+{
+	static t_list	(*const f[])(char, t_input, t_spec*, t_flags*) = \
+	{[0 ... 3] = print_csp, [4 ... 9] = print_dioux, [10 ... 11] = print_float};
+	const char		c = spec->c;
+	t_flags *const	flag = &spec->flags;
+	t_list			ret[2];
+	int				i;
+
+	i = ft_strchri("csp%diouxXfF", c);
+	spec->val = get_arg(spec, fmt, (i >= 10), ap);
+	ret[0] = f[i](c, spec->val, spec, flag);
+	if (!ret[0].content)
+		return (0);
+	i = 1 + (c != 'c' && c != 's' && c != '%');
+	if (!ft_lstaddnew(tail, ret[0].content, ret[0].content_size))
+		return (0);
+	i = flag->zero && !flag->min && ft_strchri("diouxX", c) && !spec->prec_set;
+	!flag->min ? tail = &(*tail)->next : 0;
+	ret[1].content_size = spec->min_fw - ret[0].content_size;
+	if (ret[0].content_size < spec->min_fw)
+		if (ft_strcpnew((char**)&ret[1].content, ret[1].content_size, " 0"[i]))
+			return (ft_lstaddnew(tail, ret[1].content, ret[1].content_size));
+	return (ret[0].content_size >= spec->min_fw);
+}

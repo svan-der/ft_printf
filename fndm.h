@@ -6,15 +6,15 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/12 15:28:18 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/15 14:06:34 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/10/17 15:54:47 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FNDM_H
 # define FNDM_H
-# include	"ft_printf.h"
-# include	"libft/includes/libdefs.h"
-# include	"libft/includes/list.h"
+# include "ft_printf.h"
+# include "libft/includes/libdefs.h"
+# include "libft/includes/list.h"
 
 /* conversion specifier union */
 typedef union	u_input
@@ -51,7 +51,6 @@ typedef union	u_flags
 /* format string specifiers */
 typedef struct	s_spec
 {
-	size_t		argi;
 	t_flags		flags;
 	t_mods		mod;
 	size_t		min_fw;
@@ -74,7 +73,6 @@ typedef struct	s_format
 }				t_format;
 
 int				print_buffer(t_list *buffer, int fd, char **astr, size_t size);
-t_input			get_arg(t_spec *spec, t_format *fmt, t_byte fega, va_list ap);
 int				dispatch(t_list **tail, t_format *fmt, t_spec *spec, va_list ap);
 int				process(t_format *fmt, const char *str, va_list ap);
 #endif
