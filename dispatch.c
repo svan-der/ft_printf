@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/17 16:21:09 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/10/21 15:26:19 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,37 @@ t_input			get_arg(t_spec *spec, t_byte fl, va_list ap)
 	return (va_arg(ap, t_input));
  }
 
-/* processes string arguments */
+#define BASE (t_uint[]){16, 8, 10, 16}
+static t_list	print_dioux(char c, t_input val, t_spec *spec, t_flags *flag)
+{
+	const size_t	size_arr[] = {sizeof(int), sizeof(short), sizeof(char), \
+					sizeof(long), sizeof(t_llong), sizeof(int)};
+	const t_ntoa	pref = {{{flag->plus, flag->space, flag->hash\
+					, (c == 'X'), flag->apos}}, spec->prec_set * spec->prec};
+	char			*str;
+	size_t			size;
+	t_byte			sign;
+
+	str = NULL;
+	size = sizeof(t_llong) - size_arr[spec->mod];
+	val.di &= -1ULL >> (size * 8);
+	if (c == 'd' || c == 'i')
+	{
+		sign = !!((1 << ((size * 8) - 1)) & val.di);
+		if (sign)
+			val.di |= (-1ULL - 0xFF) << ((sizeof(t_llong) - size - 1) * 8);
+		size = ft_itoap(&str, val.di, &pref);
+	}
+	else
+		size = ft_utoap_base(&str, val.oux, \
+		BASE[(c >= 'o') + (c >= 'u') + (c == 'x')], &pref);
+	return ((t_list){str, size, NULL});
+}
+
 static t_list 	print_csp(char c, t_input val, t_spec *spec, t_flags *flag)
 {
 	static char *const	chars = " !\"#$%&\'()*+,-./0123456789:;<=>?@\
 	ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-	//char				*mem; 
 	char				*str;
 	size_t				size;
 	
@@ -53,10 +78,7 @@ static t_list 	print_csp(char c, t_input val, t_spec *spec, t_flags *flag)
 			size = ft_strlen(val.s);
 	}
 	else
-	{
-		//str = ft_strcpy(&str, mem);
-		size = ft_utoap_base(&str, val.oux, 16, &(t_ntoa){{.hash = 0x20}, 0});
-	}
+		size = ft_utoap_base(&str, val.oux, 16, 0);
 	return ((t_list){str, size, NULL});
 }
 
@@ -74,7 +96,7 @@ int				dispatch(t_list **tail, t_format *fmt, t_spec *spec, va_list ap)
 	int				i;
 
 	i = ft_strchri("csp%diouxXfF", c);
-	spec->val = get_arg(spec, fmt, (i >= 10), ap);
+	spec->val = get_arg(spec, (i >= 10), ap);
 	ret[0] = f[i](c, spec->val, spec, flag);
 	if (!ret[0].content)
 		return (0);
