@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/21 15:26:19 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/10/21 17:12:03 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,13 @@ static t_list	print_dioux(char c, t_input val, t_spec *spec, t_flags *flag)
 	return ((t_list){str, size, NULL});
 }
 
+/* processes string arguments */
 static t_list 	print_csp(char c, t_input val, t_spec *spec, t_flags *flag)
 {
 	static char *const	chars = " !\"#$%&\'()*+,-./0123456789:;<=>?@\
 	ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 	char				*str;
+	char				*s2;
 	size_t				size;
 	
 	(void)flag;
@@ -71,13 +73,20 @@ static t_list 	print_csp(char c, t_input val, t_spec *spec, t_flags *flag)
 	}
 	if (c == 's')
 	{
+		s2 = "(null)";
 		str = val.s;
+		if(!str)
+		{
+			ft_strpnew(&str, 7);
+			ft_memcpy(str, s2, 7);
+			size = ft_strlen(str);
+		}
 		if (spec->prec_set)
 			size = ft_min_size(ft_strlen(val.s), spec->prec);
 		else
 			size = ft_strlen(val.s);
 	}
-	else
+	else if (c == 'p')
 		size = ft_utoap_base(&str, val.oux, 16, 0);
 	return ((t_list){str, size, NULL});
 }
