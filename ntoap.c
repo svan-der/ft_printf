@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/22 17:57:12 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/22 17:57:15 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/10/23 11:37:55 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,24 +89,12 @@ int			ft_itoap_base(char **astr, t_llong n, t_uint b, const t_ntoa *specs)
 	if (specs)
 	{
 		spec = *specs;
-		if (!spec.sign && spec.space)
-		{
+		if (spec.space && !spec.sign)
 			spec.space = 1;
-			spec.space = 1;
-		}
-		if (spec.space || spec.sign)
-		{
+		if (spec.sign || spec.space)
 			spec.sign = 1;
-			spec.space = 1;
-		}
-		//spec.space &= !spec.sign;
-		//spec.sign |= spec.space;
 		if (n != 0 && spec.sign)
-		{
-			spec.sign = 0;
-			n = 0;
-		}
-		//spec.sign &= (n != 0);
+			spec.sign = 1;
 	}
 	return (ft_utoap_base(astr, n, b, &spec));
 }

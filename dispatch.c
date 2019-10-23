@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/21 17:12:03 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/10/23 18:31:23 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,28 @@ t_input			get_arg(t_spec *spec, t_byte fl, va_list ap)
 	return (va_arg(ap, t_input));
  }
 
+void	set_mods(t_llong val, size_t array)
+{
+	size_t i; 
+
+	i = array;
+	if (i == 0 || i == 5)
+		val = (int)val; 
+	if (i == 1)
+		val = (short)val;
+	if (i == 2)
+		val = (char)val;
+	if (i == 3)
+		val = (long)val;
+	if (i == 4)
+		val = (long long)val;
+}
+
+/* processes integer arguments */
 #define BASE (t_uint[]){16, 8, 10, 16}
 static t_list	print_dioux(char c, t_input val, t_spec *spec, t_flags *flag)
 {
-	const size_t	size_arr[] = {sizeof(int), sizeof(short), sizeof(char), \
-					sizeof(long), sizeof(t_llong), sizeof(int)};
+	const size_t	(size_arr[]) = {4, 2, 1, 8, 8, 4};
 	const t_ntoa	pref = {{{flag->plus, flag->space, flag->hash\
 					, (c == 'X'), flag->apos}}, spec->prec_set * spec->prec};
 	char			*str;
@@ -38,8 +55,9 @@ static t_list	print_dioux(char c, t_input val, t_spec *spec, t_flags *flag)
 	t_byte			sign;
 
 	str = NULL;
-	size = sizeof(t_llong) - size_arr[spec->mod];
-	val.di &= -1ULL >> (size * 8);
+	if (spec->mod)
+		set_mods(val.di, size_arr[spec->mod]);
+	size = sizeof(val.di);
 	if (c == 'd' || c == 'i')
 	{
 		sign = !!((1 << ((size * 8) - 1)) & val.di);
