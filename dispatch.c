@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/23 18:31:23 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/10/28 18:32:38 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,48 +26,53 @@ t_input			get_arg(t_spec *spec, t_byte fl, va_list ap)
 	return (va_arg(ap, t_input));
  }
 
-void	set_mods(t_llong val, size_t array)
+void		get_uint_arg(t_spec *spec, va_list ap)
 {
-	size_t i; 
+	t_llong val;
+	
+	if (spec->mod == l)
+		val = va_arg(ap, unsigned long);
+	else if (spec->mod == ll)
+		val = va_arg(ap, unsigned long long);
+	else
+		val = va_arg(ap, unsigned int);
+	spec->val.di = val;
+}
 
-	i = array;
-	if (i == 0 || i == 5)
-		val = (int)val; 
-	if (i == 1)
-		val = (short)val;
-	if (i == 2)
-		val = (char)val;
-	if (i == 3)
-		val = (long)val;
-	if (i == 4)
-		val = (long long)val;
+void	get_int_arg(t_spec *spec, va_list ap)
+{
+	t_llong val;
+	
+	if (spec->mod == l)
+		val = va_arg(ap, long);
+	else if (spec->mod == ll)
+		val = va_arg(ap, t_llong);
+	else
+		val = va_arg(ap, int);
+	spec->val.di = val;
 }
 
 /* processes integer arguments */
 #define BASE (t_uint[]){16, 8, 10, 16}
-static t_list	print_dioux(char c, t_input val, t_spec *spec, t_flags *flag)
+static t_list	print_dioux(char c, va_list ap, t_spec *spec, t_flags *flag)
 {
-	const size_t	(size_arr[]) = {4, 2, 1, 8, 8, 4};
 	const t_ntoa	pref = {{{flag->plus, flag->space, flag->hash\
 					, (c == 'X'), flag->apos}}, spec->prec_set * spec->prec};
 	char			*str;
 	size_t			size;
-	t_byte			sign;
 
 	str = NULL;
-	if (spec->mod)
-		set_mods(val.di, size_arr[spec->mod]);
-	size = sizeof(val.di);
 	if (c == 'd' || c == 'i')
-	{
-		sign = !!((1 << ((size * 8) - 1)) & val.di);
-		if (sign)
-			val.di |= (-1ULL - 0xFF) << ((sizeof(t_llong) - size - 1) * 8);
-		size = ft_itoap(&str, val.di, &pref);
+	{	
+		get_int_arg(spec, ap);
+		size = ft_itoap(&str, spec->val.di, &pref);
 	}
 	else
-		size = ft_utoap_base(&str, val.oux, \
+	{
+		get_uint_arg(spec, ap);
+		size = ft_utoap_base(&str, spec->val.oux, \
 		BASE[(c >= 'o') + (c >= 'u') + (c == 'x')], &pref);
+	}
 	return ((t_list){str, size, NULL});
 }
 
