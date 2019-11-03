@@ -8,7 +8,7 @@
 			"name": "(lldb) Launch",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/a.out",
+			"program": "${workspaceFolder}/libft/a.out",
 			"args": ["__INT_MAX__"],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
