@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/12 15:28:18 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/17 15:54:47 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/04 16:52:34 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include "ft_printf.h"
 # include "libft/includes/libdefs.h"
 # include "libft/includes/list.h"
+# include "ntoa.h"
 
 /* conversion specifier union */
 typedef union	u_input
@@ -23,7 +24,7 @@ typedef union	u_input
 	char		*s;
 	void		*p;
 	t_llong		di;
-	t_ull		oux;
+	t_ull 		oux;
 	t_ldb		*fl;
 }				t_input;
 
@@ -33,7 +34,6 @@ typedef enum	e_mods
 	null, h, hh, l, ll, L
 }				t_mods;
 
-/* format string flags */
 typedef union	u_flags
 {
 	t_ull	val;
@@ -48,13 +48,13 @@ typedef union	u_flags
 	};
 }				t_flags;
 
+
 /* format string specifiers */
 typedef struct	s_spec
 {
 	t_flags		flags;
 	t_mods		mod;
 	size_t		min_fw;
-	t_byte		prec_set;
 	int			prec;
 	char		c;
 	t_ldb		ldb_reg;
@@ -72,7 +72,9 @@ typedef struct	s_format
 	t_list		*buffer;
 }				t_format;
 
+
+t_input			get_arg(t_spec *spec, t_byte fega, va_list ap);
 int				print_buffer(t_list *buffer, int fd, char **astr, size_t size);
-int				dispatch(t_list **tail, t_format *fmt, t_spec *spec, va_list ap);
-int				process(t_format *fmt, const char *str, va_list ap);
+int				dispatch(t_list **tail, t_spec *spec, va_list ap);
+int				parsing(t_format *fmt, const char *str, va_list ap);
 #endif

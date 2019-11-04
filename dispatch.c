@@ -6,13 +6,12 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/28 18:32:38 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/04 15:18:05 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fndm.h"
 
-/* gets the right argument */
 t_input			get_arg(t_spec *spec, t_byte fl, va_list ap)
 {
 	if (fl == 1)
@@ -52,32 +51,98 @@ void	get_int_arg(t_spec *spec, va_list ap)
 	spec->val.di = val;
 }
 
+/* processes float arguments */
+static t_list	print_float(char c, va_list ap, t_spec *spec, t_flags *flag)
+{
+	const t_ldb	*val; //*valptr.fl;
+	char		*str;
+	size_t		size;
+	const int	prec = (spec->prec != 0) ? spec->prec : 6;
+	
+	str = NULL;
+	val = spec->val.fl;
+	get_arg(spec, 1, ap);
+	(void)flag;
+	(void)c;
+	if (spec->mod == L)
+		size = ft_ldtoap(&str, *val, prec);
+	else
+		size = ft_dtoap(&str, *val, prec);
+	return ((t_list){str, size, NULL});
+}
+
+static void 	ft_prefix(t_ntoa *pref, t_ull val_unsign, char c)
+{
+	char	*hex_up;
+	char 	*hex;
+	char	zero;
+
+	zero = 0;
+	hex_up = "0X";
+	hex = "0x";
+	if (pref->prefix)
+	{
+		if (c == 'o' && val_unsign != 0)
+			pref->prefix = &zero;
+		else if (c == 'X' && val_unsign != 0)
+		{
+			pref->prefix = hex_up;
+			pref->upper	= 1;
+		}
+		else
+			pref->prefix = hex;
+	}
+}
+
+static void		set_flags(t_ntoa *pref, int sign, t_spec *spec, t_flags *flag)
+{
+	if (flag->space && !flag->plus)
+		pref->space = 1;
+	if (flag->plus || flag->space)
+		pref->sign = 1;
+	if (spec->val.di != 0 && flag->plus)
+		pref->sign = 1;
+	if (flag->zero || flag->min || (!spec->prec && flag->zero))
+		pref->padding = 1;
+	// if ((!flag->min && flag->zero) || (!spec->prec && flag->zero))
+	//  	pref->padding = 1;
+	if ((sign || spec->c == 'c' || spec->c == 'f' || spec->c == 'F') && flag->apos)
+		pref->delimit = 1;
+	if (!sign && flag->hash)
+		ft_prefix(pref, spec->val.oux, spec->c);
+	if (spec->prec)
+		pref->pad_len = (size_t)spec->prec;
+}
+
 /* processes integer arguments */
-#define BASE (t_uint[]){16, 8, 10, 16}
 static t_list	print_dioux(char c, va_list ap, t_spec *spec, t_flags *flag)
 {
-	const t_ntoa	pref = {{{flag->plus, flag->space, flag->hash\
-					, (c == 'X'), flag->apos}}, spec->prec_set * spec->prec};
+	t_ntoa			pref = {0, 0, 0, 0, 0, NULL, 0}; 
 	char			*str;
 	size_t			size;
+	t_uint			base[] = {16, 8, 10, 16};
+	size_t			i;
 
+	str = "diouxX";
+	i = ft_strchri(str, c);
 	str = NULL;
-	if (c == 'd' || c == 'i')
-	{	
+	if (i <= 1)
+	{
 		get_int_arg(spec, ap);
+		set_flags(&pref, 1, spec, flag);
 		size = ft_itoap(&str, spec->val.di, &pref);
 	}
 	else
 	{
 		get_uint_arg(spec, ap);
-		size = ft_utoap_base(&str, spec->val.oux, \
-		BASE[(c >= 'o') + (c >= 'u') + (c == 'x')], &pref);
+		set_flags(&pref, 0, spec, flag);
+		size = ft_utoap(&str, spec->val.oux, base[i], &pref);
 	}
 	return ((t_list){str, size, NULL});
 }
 
 /* processes string arguments */
-static t_list 	print_csp(char c, t_input val, t_spec *spec, t_flags *flag)
+static t_list 	print_csp(char c, va_list ap, t_spec *spec, t_flags *flag)
 {
 	static char *const	chars = " !\"#$%&\'()*+,-./0123456789:;<=>?@\
 	ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
@@ -86,10 +151,11 @@ static t_list 	print_csp(char c, t_input val, t_spec *spec, t_flags *flag)
 	size_t				size;
 	
 	(void)flag;
+	get_arg(spec, 0, ap);
 	if (c == 'c' || c == '%')
 	{
 		if (c == 'c')
-			str = (c == 'c' && val.c > 64) ? &chars[val.c - 31] : &chars[val.c - 32];
+			str = (c == 'c' && spec->val.c > 64) ? &chars[spec->val.c - 31] : &chars[spec->val.c - 32];
 		else 
 			str = "%";
 		size = 1;
@@ -97,20 +163,20 @@ static t_list 	print_csp(char c, t_input val, t_spec *spec, t_flags *flag)
 	if (c == 's')
 	{
 		s2 = "(null)";
-		str = val.s;
+		str = spec->val.s;
 		if(!str)
 		{
 			ft_strpnew(&str, 7);
 			ft_memcpy(str, s2, 7);
 			size = ft_strlen(str);
 		}
-		if (spec->prec_set)
-			size = ft_min_size(ft_strlen(val.s), spec->prec);
+		if (spec->prec != 0)
+			size = ft_min_size(ft_strlen(str), spec->prec);
 		else
-			size = ft_strlen(val.s);
+			size = ft_strlen(str);
 	}
-	else if (c == 'p')
-		size = ft_utoap_base(&str, val.oux, 16, 0);
+	if (c == 'p')
+		size = ft_utoap_base(&str, spec->val.oux, 16, 0);
 	return ((t_list){str, size, NULL});
 }
 
@@ -118,24 +184,24 @@ static t_list 	print_csp(char c, t_input val, t_spec *spec, t_flags *flag)
   * searches and executes corresponding function of the conversion specifier
   * saves the address and value of the argument in val variable
 */ 
-int				dispatch(t_list **tail, t_format *fmt, t_spec *spec, va_list ap)
+int				dispatch(t_list **tail, t_spec *spec, va_list ap)
 {
-	static t_list	(*const f[])(char, t_input, t_spec*, t_flags*) = \
+	static t_list	(*const f[])(char, va_list, t_spec*, t_flags*) = \
 	{[0 ... 3] = print_csp, [4 ... 9] = print_dioux, [10 ... 11] = print_float};
 	const char		c = spec->c;
 	t_flags *const	flag = &spec->flags;
 	t_list			ret[2];
 	int				i;
 
+
 	i = ft_strchri("csp%diouxXfF", c);
-	spec->val = get_arg(spec, (i >= 10), ap);
-	ret[0] = f[i](c, spec->val, spec, flag);
+	ret[0] = f[i](c, ap, spec, flag);
 	if (!ret[0].content)
 		return (0);
 	i = 1 + (c != 'c' && c != 's' && c != '%');
 	if (!ft_lstaddnew(tail, ret[0].content, ret[0].content_size))
 		return (0);
-	i = flag->zero && !flag->min && ft_strchri("diouxX", c) && !spec->prec_set;
+	i = flag->zero && !flag->min && ft_strchri("diouxX", c) && (!(spec->prec));
 	!flag->min ? tail = &(*tail)->next : 0;
 	ret[1].content_size = spec->min_fw - ret[0].content_size;
 	if (ret[0].content_size < spec->min_fw)

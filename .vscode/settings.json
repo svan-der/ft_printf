@@ -12,6 +12,8 @@
 		"fndm.h": "c",
 		"locale": "c",
 		"ios": "c",
-		"libdefs.h": "c"
+		"libdefs.h": "c",
+		"ft_printf.h": "c",
+		"ntoa.h": "c"
 	}
 }

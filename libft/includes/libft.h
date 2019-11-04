@@ -6,7 +6,7 @@
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/02/21 16:38:44 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/17 13:11:03 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/04 16:46:35 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <unistd.h>
 # include <string.h>
 # include <stdlib.h>
+# include "libdefs.h"
 
 void				ft_putchar(char c);
 void				ft_putstr(char const *s);
@@ -82,6 +83,5 @@ void				ft_strarrdel(char ***str, size_t size);
 size_t				ft_count_words(char const *s, char c);
 char				*ft_find_word(char const *s, char c);
 int					ft_whitespace(char c);
-
 
 #endif

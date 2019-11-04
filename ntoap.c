@@ -6,9 +6,11 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/22 17:57:12 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/03 22:18:20 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/04 15:14:46 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "ntoa.h"
 
 void	make(char *str, t_ull n, t_uint base, t_ntoa *pref)
 {
