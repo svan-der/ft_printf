@@ -4,7 +4,8 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/includes",
-                "${workspaceFolder}/libft/includes"
+                "${workspaceFolder}/libft/includes",
+                "${workspaceFolder}/**"
             ],
             "defines": [],
             "macFrameworkPath": [

@@ -6,11 +6,11 @@
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/20 14:22:39 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/15 14:01:31 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/11 16:38:01 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
+#include "libft.h"
 
 void	ft_putendl_fd(char const *s, int fd)
 {

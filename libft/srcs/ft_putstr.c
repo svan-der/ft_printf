@@ -6,11 +6,11 @@
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/20 12:19:38 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/15 14:31:46 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/11 16:44:54 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
+#include "libft.h"
 
 void	ft_putchar(char c)
 {

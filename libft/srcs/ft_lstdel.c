@@ -6,11 +6,11 @@
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/02/22 16:08:41 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/15 13:31:33 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/11 16:39:45 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/list.h"
+#include "list.h"
 
 void	ft_lstdel(t_list **alst, void (*del)(void *, size_t))
 {

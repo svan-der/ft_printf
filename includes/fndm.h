@@ -6,16 +6,13 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/12 15:28:18 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/04 16:52:34 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/12 18:34:49 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FNDM_H
 # define FNDM_H
 # include "ft_printf.h"
-# include "libft/includes/libdefs.h"
-# include "libft/includes/list.h"
-# include "ntoa.h"
 
 /* conversion specifier union */
 typedef union	u_input
@@ -76,5 +73,5 @@ typedef struct	s_format
 t_input			get_arg(t_spec *spec, t_byte fega, va_list ap);
 int				print_buffer(t_list *buffer, int fd, char **astr, size_t size);
 int				dispatch(t_list **tail, t_spec *spec, va_list ap);
-int				parsing(t_format *fmt, const char *str, va_list ap);
+int				process(t_format *fmt, const char *str, va_list ap);
 #endif

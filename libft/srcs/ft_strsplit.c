@@ -6,11 +6,11 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/02/14 19:03:45 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/15 14:04:33 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/11 16:45:59 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
+#include "libft.h"
 
 char		**ft_strsplit(char const *s, char c)
 {

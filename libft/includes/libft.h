@@ -6,7 +6,7 @@
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/02/21 16:38:44 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/04 16:46:35 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/12 18:08:51 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <unistd.h>
 # include <string.h>
 # include <stdlib.h>
+# include "mathlib.h"
 # include "libdefs.h"
 
 void				ft_putchar(char c);
@@ -37,6 +38,8 @@ void				ft_putnbr(int n);
 void				ft_gridset(void **grid, char c, size_t y, size_t x);
 void				ft_putnbr_fd(int n, int fd);
 char				*ft_strnew(size_t size);
+int					ft_strpnew(char **str, size_t size);
+int					ft_strcpnew(char **str, size_t size, char c);
 void				ft_strclr(char *s);
 void				ft_striter(char *s, void (*f)(char*));
 void				ft_striteri(char *s, void (*f)(unsigned int, char *));

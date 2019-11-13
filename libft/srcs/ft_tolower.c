@@ -6,11 +6,11 @@
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/29 16:17:19 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/15 13:55:38 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/11 16:46:12 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
+#include "libft.h"
 
 int		ft_toupper(int c)
 {

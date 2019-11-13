@@ -6,45 +6,52 @@
 #    By: svan-der <svan-der@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/11/08 17:46:48 by svan-der       #+#    #+#                 #
-#    Updated: 2019/11/08 18:43:02 by svan-der      ########   odam.nl          #
+#    Updated: 2019/11/13 14:49:44 by svan-der      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libftprintf.a
+
+HEADER = ./includes
+SRC = $(addprefix srcs/,dispatch.c finish.c ft_vprintf.c ntoap.c parsing.c)
+OBJ = $(SRC:.c=.o)
+
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra
 DFLAGS = $(CFLAGS) -g
 
-OBJ = $(SRC:%.c=%.o)
 LIB = libft/libft.a
-DEBUG = $(LIB)
-
-INCDIRS = $(dir includes, libft/includes)
-INCS = -I$(INCDIRS)
-
-SRCDIR = srcs
-SRCS = libft/srcs/
-SRC = $($(SRCDIR), $(SRCS))
+LIBB = libft.a
+LIB_SRC = ./libft/srcs
+LIB_BIN = -L ./libft -lft
+LIBHEADER = ./libft/includes
+HEADERS = -I$(HEADER) -I$(LIBHEADER)
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	ar rcs $(NAME) $(OBJ)
+$(LIB): 
+	make -C libft
 	
-%.o: %.c
-    # $(CC) $(CFLAGS) -o $@ -c $<
-	@echo "RED[recompiling] $< $@"
-	@(CC) $(CFLAGS) $(INCS) $(SRCFILES)
-debug: $(DEBUG)
+$(NAME):$(LIB) $(OBJ)
+	cp $(LIB) .
+	mv $(LIBB) $(NAME)
+	ar rc $(NAME) $(OBJ)
+	ranlib $(NAME)
+	
 
-$(DEBUG):
-	ar rcs $(DEBUG) $(OBJ)
+$(OBJ): $(SRCDIR)%.o: $(SRCDIR)%.c
+	$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@
+
 clean:
 	rm -f $(OBJ)
+	make clean -C libft
+
 fclean: clean
-	rm -f $(NAME) $(DEBUG)
+	rm -f $(NAME)
+	make fclean -C libft
+
 re: fclean all
 
 rebug: fclean debug
 
-.PHONY: all so clean fclean re debug rebug
+.PHONY: all so clean fclean re debug rebug libft

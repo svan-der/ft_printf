@@ -6,11 +6,12 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/04 15:18:05 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/13 14:18:16 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fndm.h"
+#include "ft_printf.h"
 
 t_input			get_arg(t_spec *spec, t_byte fl, va_list ap)
 {
@@ -61,13 +62,15 @@ static t_list	print_float(char c, va_list ap, t_spec *spec, t_flags *flag)
 	
 	str = NULL;
 	val = spec->val.fl;
+	size = 0;
+	(void)prec;
 	get_arg(spec, 1, ap);
 	(void)flag;
 	(void)c;
-	if (spec->mod == L)
-		size = ft_ldtoap(&str, *val, prec);
-	else
-		size = ft_dtoap(&str, *val, prec);
+	// if (spec->mod == L)
+	// 	size = ft_ldtoap(&str, *val, prec);
+	// else
+	// 	size = ft_dtoap(&str, *val, prec);
 	return ((t_list){str, size, NULL});
 }
 
@@ -193,7 +196,6 @@ int				dispatch(t_list **tail, t_spec *spec, va_list ap)
 	t_list			ret[2];
 	int				i;
 
-
 	i = ft_strchri("csp%diouxXfF", c);
 	ret[0] = f[i](c, ap, spec, flag);
 	if (!ret[0].content)
@@ -201,6 +203,7 @@ int				dispatch(t_list **tail, t_spec *spec, va_list ap)
 	i = 1 + (c != 'c' && c != 's' && c != '%');
 	if (!ft_lstaddnew(tail, ret[0].content, ret[0].content_size))
 		return (0);
+	
 	i = flag->zero && !flag->min && ft_strchri("diouxX", c) && (!(spec->prec));
 	!flag->min ? tail = &(*tail)->next : 0;
 	ret[1].content_size = spec->min_fw - ret[0].content_size;

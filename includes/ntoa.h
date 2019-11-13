@@ -1,7 +1,7 @@
 #ifndef NTOA_H
 # define NTOA_H
-# include "libft/includes/libft.h"
-# include "mathlib.h"
+# include "../libft/includes/libft.h"
+# include "../libft/includes/mathlib.h"
 
 typedef struct	s_ntoa
 {

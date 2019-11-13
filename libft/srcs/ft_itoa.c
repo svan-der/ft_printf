@@ -6,13 +6,14 @@
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/02/05 15:48:35 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/15 13:31:18 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/12 14:46:08 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
+#include "libft.h"
+#include "mathlib.h"
 
-static size_t	ft_count_num(int num)
+size_t	ft_count_num(int num)
 {
 	size_t	len;
 

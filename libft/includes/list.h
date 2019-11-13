@@ -6,23 +6,23 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/12 15:47:12 by svan-der       #+#    #+#                */
-/*   Updated: 2019/10/17 15:39:31 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/12 18:08:00 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIST_H
 # define LIST_H
 # include "libft.h"
-# include "libdefs.h"
 
 typedef struct		s_list
 {
 	void			*content;
 	size_t			content_size;
 	struct s_list	*next;
-	unsigned char	flag[];
 }					t_list;
 
+int					ft_lstaddnew(t_list **head, const void *content\
+					, size_t content_size);
 t_list				*ft_lstnew(void const *content, size_t content_size);
 void				ft_lstdelone(t_list **alst, void (*del)(void *, size_t));
 void				ft_lstdel(t_list **alst, void (*del)(void *, size_t));
