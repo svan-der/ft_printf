@@ -6,11 +6,11 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/11/04 15:53:26 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/13 14:18:21 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/14 18:25:41 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fndm.h"
+#include "ft_printf.h"
 
 /* writes output from the buffer */
 int		print_buffer(t_list *buffer, int fd, char **astr, size_t size)

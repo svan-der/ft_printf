@@ -6,12 +6,12 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/13 14:18:16 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/15 18:56:50 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fndm.h"
 #include "ft_printf.h"
+#include "fndm.h"
 
 t_input			get_arg(t_spec *spec, t_byte fl, va_list ap)
 {
@@ -78,22 +78,26 @@ static void 	ft_prefix(t_ntoa *pref, t_ull val_unsign, char c)
 {
 	char	*hex_up;
 	char 	*hex;
-	char	zero;
+	char	*zero;
 
-	zero = 0;
+	zero = "0";
 	hex_up = "0X";
 	hex = "0x";
-	if (pref->prefix)
+	if (c == 'o' && val_unsign != 0)
+		pref->prefix = zero;
+	else if (c == 'X')
 	{
-		if (c == 'o' && val_unsign != 0)
-			pref->prefix = &zero;
-		else if (c == 'X' && val_unsign != 0)
-		{
+		if (val_unsign != 0)
 			pref->prefix = hex_up;
-			pref->upper	= 1;
-		}
 		else
+			pref->prefix = zero;
+	}
+	else if (c == 'x')
+	{
+		if (val_unsign != 0)
 			pref->prefix = hex;
+		else
+			pref->prefix = zero;
 	}
 }
 
@@ -107,8 +111,6 @@ static void		set_flags(t_ntoa *pref, int sign, t_spec *spec, t_flags *flag)
 		pref->sign = 1;
 	if (flag->zero || flag->min || (!spec->prec && flag->zero))
 		pref->padding = 1;
-	// if ((!flag->min && flag->zero) || (!spec->prec && flag->zero))
-	//  	pref->padding = 1;
 	if ((sign || spec->c == 'c' || spec->c == 'f' || spec->c == 'F') && flag->apos)
 		pref->delimit = 1;
 	if (!sign && flag->hash)
@@ -123,7 +125,7 @@ static t_list	print_dioux(char c, va_list ap, t_spec *spec, t_flags *flag)
 	t_ntoa			pref = {0, 0, 0, 0, 0, NULL, 0}; 
 	char			*str;
 	size_t			size;
-	t_uint			base[] = {16, 8, 10, 16};
+	t_uint			base[] = {16, 16, 8, 10, 16, 16};
 	size_t			i;
 
 	str = "diouxX";
@@ -137,6 +139,7 @@ static t_list	print_dioux(char c, va_list ap, t_spec *spec, t_flags *flag)
 	}
 	else
 	{
+		pref.upper = (i == 5) ? 1 : 0;
 		get_uint_arg(spec, ap);
 		set_flags(&pref, 0, spec, flag);
 		size = ft_utoap(&str, spec->val.oux, base[i], &pref);
@@ -203,7 +206,6 @@ int				dispatch(t_list **tail, t_spec *spec, va_list ap)
 	i = 1 + (c != 'c' && c != 's' && c != '%');
 	if (!ft_lstaddnew(tail, ret[0].content, ret[0].content_size))
 		return (0);
-	
 	i = flag->zero && !flag->min && ft_strchri("diouxX", c) && (!(spec->prec));
 	!flag->min ? tail = &(*tail)->next : 0;
 	ret[1].content_size = spec->min_fw - ret[0].content_size;

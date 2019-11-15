@@ -6,11 +6,11 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/22 17:57:12 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/13 14:18:30 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/15 18:52:25 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ntoa.h"
+#include "ft_printf.h"
 
 void	make(char *str, t_ull n, t_uint base, t_ntoa *pref)
 {
@@ -19,7 +19,7 @@ void	make(char *str, t_ull n, t_uint base, t_ntoa *pref)
 
 	digit = (pref->upper) ? HEX_UP : HEX;
 	i = -(n == 0);
-	if (n == 0)
+	if (n == 0 && !pref->prefix)
 		str[-1] = '0';
 	else if (base == 1)
 		ft_memset(str - n, '1', n);
@@ -82,7 +82,7 @@ int		ft_itoap_base(char **astr, t_llong n, t_uint base, t_ntoa *pref)
 	if (!pref->sign && pref->space && (n > 0))
 		pref->prefix = &sign[2];
 	len[0] = pref->prefix ? 1 : 0;
-	len[1] = ft_numlen(n);
+	len[1] = ft_count_num(n);
 	len[2] = (pref->delimit) ? (len[1] / 3) - !(len[1] % 3) : 0;
 	total = (len[0] + ft_max_size(pref->pad_len, len[1]) + len[2]);
 	if (!*astr)
@@ -109,13 +109,14 @@ int		ft_utoap_base(char **astr, t_ull n, t_uint base, t_ntoa *pref)
 	len[1] = ft_numlen_base(n, base);
 	if (!len[1])
 		return (0);
-	len[0] = 1 + pre;
+	len[0] = pre + 1;
 	len[2] = (pref->delimit) ? (len[1] / 3) - !(len[1] % 3) : 0;
 	total = pref->sign + len[0] + ft_max_size(pref->pad_len, len[1]) + len[2];
 	if (!*astr)
 		if (!ft_strpnew(astr, total))
 			return (-1);
-	ft_memcpy(*astr, pref->prefix, len[0]);
+	if (pref->prefix)
+		ft_memcpy(*astr, pref->prefix, len[0]);
 	make(*astr + total, n, base, pref);
 	if (pre)
 		*astr[0] = *pref->prefix;
