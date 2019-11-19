@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/15 11:23:28 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/14 18:56:55 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/19 13:03:44 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	set_flags(t_format *fmt, const char *str, t_flags *flag)
 {
 	int			i;
 	int			j;
-	char 		*flags;
+	char		*flags;
 
 	flags = "#0- +'";
 	flag->val = 0;

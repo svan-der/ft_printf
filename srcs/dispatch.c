@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/15 18:56:50 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/19 18:04:51 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,8 +144,34 @@ static t_list	print_dioux(char c, va_list ap, t_spec *spec, t_flags *flag)
 		set_flags(&pref, 0, spec, flag);
 		size = ft_utoap(&str, spec->val.oux, base[i], &pref);
 	}
+	// size = ft_minfw(&str, &spec, &pref, &flag);
 	return ((t_list){str, size, NULL});
 }
+
+// ft_minfw(char **str, t_spec *spec, t_ntoa *pref, t_flags *flag)
+// {
+// 	int i;
+// 	char c;  
+// 	size_t size;
+// 	char *padding;
+	
+// 	c = spec->c;
+// 	i = ft_strchri("csp%diouxX", c);
+// 	i = 0;
+// 	if (i > 3)
+// 	size = ft_strlen(str) - spec->min_fw;
+// 	// if (pref->padding)
+// 	// {
+// 	// 	if(flag->zero && !flag->min)
+// 	// 		i += 1;
+// 	// }	
+// 	if ()
+// 	ft_strcpnew(str, size, " 0"[i]);
+// 	if (pref->prefix)
+// 		ft_memcpy(str[0], pref->prefix, ft_strlen(pref->prefix));
+// 	size = ft_strlen(str);
+// 	return (size);
+// }
 
 /* processes string arguments */
 static t_list 	print_csp(char c, va_list ap, t_spec *spec, t_flags *flag)
@@ -203,7 +229,6 @@ int				dispatch(t_list **tail, t_spec *spec, va_list ap)
 	ret[0] = f[i](c, ap, spec, flag);
 	if (!ret[0].content)
 		return (0);
-	i = 1 + (c != 'c' && c != 's' && c != '%');
 	if (!ft_lstaddnew(tail, ret[0].content, ret[0].content_size))
 		return (0);
 	i = flag->zero && !flag->min && ft_strchri("diouxX", c) && (!(spec->prec));

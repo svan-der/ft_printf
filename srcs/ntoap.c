@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/22 17:57:12 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/15 18:52:25 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/19 18:01:12 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,10 @@
 void	make(char *str, t_ull n, t_uint base, t_ntoa *pref)
 {
 	char	*digit;
+	size_t	padding;
 	int		i;
 
+	padding = pref->pad_len;
 	digit = (pref->upper) ? HEX_UP : HEX;
 	i = -(n == 0);
 	if (n == 0 && !pref->prefix)
@@ -26,7 +28,7 @@ void	make(char *str, t_ull n, t_uint base, t_ntoa *pref)
 	else
 		while (n)
 		{
-			i--;
+			i = i--;
 			if ((-i % 3 == 1) && i < -3 && pref->delimit)
 			{
 				str[i] = '.';
@@ -35,8 +37,8 @@ void	make(char *str, t_ull n, t_uint base, t_ntoa *pref)
 			str[i] = digit[n % base];
 			n /= base;
 		}
-	if (pref->pad_len != 0)
-		ft_memset(str - pref->pad_len, 0, pref->pad_len);
+	if (padding != 0)
+		ft_memset(str + i - padding, '0', padding);
 }
 
 void	make_signstr(char *str, t_llong n, t_uint base, t_ntoa *pref)
@@ -102,14 +104,14 @@ int		ft_utoap_base(char **astr, t_ull n, t_uint base, t_ntoa *pref)
 	size_t	total;
 	int		pre;
 
+	*astr = NULL;
 	pre = 0;
 	if (pref->prefix)
 		pre = ft_strlen(pref->prefix);
-	*astr = NULL;
+	len[0] = pre ? pre + 1 : 0;
 	len[1] = ft_numlen_base(n, base);
 	if (!len[1])
 		return (0);
-	len[0] = pre + 1;
 	len[2] = (pref->delimit) ? (len[1] / 3) - !(len[1] % 3) : 0;
 	total = pref->sign + len[0] + ft_max_size(pref->pad_len, len[1]) + len[2];
 	if (!*astr)
