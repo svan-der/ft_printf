@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/20 17:02:29 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/20 17:21:19 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,11 +190,13 @@ static t_list 	print_csp(char c, va_list ap, t_spec *spec, t_flags *flag)
 	get_arg(spec, c, 0, ap);
 	if (c == 'c' || c == '%')
 	{
-		if (c == 'c')
+		if (c == 'c' && spec->val.c != 0)
 			str = (c == 'c' && spec->val.c > 64) ? &chars[spec->val.c - 31] : &chars[spec->val.c - 32];
-		else 
+		else if (spec->val.c == 0)
+			str = "\0";
+		else if (c == '%')
 			str = "%";
-		size = spec->val.c != 0 ? 1 : 0;
+		size = 1;
 	}
 	if (c == 's')
 	{

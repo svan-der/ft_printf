@@ -3,7 +3,10 @@
 
 int		main(void)
 {
-	ft_printf("mine:%x\n", 42);
-	printf("real:%x\n", 42);
+	char c;
+
+	c = 0;
+	ft_printf("mine:%2c\n", c);
+	printf("real:%2c\n", c);
 	return (1);
 }
