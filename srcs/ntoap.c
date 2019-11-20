@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/22 17:57:12 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/19 18:01:12 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/20 15:55:19 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	make(char *str, t_ull n, t_uint base, t_ntoa *pref)
 	else
 		while (n)
 		{
-			i = i--;
+			i--;
 			if ((-i % 3 == 1) && i < -3 && pref->delimit)
 			{
 				str[i] = '.';
@@ -108,7 +108,7 @@ int		ft_utoap_base(char **astr, t_ull n, t_uint base, t_ntoa *pref)
 	pre = 0;
 	if (pref->prefix)
 		pre = ft_strlen(pref->prefix);
-	len[0] = pre ? pre + 1 : 0;
+	len[0] = pre && (n != 0) ? pre : 0;
 	len[1] = ft_numlen_base(n, base);
 	if (!len[1])
 		return (0);
