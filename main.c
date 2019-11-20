@@ -3,12 +3,7 @@
 
 int		main(void)
 {
-	int d;
-	// char *s=""; 
-
-	d = 42;
-	ft_printf("mine:%#08x\n", d);
-	printf("real:%#08x\n", d);
-	// printf("real:% s\n", s);
+	ft_printf("mine:%x\n", 42);
+	printf("real:%x\n", 42);
 	return (1);
 }

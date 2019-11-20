@@ -6,14 +6,14 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/19 18:04:51 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/20 17:02:29 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "fndm.h"
 
-t_input			get_arg(t_spec *spec, t_byte fl, va_list ap)
+void		get_arg(t_spec *spec, char c, t_byte fl, va_list ap)
 {
 	if (fl == 1)
 	{
@@ -21,9 +21,13 @@ t_input			get_arg(t_spec *spec, t_byte fl, va_list ap)
 			va_arg(ap, t_ldb);
 		else
 			va_arg(ap, double);
-		return ((t_input)&spec->ldb_reg); 
 	}
-	return (va_arg(ap, t_input));
+	if (c == 'c' || c == '%')
+		spec->val.c = va_arg(ap, int);
+	if (c == 's')
+		spec->val.s = va_arg(ap, char*);
+	if (c == 'p')
+		spec->val.oux = va_arg(ap, unsigned int);
  }
 
 void		get_uint_arg(t_spec *spec, va_list ap)
@@ -36,7 +40,7 @@ void		get_uint_arg(t_spec *spec, va_list ap)
 		val = va_arg(ap, unsigned long long);
 	else
 		val = va_arg(ap, unsigned int);
-	spec->val.di = val;
+	spec->val.oux = val;
 }
 
 void	get_int_arg(t_spec *spec, va_list ap)
@@ -64,7 +68,7 @@ static t_list	print_float(char c, va_list ap, t_spec *spec, t_flags *flag)
 	val = spec->val.fl;
 	size = 0;
 	(void)prec;
-	get_arg(spec, 1, ap);
+	get_arg(spec, spec->c, 1, ap);
 	(void)flag;
 	(void)c;
 	// if (spec->mod == L)
@@ -183,14 +187,14 @@ static t_list 	print_csp(char c, va_list ap, t_spec *spec, t_flags *flag)
 	size_t				size;
 	
 	(void)flag;
-	get_arg(spec, 0, ap);
+	get_arg(spec, c, 0, ap);
 	if (c == 'c' || c == '%')
 	{
 		if (c == 'c')
 			str = (c == 'c' && spec->val.c > 64) ? &chars[spec->val.c - 31] : &chars[spec->val.c - 32];
 		else 
 			str = "%";
-		size = 1;
+		size = spec->val.c != 0 ? 1 : 0;
 	}
 	if (c == 's')
 	{

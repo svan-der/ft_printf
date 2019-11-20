@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/12 15:28:18 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/12 18:34:49 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/20 16:43:20 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # include "ft_printf.h"
 
 /* conversion specifier union */
-typedef union	u_input
+typedef struct	s_input
 {
 	char		c;
 	char		*s;
@@ -70,7 +70,7 @@ typedef struct	s_format
 }				t_format;
 
 
-t_input			get_arg(t_spec *spec, t_byte fega, va_list ap);
+void			get_arg(t_spec *spec, char c, t_byte fega, va_list ap);
 int				print_buffer(t_list *buffer, int fd, char **astr, size_t size);
 int				dispatch(t_list **tail, t_spec *spec, va_list ap);
 int				process(t_format *fmt, const char *str, va_list ap);
