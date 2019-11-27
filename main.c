@@ -3,10 +3,7 @@
 
 int		main(void)
 {
-	char c;
-
-	c = 0;
-	ft_printf("mine:%2c\n", c);
-	printf("real:%2c\n", c);
+	ft_printf("@moulitest: %.x %.0x", 0, 0);
+	printf("@moulitest: %.x %.0x", 0, 0);
 	return (1);
 }
