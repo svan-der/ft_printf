@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/15 11:23:28 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/19 13:03:44 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/24 13:47:00 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ static int	print_arg(t_format *fmt, const char *str, va_list ap)
 	const t_list	*tail = fmt->buffer;
 	t_list			**alst;
 	t_spec			spec;
+	int				ret;
 
 	fmt->index++;
 	set_flags(fmt, str, &spec.flags);
@@ -102,7 +103,10 @@ static int	print_arg(t_format *fmt, const char *str, va_list ap)
 	alst = &fmt->buffer;
 	while (*alst != tail)
 		alst = &(*alst)->next;
-	return (dispatch(alst, &spec, ap));
+	ret = dispatch(alst, &spec, ap);
+	if (ret == 0)
+		return (0);
+	return (1);
 }
 
 /* searches in format string for format specifier and processes this string */

@@ -3,10 +3,7 @@
 
 int		main(void)
 {
-	char c;
-
-	c = 0;
-	ft_printf("mine:%2c\n", c);
-	printf("real:%2c\n", c);
+	ft_printf("%-5%\n");
+	printf("%-5%\n");
 	return (1);
 }
