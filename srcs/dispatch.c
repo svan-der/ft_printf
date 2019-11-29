@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/27 19:18:37 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/29 09:48:02 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,7 @@
 
 void		get_strarg(t_spec *spec, char c, t_byte fl, va_list ap)
 {
-	char c;
-
-	c = spec->c;
-	if (c == 'f' || c == 'F')
+	if (fl == 1)
 	{
 		if(spec->mod == L)
 			va_arg(ap, t_ldb);
@@ -33,7 +30,7 @@ void		get_strarg(t_spec *spec, char c, t_byte fl, va_list ap)
 		spec->val.oux = va_arg(ap, unsigned int);
  }
 
-static void		get_uint_arg(t_spec *spec, va_list ap)
+void		get_uint_arg(t_spec *spec, va_list ap)
 {
 	t_llong val;
 	
@@ -46,7 +43,7 @@ static void		get_uint_arg(t_spec *spec, va_list ap)
 	spec->val.oux = val;
 }
 
-static void		get_int_arg(t_spec *spec, va_list ap)
+void	get_int_arg(t_spec *spec, va_list ap)
 {
 	t_llong val;
 	
@@ -130,38 +127,14 @@ static void		set_flags(t_ntoa *pref, int sign, t_spec *spec, t_flags *flag)
 		pref->upper = 1;
 }
 
-static void		ft_minfw(char **str, t_spec *spec, t_ntoa *pref, t_flags *flag)
-{
-	int i;
-	size_t size;
-	size_t total;
-	
-	total = pref->total;
-	i = ft_strchri("csp%diouxXfF", spec->c);
-	size = 0;
-	if (total < spec->min_fw || (i >=0 && i < 4 && pref->padding))
-	{
-		size = (spec->min_fw > total) ? spec->min_fw - total : total;
-		if (pref->padding && i > 3)
-			if(flag->zero && !flag->min)
-				i += 1;
-		i = 0;
-		ft_strpnew(*padding, " 0"[i], size);
-		ft_memset(*str, " 0"[i], size);
-	}
-	pref->total = ft_strlen(*str);
-}
-
 /* processes integer arguments */
 static t_list	print_dioux(char c, t_spec *spec, t_ntoa *pref)
 {
 	char			*str;
 	size_t			size;
 	t_uint			base[] = {16, 16, 8, 10, 16, 16};
-	char 			c;
 	size_t			i;
 
-	c = spec->c;
 	str = "diouxX";
 	i = ft_strchri(str, c);
 	str = NULL;
@@ -183,7 +156,15 @@ static t_list 	print_csp(char c, t_spec *spec, t_ntoa *pref)
 	
 	(void)pref;
 	if (c == 'c' || c == '%')
-		print_c(spec, pref, &str, flag);
+	{
+		if (c == 'c' && spec->val.c != 0)
+			str = (c == 'c' && spec->val.c > 64) ? &chars[spec->val.c - 31] : &chars[spec->val.c - 32];
+		else if (spec->val.c == 0)
+			str = "\0";
+		else if (c == '%')
+			str = "%";
+		size = 1;
+	}
 	if (c == 's')
 	{
 		s2 = "(null)";
@@ -192,30 +173,16 @@ static t_list 	print_csp(char c, t_spec *spec, t_ntoa *pref)
 		{
 			ft_strpnew(&str, 7);
 			ft_memcpy(str, s2, 7);
-			pref->total = ft_strlen(str);
+			size = ft_strlen(str);
 		}
 		if (spec->prec != 0)
-			pref->total = ft_min_size(ft_strlen(str), spec->prec);
+			size = ft_min_size(ft_strlen(str), spec->prec);
 		else
-			pref->total = ft_strlen(str);
+			size = ft_strlen(str);
 	}
 	if (c == 'p')
-		pref->total = ft_utoap_base(&str, spec->val.oux, 16, 0);
-	ft_minfw(&str, spec, pref, flag);
-	return ((t_list){str, pref->total, NULL});
-}
-
-int		get_arg(t_spec *spec, int index, va_list ap)
-{
-	int i;
-
-	i = index;
-	if (i < 3 || i > 9)
-		get_strarg(spec, (i > 9), ap);
-	else if (i == 4 || i == 5)
-		get_int_arg(spec, ap);
-	else
-		get_uint_arg(spec, ap);
+		size = ft_utoap_base(&str, spec->val.oux, 16, 0);
+	return ((t_list){str, size, NULL});
 }
 
 static t_list 	ft_minfw(int index, t_spec *spec, size_t total, t_ntoa *pref)
