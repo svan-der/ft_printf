@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/15 11:23:28 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/24 13:47:00 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/27 19:14:08 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,15 @@ static void	argi_minfw_prec(t_format *fmt, const char *str, t_spec *spec)
 	int		i;
 	int		num;
 
-	spec->prec = 0;
 	i = fmt->index;
 	num = 0;
-	ft_atoip(str, &num);
 	i += ft_atoip(str + i, &num);
 	spec->min_fw = num;
+	spec->prec = 0;
+	spec->prec_set = (str[i] == '.');
 	i += (str[i] == '.');
-	i += ft_atoip(str + i, &spec->prec);
+	num = ft_atoip(str + i, &spec->prec);
+	i += num;
 	if (spec->prec < 0)
 		spec->prec = 0;
 	fmt->index = i;
@@ -125,7 +126,7 @@ int			process(t_format *fmt, const char *str, va_list ap)
 				return (0);
 		fmt->index = j;
 		if (str[j] == '%')
-			if (!print_arg(fmt, str, ap))
+			if (!print_arg(fmt, str, ap) && i == j)
 				return (0);
 		i = fmt->index;
 	}

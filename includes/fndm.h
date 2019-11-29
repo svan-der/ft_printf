@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/12 15:28:18 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/24 18:13:26 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/27 19:14:01 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,10 @@ typedef struct	s_spec
 	t_mods		mod;
 	size_t		min_fw;
 	int			prec;
+	int			prec_set;
 	char		c;
+	char		*pref;
+	int			pre;
 	t_ldb		ldb_reg;
 	t_input		val;
 }				t_spec;
@@ -70,7 +73,7 @@ typedef struct	s_format
 }				t_format;
 
 
-void			get_arg(t_spec *spec, int index, va_list ap);
+int				get_arg(int i, t_spec *spec, va_list ap);
 int				print_buffer(t_list *buffer, int fd, char **astr, size_t size);
 int				dispatch(t_list **tail, t_spec *spec, va_list ap);
 int				process(t_format *fmt, const char *str, va_list ap);
