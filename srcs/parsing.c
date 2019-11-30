@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/15 11:23:28 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/27 19:14:08 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/29 10:24:25 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,15 @@ static void	argi_minfw_prec(t_format *fmt, const char *str, t_spec *spec)
 	num = 0;
 	i += ft_atoip(str + i, &num);
 	spec->min_fw = num;
-	spec->prec = 0;
+	spec->prec = -1;
 	spec->prec_set = (str[i] == '.');
 	i += (str[i] == '.');
-	num = ft_atoip(str + i, &spec->prec);
-	i += num;
-	if (spec->prec < 0)
-		spec->prec = 0;
+	if (ft_isdigit(str[i]))
+	{
+		num = ft_atoip(str + i, &spec->prec);
+		spec->prec = (spec->prec < 0) ? 0: spec->prec;
+		i++;
+	}
 	fmt->index = i;
 }
 

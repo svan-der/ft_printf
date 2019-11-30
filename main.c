@@ -3,7 +3,7 @@
 
 int		main(void)
 {
-	ft_printf("@moulitest: %.x %.0x", 0, 0);
-	printf("@moulitest: %.x %.0x", 0, 0);
+	ft_printf("%#x", 42);
+	printf("%#x", 42);
 	return (1);
 }
