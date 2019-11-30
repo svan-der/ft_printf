@@ -6,14 +6,16 @@
 #    By: svan-der <svan-der@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/11/08 17:46:48 by svan-der       #+#    #+#                 #
-#    Updated: 2019/11/15 16:58:20 by svan-der      ########   odam.nl          #
+#    Updated: 2019/11/30 17:23:41 by svan-der      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libftprintf.a
 
 HEADER = ./includes
-SRC = $(addprefix srcs/,dispatch.c finish.c ft_vprintf.c ntoap.c parsing.c ft_memchr.c ft_putnbr_fd.c ft_striter.c ft_strnew.c ft_atoi.c\
+SRC = $(addprefix srcs/,dispatch.c finish.c ft_vprintf.c ntoap.c parsing.c\
+	ft_memchr.c ft_putnbr_fd.c ft_abs.c\
+	ft_striter.c ft_strnew.c ft_atoi.c\
 	ft_memcmp.c ft_putstr.c ft_itoa.c ft_gridset.c\
 	ft_bzero.c ft_memcpy.c ft_putstr_fd.c ft_strjoin.c ft_strrchr.c\
 	ft_isalnum.c ft_memdel.c ft_strcat.c ft_strlcat.c ft_strstr.c\
@@ -34,7 +36,8 @@ CFLAGS = -Wall -Werror -Wextra
 DFLAGS = $(CFLAGS) -g
 
 LIB = libft/libft.a
-LIB_SRC = $(addprefix $(LIB_DIR),ft_memchr.c ft_putnbr_fd.c ft_striter.c ft_strnew.c ft_atoi.c\
+LIB_SRC = $(addprefix $(LIB_DIR),ft_memchr.c ft_putnbr_fd.c ft_striter.c\
+	ft_strnew.c ft_atoi.c ft_abs.c\
 	ft_memcmp.c ft_putstr.c ft_itoa.c ft_gridset.c\
 	ft_bzero.c ft_memcpy.c ft_putstr_fd.c ft_strjoin.c ft_strrchr.c\
 	ft_isalnum.c ft_memdel.c ft_strcat.c ft_strlcat.c ft_strstr.c\
@@ -56,15 +59,15 @@ LIB_BIN = -L./libft -lft
 LIBHEADER = ./libft/includes
 HEADERS = -I$(HEADER) -I$(LIBHEADER)
 
-all: $(NAME) $(LIB_OBJ) 
-	
+all: $(NAME) $(LIB_OBJ)
+
 $(NAME): $(OBJ) $(LIB_OBJ)
 	ar rc $(NAME) $(OBJ) $(LIB_OBJ)
 	ranlib $(NAME)
 
 $(OBJ): $(SRCDIR)%.o: $(SRCDIR)%.c
 	$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@
-	
+
 $(LIB_OBJ): $(LIB_DIR)%.o: $(LIB_DIR)%.c
 	$(CC) $(CFLAGS) -I$(LIBHEADER) -c $< -o $@
 

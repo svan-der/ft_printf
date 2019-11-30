@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/11/14 17:54:21 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/29 09:49:36 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/30 18:27:33 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@
 typedef struct	s_ntoa
 {
 	t_byte	space;
-	t_byte	sign;
 	t_byte	padding;
 	t_byte	delimit;
 	t_byte	upper;
 	t_byte	min;
 	t_byte	pref;
 	t_byte	prec_set;
+	char	*sign;
 	char	*prefix;
 	int		pre;
 	size_t	prec;

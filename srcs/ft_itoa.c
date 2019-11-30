@@ -6,17 +6,19 @@
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/02/05 15:48:35 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/12 14:46:08 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/11/30 15:32:17 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "mathlib.h"
 
-size_t	ft_count_num(int num)
+size_t	ft_count_num(t_llong num)
 {
 	size_t	len;
 
+	if (num < 0)
+		num = num * -1;
 	len = 1;
 	while (num > 9)
 	{
