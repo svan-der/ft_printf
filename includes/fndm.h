@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/12 15:28:18 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/02 14:13:52 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/04 11:36:09 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ typedef struct	s_input
 {
 	char		c;
 	char		*s;
-	void		*p;
+	t_ull		p;
 	t_llong		di;
 	t_ull 		oux;
 	t_ldb		*fl;
