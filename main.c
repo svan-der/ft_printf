@@ -3,64 +3,50 @@
 #include <float.h>
 #include <fcntl.h>
 
-int		main(void)
+int	main(void)
 {
-	ft_printf("@moulitest: %o", 0);
-	printf("@moulitest: %o", 0);
-	return (0);
-}
+	char **ptr2;
+	char *ptr;
+	char *str;
+	int i;
+	int octal;
+	int o;
+	unsigned int ui;
+	int hexi;
+	int bighexi;
+	char c;
+	short sh;
+	long long ll;
+	unsigned short ush;
+	unsigned char uc;
+	unsigned long ul;
+	unsigned long long ull;
 
-// int	main(void)
-// {
-// 	char **ptr2;
-// 	char *ptr;
-// 	char *str;
-// 	int i;
-// 	int octal;
-// 	int o;
-// 	unsigned int ui;
-// 	int hexi;
-// 	int bighexi;
-// 	char c;
-// 	short sh;
-// 	long long ll;
-// 	unsigned short ush;
-// 	unsigned char uc;
-// 	unsigned long ul;
-// 	unsigned long long ull;
-	
-// 	ptr = "Hello";
-// 	ptr2 = &ptr;
-// 	str = "ohno412";
-// 	i = 2147483647;
-// 	octal = 2500;
-// 	o = 2500;
-// 	ui = 2147483650;
-// 	hexi = 2500;
-// 	bighexi = 2500;
-// 	c = 'u';
-// 	sh = 2;
-// 	ll = 1678945612345945612;
-// 	ush = 4;
-// 	uc = 'c';
-// 	ul = 4294967293;
-// 	ull = 1844674403709551614;
+	ptr = "Hello";
+	ptr2 = &ptr;
+	str = "ohno412";
+	i = 2147483647;
+	octal = 2500;
+	o = 2500;
+	ui = 2147483650;
+	hexi = 2500;
+	bighexi = 2500;
+	c = 'u';
+	sh = 2;
+	ll = 1678945612345945612;
+	ush = 4;
+	uc = 'c';
+	ul = 4294967293;
+	ull = 1844674403709551614;
 
-// 	printf("printf\t\t[%s][%p][%d][%%][%s][%p]\n", ptr, ptr2, 214, str, &ptr);
-// 	ft_printf("ft_printf\t[%s][%p][%d][%%][%s][%p]\n", ptr, ptr2, 214, str, &ptr);
-// 	ft_printf("\n");
-	// 	ft_printf("\n");
+	// printf("printf\t\t[%s][%p][%d][%%][%s][%p]\n", ptr, ptr2, 214, str, &ptr);
+	// ft_printf("ft_printf\t[%s][%p][%d][%%][%s][%p]\n", ptr, ptr2, 214, str, &ptr);
 	// printf("printf\t\t[%u][%u][%10u][%.20u][%-10u][%10.20u][%-10.20u][%u][%20.10u][%020u][%030.20u][%030.40u][%-20.10u]\n", ui, ui, ui, ui, ui, ui, ui, ui, ui, ui, ui, ui, ui);
 	// ft_printf("ft_printf\t[%u][%u][%10u][%.20u][%-10u][%10.20u][%-10.20u][%u][%20.10u][%020u][%030.20u][%030.40u][%-20.10u]\n", ui, ui, ui, ui, ui, ui, ui, ui, ui, ui, ui, ui, ui);
-	// printf("printf\t\t[%X][%X][%10X][%.20X][%-10X][%10.20X][%-10.20X][%X][%20.10X][%020X][%030.20X][%030.40X][%-20.10X]\n", bighexi, bighexi, bighexi, bighexi, bighexi, bighexi, bighexi, bighexi, bighexi, bighexi, bighexi, bighexi, bighexi);
-	// ft_printf("ft_printf\t[%X][%X][%10X][%.20X][%-10X][%10.20X][%-10.20X][%X][%20.10X][%020X][%030.20X][%030.40X][%-20.10X]\n", bighexi, bighexi, bighexi, bighexi, bighexi, bighexi, bighexi, bighexi, bighexi, bighexi, bighexi, bighexi, bighexi);
-	// 	ft_printf("\n");
-	// printf("printf\t\t[%hi][%hhi][%li][%lli]\n", sh, c, 123456789456123, ll);
-	// ft_printf("ft_printf\t[%hi][%hhi][%li][%lli]\n", sh, c, 123456789456123, ll);
 	// printf("printf\t\t[%ho][%hho][%lo][%llo]\n", ush, uc, ul, ull);
 	// ft_printf("ft_printf\t[%ho][%hho][%lo][%llo]\n", ush, uc, ul, ull);
-	// printf("printf\t\t[%hx][%hhx][%lx][%llx]\n", ush, uc, ul, ull);
-	// ft_printf("ft_printf\t[%hx][%hhx][%lx][%llx]\n", ush, uc, ul, ull);
+	printf("printf\t\t[%hx][%hhx][%lx][%llx]\n", ush, uc, ul, ull);
+	ft_printf("ft_printf\t[%hx][%hhx][%lx][%llx]\n", ush, uc, ul, ull);
 	// printf("printf\t\t[%hX][%hhX][%lX][%llX]\n", ush, uc, ul, ull);
 	// ft_printf("ft_printf\t[%hX][%hhX][%lX][%llX]\n", ush, uc, ul, ull);
 	// ft_printf("\n");
@@ -100,8 +86,6 @@ int		main(void)
 	// printf("printf\t\t[%.15hX][%.15hhX][%.15lX][%.15llX]\n", ush, uc, ul, ull);
 	// ft_printf("ft_printf\t[%.15hX][%.15hhX][%.15lX][%.15llX]\n", ush, uc, ul, ull);
 	// ft_printf("\n");
-
-
 
 
 
@@ -157,5 +141,5 @@ int		main(void)
 // 	printf("printf\t\t[%5.5i]\n", 2);
 // 	ft_printf("ft_printf\t[%5.5i]\n", 2);
 // 	ft_printf("\n");
-// 	return (0);
-// }
+	return (0);
+}

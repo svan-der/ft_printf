@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/04 12:13:24 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/04 13:34:44 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,7 +208,7 @@ static t_list 	print_csp(char c, t_spec *spec, t_ntoa *pref)
 			ft_memcpy(str, s2, 7);
 			size = ft_strlen(str);
 		}
-		if (spec->prec != 0)
+		if (spec->prec > 0)
 			size = ft_min_size(ft_strlen(str), spec->prec);
 		else
 			size = ft_strlen(str);

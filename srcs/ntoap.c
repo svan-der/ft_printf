@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/22 17:57:12 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/02 17:32:30 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/04 13:52:25 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	make(char *str, t_ull n, t_uint base, t_ntoa *pref)
 			str[i] = digit[n % base];
 			n /= base;
 		}
-	padding = (padding - i > 0) ? padding - i : 0;
+	padding = (padding && padding - i > 0) ? padding - i : 0;
 	if (padding != 0)
 		ft_memset(str + i - padding, '0', padding);
 }
@@ -70,7 +70,7 @@ void	make_signstr(char *str, t_llong n, t_uint base, t_ntoa *pref)
 			n /= base;
 		}
 	len = (i < 0) ? i * -1 : i;
-	padding = (padding - len > 0) ? padding - len : 0;
+	padding = (padding && padding - len > 0) ? padding - len : 0;
 	if (padding != 0)
 		ft_memset(str + i - padding, '0', padding);
 }
