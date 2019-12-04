@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/22 17:57:12 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/04 14:36:51 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/04 16:04:37 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int		ft_itoap_base(char **astr, t_llong n, t_uint base, t_ntoa *pref)
 	*astr = NULL;
 	if ((pref->sign && !pref->pre) || (n < 0 && !pref->pre))
 		pref->prefix = (pref->sign && n >= 0) ? &sign[0] : &sign[1];
-	if (!pref->sign && pref->space && (n > 0) && !pref->pre)
+	if (!pref->sign && pref->space && (n >= 0) && !pref->pre)
 		pref->prefix = &sign[2];
 	len[0] = pref->prefix ? 1 : 0;
 	len[1] = (max != 1) ? ft_count_num(n) : ft_numlen_base(n, 10);

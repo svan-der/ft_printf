@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/04 13:34:44 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/04 16:05:20 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,6 @@ static void		ft_sign(t_ntoa *pref, t_spec *spec, t_flags *flag)
 
 static void		set_flags(t_ntoa *pref, int sign, t_spec *spec, t_flags *flag)
 {
-	if (flag->space && !flag->plus)
-		pref->space = 1;
 	if (flag->zero || flag->min || (!spec->prec && flag->zero))
 		pref->padding = 1;
 	if (spec->min_fw == 0)
@@ -141,6 +139,8 @@ static void		set_flags(t_ntoa *pref, int sign, t_spec *spec, t_flags *flag)
 		pref->delimit = 1;
 	if (flag->plus || spec->val.di < 0)
 		ft_sign(pref, spec, flag);
+	if (!pref->sign && flag->space && spec->val.di >= 0)
+		pref->space = 1;
 	if ((!sign && flag->hash) || spec->c == 'p')
 		ft_prefix(pref, spec->val.oux, spec, flag);
 	if (spec->prec != -1 && spec->prec_set)
@@ -208,8 +208,8 @@ static t_list 	print_csp(char c, t_spec *spec, t_ntoa *pref)
 			ft_memcpy(str, s2, 7);
 			size = ft_strlen(str);
 		}
-		if (spec->prec > 0)
-			size = ft_min_size(ft_strlen(str), spec->prec);
+		if (pref->prec >= 0 && pref->prec_set)
+			size = ft_min_size(ft_strlen(str), pref->prec);
 		else
 			size = ft_strlen(str);
 	}
