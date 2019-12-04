@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/22 17:57:12 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/04 13:52:25 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/04 14:36:51 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 void	make(char *str, t_ull n, t_uint base, t_ntoa *pref)
 {
 	char	*digit;
-	size_t	padding;
+	int		len;
+	int		padding;
 	int		i;
 
 	padding = pref->prec;
@@ -39,7 +40,8 @@ void	make(char *str, t_ull n, t_uint base, t_ntoa *pref)
 			str[i] = digit[n % base];
 			n /= base;
 		}
-	padding = (padding && padding - i > 0) ? padding - i : 0;
+	len = (i < 0) ? i * -1 : i;
+	padding = (padding && (padding - len > 0)) ? padding - len : 0;
 	if (padding != 0)
 		ft_memset(str + i - padding, '0', padding);
 }

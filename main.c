@@ -3,6 +3,7 @@
 #include <float.h>
 #include <fcntl.h>
 
+
 int	main(void)
 {
 	char **ptr2;
@@ -41,12 +42,10 @@ int	main(void)
 
 	// printf("printf\t\t[%s][%p][%d][%%][%s][%p]\n", ptr, ptr2, 214, str, &ptr);
 	// ft_printf("ft_printf\t[%s][%p][%d][%%][%s][%p]\n", ptr, ptr2, 214, str, &ptr);
-	// printf("printf\t\t[%u][%u][%10u][%.20u][%-10u][%10.20u][%-10.20u][%u][%20.10u][%020u][%030.20u][%030.40u][%-20.10u]\n", ui, ui, ui, ui, ui, ui, ui, ui, ui, ui, ui, ui, ui);
-	// ft_printf("ft_printf\t[%u][%u][%10u][%.20u][%-10u][%10.20u][%-10.20u][%u][%20.10u][%020u][%030.20u][%030.40u][%-20.10u]\n", ui, ui, ui, ui, ui, ui, ui, ui, ui, ui, ui, ui, ui);
+	printf("printf\t\t[%u][%u][%10u][%.20u][%-10u][%10.20u][%-10.20u][%u][%20.10u][%020u][%030.20u][%030.40u][%-20.10u]\n", ui, ui, ui, ui, ui, ui, ui, ui, ui, ui, ui, ui, ui);
+	ft_printf("ft_printf\t[%u][%u][%10u][%.20u][%-10u][%10.20u][%-10.20u][%u][%20.10u][%020u][%030.20u][%030.40u][%-20.10u]\n", ui, ui, ui, ui, ui, ui, ui, ui, ui, ui, ui, ui, ui);
 	// printf("printf\t\t[%ho][%hho][%lo][%llo]\n", ush, uc, ul, ull);
 	// ft_printf("ft_printf\t[%ho][%hho][%lo][%llo]\n", ush, uc, ul, ull);
-	printf("printf\t\t[%hx][%hhx][%lx][%llx]\n", ush, uc, ul, ull);
-	ft_printf("ft_printf\t[%hx][%hhx][%lx][%llx]\n", ush, uc, ul, ull);
 	// printf("printf\t\t[%hX][%hhX][%lX][%llX]\n", ush, uc, ul, ull);
 	// ft_printf("ft_printf\t[%hX][%hhX][%lX][%llX]\n", ush, uc, ul, ull);
 	// ft_printf("\n");
