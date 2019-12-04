@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/04 16:05:20 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/04 16:19:10 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ static void		set_flags(t_ntoa *pref, int sign, t_spec *spec, t_flags *flag)
 		pref->min = 1;
 	if ((sign || spec->c == 'c' || spec->c == 'f' || spec->c == 'F') && flag->apos)
 		pref->delimit = 1;
-	if (flag->plus || spec->val.di < 0)
+	if ((flag->plus && (spec->c == 'd' || spec->c == 'i')) || spec->val.di < 0)
 		ft_sign(pref, spec, flag);
 	if (!pref->sign && flag->space && spec->val.di >= 0)
 		pref->space = 1;

@@ -5,7 +5,7 @@
 
 int 	main(void)
 {
-	printf("printf\t\t[% i]\n", 0);
-	ft_printf("ft_printf\t\t[% i]\n", 0);
+	printf("printf\t\t[%05d]\n", -42);
+	ft_printf("ft_printf\t\t[%05d]\n", -42);
 	return (0);
 }
