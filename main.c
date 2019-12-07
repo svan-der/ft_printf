@@ -46,6 +46,7 @@
 
 int		main(void)
 {
-
+	ft_printf("%");
+	// printf("real: %\n");
 	return (0);
 }
