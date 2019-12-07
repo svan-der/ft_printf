@@ -6,22 +6,24 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/04 16:19:10 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/07 16:37:02 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+#include <stdio.h>
 #include "fndm.h"
 
-void		get_strarg(t_spec *spec, char c, t_byte fl, va_list ap)
+void		get_floatarg(t_spec *spec, va_list ap)
 {
-	if (fl == 1)
-	{
-		if(spec->mod == L)
-			va_arg(ap, t_ldb);
-		else
-			va_arg(ap, double);
-	}
+	if(spec->mod == L)
+		va_arg(ap, t_ldb);
+	else
+		va_arg(ap, double);
+}
+
+void		get_strarg(t_spec *spec, char c, va_list ap)
+{
 	if (c == 'c' || c == '%')
 		spec->val.c = va_arg(ap, int);
 	if (c == 's')
@@ -255,8 +257,10 @@ static t_list 	ft_minfw(t_spec *spec, size_t total, t_ntoa *pref)
 
 int		get_arg(int i, t_spec *spec, t_flags *flag, va_list ap)
 {
-	if (i < 4 || i > 9)
-		get_strarg(spec, spec->c, (i > 9), ap);
+	if (i < 4)
+		get_strarg(spec, spec->c, ap);
+	else if (i > 9)
+		get_floatarg(spec, ap);
 	else if (i == 4 || i == 5)
 	{
 		get_int_arg(spec, ap);
@@ -293,7 +297,7 @@ int				dispatch(t_list **tail, t_spec *spec, va_list ap)
 
 	i = ft_strchri("csp%diouxXfF", spec->c);
 	if (i == -1)
-		return (0);
+		return (-1);
 	if (!get_arg(i, spec, flag, ap) && spec->min_fw <= 0)
 		return (0);
 	set_flags(&pref, (i == 4 || i == 5), spec, flag);

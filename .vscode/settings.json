@@ -17,6 +17,7 @@
 		"ntoa.h": "c",
 		"stdarg.h": "c",
 		"stdio.h": "c",
-		"mathlib.h": "c"
+		"mathlib.h": "c",
+		"fcntl.h": "c"
 	}
 }

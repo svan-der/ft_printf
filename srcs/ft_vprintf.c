@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/12 15:08:04 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/14 18:38:32 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/07 16:41:39 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int		ft_vdprintf(int fd, const char *format, va_list ap)
 	t_format	fmt;
 
 	fmt = (t_format){0, 0, fd, NULL, NULL, NULL};
-	if (process(&fmt, format, ap) == -1)
+	if (process(&fmt, format, ap) == -1 && !fmt.buffer)
 		return (-1);
 	return (print_buffer(fmt.buffer, fd, NULL, 0));
 }
