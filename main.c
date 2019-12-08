@@ -46,7 +46,11 @@
 
 int		main(void)
 {
-	ft_printf("%");
+	// ft_printf("mine: [%#X]\n", i);
+	// printf("real: [%#X]\n", i);
 	// printf("real: %\n");
+
+	ft_printf("%p", NULL);
+	printf("%p", NULL);
 	return (0);
 }

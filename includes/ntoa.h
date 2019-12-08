@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/11/14 17:54:21 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/04 11:07:31 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/08 14:57:08 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ typedef struct	s_ntoa
 	char	*sign;
 	char	*prefix;
 	int		pre;
-	size_t	prec;
+	int		prec;
 }				t_ntoa;
 
 char			*ft_utoa(t_ull n);

@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/22 17:57:12 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/04 16:16:53 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/08 17:54:21 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	make(char *str, t_ull n, t_uint base, t_ntoa *pref)
 	digit = (pref->upper) ? HEX_UP : HEX;
 	i = -(n == 0);
 	if (n == 0)
-		if (!pref->prefix)
+		if (!pref->prefix || (pref->prefix && pref->pref))
 			if ((pref->prec > 0 && pref->prec_set) || !pref->prec_set)
 				str[-1] = '0';
 	if (base == 1)
@@ -89,11 +89,11 @@ int		ft_itoap_base(char **astr, t_llong n, t_uint base, t_ntoa *pref)
 	max = (n < -1 * (__LONG_LONG_MAX__) || n > (__LONG_LONG_MAX__)) ? 1 : 0;
 	pre = NULL;
 	*astr = NULL;
-	if ((pref->sign && !pref->pre) || (n < 0 && !pref->pre))
-		pref->prefix = (pref->sign && n >= 0) ? &sign[0] : &sign[1];
-	if (!pref->sign && pref->space && (n >= 0) && !pref->pre)
-		pref->prefix = &sign[2];
-	len[0] = pref->prefix ? 1 : 0;
+	// if ((pref->sign && !pref->pre) || (n < 0 && !pref->pre))
+	// 	pref->prefix = (pref->sign && n >= 0) ? &sign[0] : &sign[1];
+	// if (!pref->sign && pref->space && (n >= 0) && !pref->pre)
+	// 	pref->prefix = &sign[2];
+	len[0] = pref->sign && pref->pref ? 1 : 0;
 	len[1] = (max != 1) ? ft_count_num(n) : ft_numlen_base(n, 10);
 	if (!len[1])
 		return (0);
@@ -103,8 +103,8 @@ int		ft_itoap_base(char **astr, t_llong n, t_uint base, t_ntoa *pref)
 		if (!ft_strpnew(astr, total))
 			return (-1);
 	max ? make(*astr + total, n, base, pref) : make_signstr(*astr + total, n, base, pref);
-	if (pref->prefix)
-		*astr[0] = *pref->prefix;
+	if (pref->sign && pref->pref)
+		*astr[0] = *pref->sign;
 	return (total);
 }
 
@@ -119,12 +119,12 @@ int		ft_utoap_base(char **astr, t_ull n, t_uint base, t_ntoa *pref)
 	if (!len[1])
 		return (0);
 	len[2] = (pref->delimit) ? (len[1] / 3) - !(len[1] % 3) : 0;
-	total = len[0] + ft_max_size(pref->prec, len[1]) + len[2];
+	total = len[0] + ft_max_size((size_t)pref->prec, len[1]) + len[2];
 	if (!*astr)
 		if (!ft_strpnew(astr, total))
 			return (-1);
 	make(*astr + total, n, base, pref);
-	if (pref->prefix && pref->min)
+	if ((pref->prefix && pref->min) || (pref->prefix && pref->pref))
 		ft_memcpy(*astr, pref->prefix, len[0]);
 	return (total);
 }

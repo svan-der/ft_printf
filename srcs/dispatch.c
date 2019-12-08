@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/07 16:37:02 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/08 20:55:17 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,16 +103,16 @@ static void 	ft_prefix(t_ntoa *pref, t_ull val_unsign, t_spec *spec, t_flags *fl
 		if (val_unsign != 0)
 			pref->prefix = hex_up;
 	}
-	else if (spec->c == 'x' || spec->c == 'p')
+	else if (spec->c == 'x')
 	{
-		if (val_unsign != 0)
+		if (spec->c == 'x' && val_unsign != 0)
 			pref->prefix = hex;
 	}
-	pref->pref = ((flag->zero || flag->min) && flag->hash) ? 1 : 0;
+	pref->pref = ((flag->zero || flag->min) && flag->hash) ? 0 : 1;
 	pref->pre = (pref->prefix) ? ft_strlen(pref->prefix) : 0;
 }
 
-static void		ft_sign(t_ntoa *pref, t_spec *spec, t_flags *flag)
+static void		ft_spsign(t_ntoa *pref, t_spec *spec, t_flags *flag)
 {
 	char	*sign;
 	t_llong val;
@@ -123,7 +123,8 @@ static void		ft_sign(t_ntoa *pref, t_spec *spec, t_flags *flag)
 		pref->sign = (flag->plus && val >= 0) ? &sign[0] : &sign[1];
 	if (!flag->plus && flag->space && (val > 0))
 		pref->sign = &sign[2];
-	pref->pre = (pref->sign && pref->zero && spec->min_fw != 0) ? 1 : 0;
+	pref->pref = (pref->sign && pref->zero && spec->min_fw != 0) ? 0 : 1;
+	pref->pre = (pref->sign) ? 1 : 0;
 }
 
 
@@ -139,11 +140,11 @@ static void		set_flags(t_ntoa *pref, int sign, t_spec *spec, t_flags *flag)
 		pref->min = 1;
 	if ((sign || spec->c == 'c' || spec->c == 'f' || spec->c == 'F') && flag->apos)
 		pref->delimit = 1;
-	if ((flag->plus && (spec->c == 'd' || spec->c == 'i')) || spec->val.di < 0)
-		ft_sign(pref, spec, flag);
+	if ((flag->plus && (spec->c == 'd' || spec->c == 'i')) || spec->val.di < 0 || flag->space)
+		ft_spsign(pref, spec, flag);
 	if (!pref->sign && flag->space && spec->val.di >= 0)
 		pref->space = 1;
-	if ((!sign && flag->hash) || spec->c == 'p')
+	if (!sign && flag->hash)
 		ft_prefix(pref, spec->val.oux, spec, flag);
 	if (spec->prec != -1 && spec->prec_set)
 		pref->prec = (size_t)spec->prec;
@@ -173,9 +174,10 @@ static t_list	print_dioux(char c, t_spec *spec, t_ntoa *pref)
 	}
 	else
 	{
-		if (pref->prec_set && pref->prec <= 0 && spec->val.oux == 0)
+		if (pref->prec_set && spec->prec <= 0 && spec->val.oux == 0)
 			return ((t_list){str, 0, NULL});
 		size = ft_utoap(&str, spec->val.oux, base[i], pref);
+		// if (!str &&) 
 	}
 	return ((t_list){str, size, NULL});
 }
@@ -220,40 +222,151 @@ static t_list 	print_csp(char c, t_spec *spec, t_ntoa *pref)
 	return ((t_list){str, size, NULL});
 }
 
-static t_list 	ft_minfw(t_spec *spec, size_t total, t_ntoa *pref)
-{
-	int i;
-	size_t len;
-	size_t size;
-	char *str;
-	char *pad;
 
-	str = " 0";
+size_t	insert_prefix(char *str, t_ntoa *pref, size_t *size)
+{
+	size_t len;
+	size_t total;
+	
+	total = *size;
 	len = 0;
-	i = pref->padding && !pref->min && (pref->prec <= 0);
-	pref->pre = (pref->min) ? 0 : pref->pre;
-	size = (total < spec->min_fw && spec->min_fw) ? spec->min_fw - total : 0 + pref->pre;
+	if (pref->pre != 0 && pref->pref == 0 && pref->zero)
+	{
+		ft_memcpy(str, pref->prefix, pref->pre);
+		len += pref->pre;
+		*size -= pref->pre;
+		// len += (size >= (size_t)pref->pre) ? size - pref->pre : pref->pre;
+		
+	}
+	else if (pref->pre != 0 && pref->pref == 1 && pref->prefix)
+	{
+		*size = (*size >= (size_t)pref->pre) ? *size - pref->pre : *size + pref->pre;
+		ft_memcpy(str + *size, pref->prefix, pref->pre);
+		len = (pref->padding || pref->space || total) ? 0 : 2;
+		// *size -= pref->pre;
+	}
+	return (len);
+}
+
+static t_list	ft_cspad(int index, int i, size_t padding, size_t total)
+{
+	size_t 	pre;
+	size_t 	size;
+	size_t 	len;
+	char	*pad;
+
+	len = 0;
+	pre = (index == 2) ? 2 : 0;
+	size = (total < padding && padding) ? padding - total : pre;
 	pad = ft_strnew(size);
-	if (pref->pre != 0 && pref->pref == 1)
+	if (size != 0 && padding != 0)
+		ft_memset(pad, " 0"[i], size);
+	if (index == 2)
 	{
-		ft_memcpy(pad, pref->prefix, pref->pre);
-		len = 0 + pref->pre;
+		len = (size != 0) ? size - pre : 0;
+		ft_memcpy(pad + len, "0x", 2);
 	}
-	else if (pref->pre != 0 && pref->pref == 0 && pref->prefix)
-	{
-		size -= pref->pre;
-		ft_memcpy(pad + size, pref->prefix, pref->pre);
-	}
-	if (size != 0 && spec->min_fw != 0)
-		ft_memset(pad + len, str[i], size);
-	if (pref->sign && pref->pre)
-	{
-		pad[0] = *pref->sign;
-		size -= 1;
-	}
-	size = (pref->pref) ? size : size + pref->pre;
 	return ((t_list){pad, size, NULL});
 }
+
+static t_list	ft_intpad(int i, size_t padding, size_t total, t_ntoa *pref)
+{
+	size_t 	size;
+	size_t 	len;
+	char	*pad;
+
+	len = 0;
+	// pref->pre = (pref->min) ? 0 : pref->pre;
+	size = (total < padding && padding) ? padding - total : 0;
+	size = (size == 0 && !pref->pref && pref->pre) ? pref->pre : size;
+	if (!size)
+		return((t_list){NULL, size, NULL});
+	pad = ft_strnew(size);
+	if (size != 0 && padding != 0)
+		ft_memset(pad, " 0"[i], size);
+	if (pref->sign && !pref->pref)
+		pad[0] = *pref->sign;
+	size = (size == (size_t)pref->pre) ? 1 : size;
+	return ((t_list){pad, size, NULL});
+}
+
+static t_list	ft_uintpad(int i, size_t padding, size_t total, t_ntoa *pref)
+{
+	size_t 	size;
+	size_t	pad_len;
+	size_t 	len;
+	char	*pad;
+
+	len = 0;
+	// pref->pre = (pref->min) ? 0 : pref->pre;
+	size = (total < padding && padding) ? padding - total : pref->pre;
+	pad_len = size;
+	if (!size)
+		return((t_list){NULL, size, NULL});
+	pad = ft_strnew(size);
+	len = insert_prefix(pad, pref, &size);
+	if (size != 0 && padding != 0)
+		ft_memset(pad + len, " 0"[i], size);
+	return ((t_list){pad, pad_len, NULL});
+}
+
+static t_list 	ft_minfw(int index, t_spec *spec, size_t total, t_ntoa *pref)
+{
+	int i;
+
+	i = pref->padding && !pref->min && (spec->prec < 0);
+	if (index < 4)
+		return (ft_cspad(index, i, spec->min_fw, total));
+	if (index == 4 || index == 5)
+		return (ft_intpad(i, spec->min_fw, total, pref));
+	return (ft_uintpad(i, spec->min_fw, total, pref));
+	// pref->pre = (pref->min) ? 0 : pref->pre;
+	// size = (total < spec->min_fw && spec->min_fw) ? spec->min_fw - total : 0;
+	// size = (!size && pref->pre && pref->pref && !pref->sign) ? pref->pre : size;
+	// if (!size)
+	// 	return((t_list){NULL, size, NULL});
+	// pad = ft_strnew(size);
+	// len = insert_prefix(pad, pref, &size);
+	// if (size != 0 && spec->min_fw != 0)
+	// 	ft_memset(pad + len, " 0"[i], size);
+	// size = (size == (size_t)pref->pre) ? pref->pre : size + len;
+	// return ((t_list){pad, size, NULL});
+}
+
+// static t_list 	ft_minfw(t_spec *spec, size_t total, t_ntoa *pref)
+// {
+// 	int i;
+// 	size_t len;
+// 	size_t size;
+// 	char *str;
+// 	char *pad;
+
+// 	str = " 0";
+// 	len = 0;
+// 	i = pref->padding && !pref->min && (spec->prec < 0);
+// 	pref->pre = (pref->min) ? 0 : pref->pre;
+// 	size = (total < spec->min_fw && spec->min_fw) ? spec->min_fw - total : pref->pre;
+// 	pad = ft_strnew(size);
+// 	if (pref->pre != 0 && pref->pref == 1)
+// 	{
+// 		ft_memcpy(pad, pref->prefix, pref->pre);
+// 		len = 0 + pref->pre;
+// 	}
+// 	else if (pref->pre != 0 && pref->pref == 0 && pref->prefix)
+// 	{
+// 		size -= pref->pre;
+// 		ft_memcpy(pad + size, pref->prefix, pref->pre);
+// 	}
+// 	if (size != 0 && spec->min_fw != 0)
+// 		ft_memset(pad + len, str[i], size);
+// 	if (pref->sign && pref->pre)
+// 	{
+// 		pad[0] = *pref->sign;
+// 		size -= 1;
+// 	}
+// 	size = (pref->pref) ? size : size + pref->pre;
+// 	return ((t_list){pad, size, NULL});
+// }
 
 int		get_arg(int i, t_spec *spec, t_flags *flag, va_list ap)
 {
@@ -282,6 +395,26 @@ int		get_arg(int i, t_spec *spec, t_flags *flag, va_list ap)
 	return (1);
 }
 
+int		process_arg(t_list *ret, t_spec *spec, t_list **tail, t_ntoa *pref)
+{
+	if (!ret->content && spec->min_fw <= 0)
+	{
+		if (spec->flags.hash && spec->c != 'o') 
+			return (0);
+	}
+	else if (ret->content)
+	{
+		if (!ft_lstaddnew(tail, ret->content, ret->content_size))
+			return (0);
+	}
+	else if (!ret->content)
+	{
+		*ret = ft_minfw(spec->index, spec, ret->content_size, pref);
+		return (ft_lstaddnew(tail, ret->content, ret->content_size));
+	}
+	return (1);
+}
+
 /**
   * searches and executes corresponding function of the conversion specifier
   * saves the address and value of the argument in val variable
@@ -293,32 +426,18 @@ int				dispatch(t_list **tail, t_spec *spec, va_list ap)
 	t_ntoa			pref = {0, 0, 0, 0, 0, 0, 0, 0, NULL, NULL, 0, 0}; 
 	t_flags *const	flag = &spec->flags;
 	t_list			ret;
-	int				i;
 
-	i = ft_strchri("csp%diouxXfF", spec->c);
-	if (i == -1)
+ 	spec->index = ft_strchri("csp%diouxXfF", spec->c);
+	if (spec->index == -1)
 		return (-1);
-	if (!get_arg(i, spec, flag, ap) && spec->min_fw <= 0)
+	if (!get_arg(spec->index, spec, flag, ap) && spec->min_fw <= 0)
 		return (0);
-	set_flags(&pref, (i == 4 || i == 5), spec, flag);
-	ret = f[i](spec->c, spec, &pref);
-	if (!ret.content && spec->min_fw <= 0)
-	{
-		if (flag->hash && i != 6) 
-			return (0);
-	}
-	else if (ret.content)
-	{
-		if (!ft_lstaddnew(tail, ret.content, ret.content_size))
-			return (0);
-	}
-	else if (!ret.content)
-	{
-		ret = ft_minfw(spec, ret.content_size, &pref);
-		return (ft_lstaddnew(tail, ret.content, ret.content_size));
-	}
+	set_flags(&pref, (spec->index == 4 || spec->index == 5), spec, flag);
+	ret = f[spec->index](spec->c, spec, &pref);
+	if (!process_arg(&ret, spec, tail, &pref))
+		return (0);
 	!flag->min && ret.content ? tail = &(*tail)->next : 0;
-	ret = ft_minfw(spec, ret.content_size, &pref);
+	ret = ft_minfw(spec->index, spec, ret.content_size, &pref);
 		if(ret.content)
 			return (ft_lstaddnew(tail, ret.content, ret.content_size));
 	return (ret.content_size >= spec->min_fw);
