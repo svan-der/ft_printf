@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/12 15:28:18 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/08 19:42:50 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/09 17:02:31 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ typedef struct	s_input
 	t_ull		p;
 	t_llong		di;
 	t_ull 		oux;
-	t_ldb		*fl;
+	t_ldb		fl;
 }				t_input;
 
 /* format string length modifiers */

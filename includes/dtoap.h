@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/04 11:07:43 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/09 12:25:50 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/09 17:02:52 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ typedef struct  s_opt
 typedef struct  s_dtoa
 {
     t_opt       inval;
+    t_byte      dec;
+    t_byte      neg;
 }               t_dtoa;
 
-size_t          ft_ldtoap(char *str, t_ldb val, const int prec, t_ntoa *pref);
+// size_t          ft_ldtoap(char *str, t_ldb val, t_spec *spec, t_ntoa *pref);
 #endif

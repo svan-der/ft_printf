@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/11/04 16:42:11 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/30 15:27:05 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/09 16:55:55 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include "libdefs.h"
 
 size_t		ft_count_num(t_llong num);
+size_t		ft_dtoa_base(t_ldb n, t_uint base);
 size_t		ft_numlen(t_ull n);
 size_t		ft_numlen_base(t_ull n, t_uint base);
 t_ull		ft_max_size(t_ull a, t_ull b);

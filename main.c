@@ -5,8 +5,7 @@
 
 int		main(void)
 {
-	// ft_printf("[%p]", str);
-	// printf("[%p]", str);
-	ft_printf("%d", -1);
+	ft_printf("mine: [%010.5i]\n", -216);
+	printf("real: [%010.5i]\n", -216);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/09 15:14:14 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/09 17:19:29 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 void		get_floatarg(t_spec *spec, va_list ap)
 {
 	if(spec->mod == L)
-		va_arg(ap, t_ldb);
+		spec->val.fl = va_arg(ap, t_ldb);
 	else
-		va_arg(ap, double);
+		spec->val.fl = (t_ldb)va_arg(ap, double);
 }
 
 void		get_strarg(t_spec *spec, char c, va_list ap)
@@ -73,9 +73,9 @@ static t_list	print_float(char c, t_spec *spec, t_ntoa *pref)
 	char		*str;
 	size_t		size;
 	
-	spec->prec = (spec->prec < 0) ? 6 : spec->prec;
+	spec->prec = (spec->prec < 0 || (spec->prec_set && spec->prec < 0))? 6 : spec->prec;
 	str = NULL;
-	val = spec->val.fl;
+	val = &spec->val.fl;
 	size = 0;
 	(void)c;
 	(void)pref;
@@ -274,7 +274,6 @@ static t_list	ft_intpad(int i, size_t padding, size_t total, t_ntoa *pref)
 	char	*pad;
 
 	len = 0;
-	// pref->pre = (pref->min) ? 0 : pref->pre;
 	size = (total < padding && padding) ? padding - total : 0;
 	size = (size == 0 && !pref->pref && pref->pre) ? pref->pre : size;
 	if (!size)
@@ -283,7 +282,10 @@ static t_list	ft_intpad(int i, size_t padding, size_t total, t_ntoa *pref)
 	if (size != 0 && padding != 0)
 		ft_memset(pad, " 0"[i], size);
 	if (pref->sign && !pref->pref)
-		pad[0] = *pref->sign;
+	{
+		len = (i == 0) ? size - 1 : 0;
+		ft_memcpy(pad + len, pref->sign, 1);
+	}
 	size = (size == (size_t)pref->pre) ? 1 : size;
 	return ((t_list){pad, size, NULL});
 }
@@ -296,7 +298,6 @@ static t_list	ft_uintpad(int i, size_t padding, size_t total, t_ntoa *pref)
 	char	*pad;
 
 	len = 0;
-	// pref->pre = (pref->min) ? 0 : pref->pre;
 	size = (total < padding && padding) ? padding - total : pref->pre;
 	pad_len = size;
 	if (!size)
@@ -318,53 +319,7 @@ static t_list 	ft_minfw(int index, t_spec *spec, size_t total, t_ntoa *pref)
 	if (index == 4 || index == 5)
 		return (ft_intpad(i, spec->min_fw, total, pref));
 	return (ft_uintpad(i, spec->min_fw, total, pref));
-	// pref->pre = (pref->min) ? 0 : pref->pre;
-	// size = (total < spec->min_fw && spec->min_fw) ? spec->min_fw - total : 0;
-	// size = (!size && pref->pre && pref->pref && !pref->sign) ? pref->pre : size;
-	// if (!size)
-	// 	return((t_list){NULL, size, NULL});
-	// pad = ft_strnew(size);
-	// len = insert_prefix(pad, pref, &size);
-	// if (size != 0 && spec->min_fw != 0)
-	// 	ft_memset(pad + len, " 0"[i], size);
-	// size = (size == (size_t)pref->pre) ? pref->pre : size + len;
-	// return ((t_list){pad, size, NULL});
 }
-
-// static t_list 	ft_minfw(t_spec *spec, size_t total, t_ntoa *pref)
-// {
-// 	int i;
-// 	size_t len;
-// 	size_t size;
-// 	char *str;
-// 	char *pad;
-
-// 	str = " 0";
-// 	len = 0;
-// 	i = pref->padding && !pref->min && (spec->prec < 0);
-// 	pref->pre = (pref->min) ? 0 : pref->pre;
-// 	size = (total < spec->min_fw && spec->min_fw) ? spec->min_fw - total : pref->pre;
-// 	pad = ft_strnew(size);
-// 	if (pref->pre != 0 && pref->pref == 1)
-// 	{
-// 		ft_memcpy(pad, pref->prefix, pref->pre);
-// 		len = 0 + pref->pre;
-// 	}
-// 	else if (pref->pre != 0 && pref->pref == 0 && pref->prefix)
-// 	{
-// 		size -= pref->pre;
-// 		ft_memcpy(pad + size, pref->prefix, pref->pre);
-// 	}
-// 	if (size != 0 && spec->min_fw != 0)
-// 		ft_memset(pad + len, str[i], size);
-// 	if (pref->sign && pref->pre)
-// 	{
-// 		pad[0] = *pref->sign;
-// 		size -= 1;
-// 	}
-// 	size = (pref->pref) ? size : size + pref->pre;
-// 	return ((t_list){pad, size, NULL});
-// }
 
 int		get_arg(int i, t_spec *spec, t_flags *flag, va_list ap)
 {
