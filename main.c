@@ -5,7 +5,7 @@
 
 int		main(void)
 {
-	ft_printf("mine: [%010.5i]\n", -216);
-	printf("real: [%010.5i]\n", -216);
+	ft_printf("this % i number", 0);
+	printf("this % i number", 0);
 	return (0);
 }

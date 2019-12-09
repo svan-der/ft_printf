@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/09 17:19:29 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/09 17:51:30 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,10 +120,10 @@ static void		ft_spsign(t_ntoa *pref, t_spec *spec, t_flags *flag)
 	val = spec->val.di;
 	if (flag->plus || val < 0)
 		pref->sign = (flag->plus && val >= 0) ? &sign[0] : &sign[1];
-	if (!flag->plus && flag->space && (val > 0))
+	if (!flag->plus && flag->space && (val >= 0))
 		pref->sign = &sign[2];
 	pref->pref = (pref->sign && pref->zero && spec->min_fw != 0) ? 0 : 1;
-	pref->pre = (pref->sign) ? 1 : 0;
+	pref->pre = (pref->sign || pref->space) ? 1 : 0;
 }
 
 static void		set_flags(t_ntoa *pref, int sign, t_spec *spec, t_flags *flag)
@@ -254,10 +254,13 @@ static t_list	ft_cspad(int index, int i, size_t padding, size_t total)
 	char	*pad;
 
 	len = 0;
+	pad = NULL;
 	pre = (index == 2) ? 2 : 0;
 	size = (total < padding && padding) ? padding - total : pre;
+	if (!size)
+		return((t_list){pad, size, NULL});
 	pad = ft_strnew(size);
-	if (size != 0 && padding != 0)
+	if (padding != 0)
 		ft_memset(pad, " 0"[i], size);
 	if (index == 2)
 	{
@@ -273,11 +276,12 @@ static t_list	ft_intpad(int i, size_t padding, size_t total, t_ntoa *pref)
 	size_t 	len;
 	char	*pad;
 
+	pad = NULL;
 	len = 0;
 	size = (total < padding && padding) ? padding - total : 0;
 	size = (size == 0 && !pref->pref && pref->pre) ? pref->pre : size;
 	if (!size)
-		return((t_list){NULL, size, NULL});
+		return((t_list){pad, size, NULL});
 	pad = ft_strnew(size);
 	if (size != 0 && padding != 0)
 		ft_memset(pad, " 0"[i], size);
@@ -297,11 +301,12 @@ static t_list	ft_uintpad(int i, size_t padding, size_t total, t_ntoa *pref)
 	size_t 	len;
 	char	*pad;
 
+	pad = NULL;
 	len = 0;
 	size = (total < padding && padding) ? padding - total : pref->pre;
 	pad_len = size;
 	if (!size)
-		return((t_list){NULL, size, NULL});
+		return ((t_list){pad, pad_len, NULL});
 	pad = ft_strnew(size);
 	len = insert_prefix(pad, pref, &size);
 	if (size != 0 && padding != 0)
@@ -391,7 +396,7 @@ int				dispatch(t_list **tail, t_spec *spec, va_list ap)
 		return (0);
 	!flag->min && ret.content ? tail = &(*tail)->next : 0;
 	ret = ft_minfw(spec->index, spec, ret.content_size, &pref);
-		if(ret.content)
+	if (ret.content)
 			return (ft_lstaddnew(tail, ret.content, ret.content_size));
 	return (ret.content_size >= spec->min_fw);
 }
