@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/09 14:20:06 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/09 15:14:14 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,21 +69,20 @@ void	get_int_arg(t_spec *spec, va_list ap)
 /* processes float arguments */
 static t_list	print_float(char c, t_spec *spec, t_ntoa *pref)
 {
-	const t_ldb	*val; //*valptr.fl;
+	const t_ldb	*val;
 	char		*str;
 	size_t		size;
-	const int	prec = (spec->prec <= 0) ? spec->prec : 6;
 	
+	spec->prec = (spec->prec < 0) ? 6 : spec->prec;
 	str = NULL;
 	val = spec->val.fl;
 	size = 0;
-	(void)prec;
-	(void)pref;
 	(void)c;
+	(void)pref;
 	// if (spec->mod == L)
-	// 	size = ft_ldtoap(&str, *val, prec, pref);
+	// 	size = ft_ldtoap(&str, *val, spec, pref);
 	// else
-	// 	size = ft_dtoap(&str, *val, prec, pref);
+	// 	size = ft_dtoap(&str, *val, spec, pref);
 	return ((t_list){str, size, NULL});
 }
 
@@ -116,7 +115,7 @@ static void		ft_spsign(t_ntoa *pref, t_spec *spec, t_flags *flag)
 {
 	char	*sign;
 	t_llong val;
-	
+
 	sign = "+- ";
 	val = spec->val.di;
 	if (flag->plus || val < 0)
@@ -126,7 +125,6 @@ static void		ft_spsign(t_ntoa *pref, t_spec *spec, t_flags *flag)
 	pref->pref = (pref->sign && pref->zero && spec->min_fw != 0) ? 0 : 1;
 	pref->pre = (pref->sign) ? 1 : 0;
 }
-
 
 static void		set_flags(t_ntoa *pref, int sign, t_spec *spec, t_flags *flag)
 {
@@ -140,7 +138,7 @@ static void		set_flags(t_ntoa *pref, int sign, t_spec *spec, t_flags *flag)
 		pref->min = 1;
 	if ((sign || spec->c == 'c' || spec->c == 'f' || spec->c == 'F') && flag->apos)
 		pref->delimit = 1;
-	if ((flag->plus && (spec->c == 'd' || spec->c == 'i')) || spec->val.di < 0 || flag->space)
+	if ((sign && (flag->plus || flag->space)) || sign)
 		ft_spsign(pref, spec, flag);
 	if (!pref->sign && flag->space && spec->val.di >= 0)
 		pref->space = 1;
@@ -423,7 +421,7 @@ int				dispatch(t_list **tail, t_spec *spec, va_list ap)
 {
 	static t_list	(*const f[])(char, t_spec*, t_ntoa*) = \
 	{[0 ... 3] = print_csp, [4 ... 9] = print_dioux, [10 ... 11] = print_float};
-	t_ntoa			pref = {0, 0, 0, 0, 0, 0, 0, 0, NULL, NULL, 0, 0}; 
+	t_ntoa			pref = {0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, NULL, 0, 0}; 
 	t_flags *const	flag = &spec->flags;
 	t_list			ret;
 

@@ -6,15 +6,19 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/04 11:05:56 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/09 13:10:00 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/09 15:06:20 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "dtoap.h"
+#include "fndm.h"
 
-// static void		handle_invalid(char *str, t_opt *inval, t_ntoa *pref)
+// void		handle_invalid(char *str, t_opt *inval, t_spec *spec, t_ntoa *pref)
 // {
+// 	size_t len;
+
+// 	len = (inval->nan || inval->inf && !spec->flags.plus) ? 3 : 4;
 // 	if (inval->nan)
 // 	{
 // 		if (pref->upper)
@@ -24,7 +28,7 @@
 // 	}
 // 	else if (inval->inf || inval->neg_inf)
 // 	{
-// 		if ()
+// 		if (ft_strcpy(str, ))
 // 	}
 	
 // }
@@ -42,7 +46,7 @@
 // 	return (0);
 // }
 
-// size_t	ft_ldtoap(char *str, t_ldb val, const int prec, t_ntoa *pref)
+// size_t	ft_ldtoap(char *str, t_ldb val, t_spec *spec, t_ntoa *pref)
 // {
 // 	t_dtoa	dtoa;
 // 	size_t	size;
@@ -51,7 +55,7 @@
 // 	dtoa = (t_dtoa){0};
 // 	ret = check_valid(val, &dtoa.inval);
 // 	if (ret)
-// 		size = handle_invalid(str, &dtoa.inval, &pref);
+// 		size = handle_invalid(str, &dtoa.inval, spec, &pref);
 // 	else
 // 	{
 		

@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/11/14 17:54:21 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/08 14:57:08 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/09 14:38:02 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct	s_ntoa
 	t_byte	pref;
 	t_byte	prec_set;
 	t_byte	zero;
+	t_byte	plus;
 	char	*sign;
 	char	*prefix;
 	int		pre;

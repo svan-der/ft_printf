@@ -5,14 +5,8 @@
 
 int		main(void)
 {
-	// ft_printf("mine: [%#X]\n", i);
-	// printf("real: [%#X]\n", i);
-	// printf("real: %\n");
-
-	// ft_printf("%p", NULL);
-	// printf("%p", NULL);
-	// printf("%Lf", -1 * LDBL_MAX);
-	ft_printf("%%");
-	printf("%%");
+	// ft_printf("[%p]", str);
+	// printf("[%p]", str);
+	ft_printf("%d", -1);
 	return (0);
 }
