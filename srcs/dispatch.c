@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/08 20:55:17 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/09 13:24:21 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ void		get_floatarg(t_spec *spec, va_list ap)
 
 void		get_strarg(t_spec *spec, char c, va_list ap)
 {
-	if (c == 'c' || c == '%')
+	if (c == 'c')
 		spec->val.c = va_arg(ap, int);
 	if (c == 's')
-		spec->val.s = va_arg(ap, char*);
+		spec->val.s = va_arg(ap, char *);
 	if (c == 'p')
 		spec->val.p = va_arg(ap, unsigned long long);
  }
@@ -72,7 +72,7 @@ static t_list	print_float(char c, t_spec *spec, t_ntoa *pref)
 	const t_ldb	*val; //*valptr.fl;
 	char		*str;
 	size_t		size;
-	const int	prec = (spec->prec != 0) ? spec->prec : 6;
+	const int	prec = (spec->prec <= 0) ? spec->prec : 6;
 	
 	str = NULL;
 	val = spec->val.fl;
@@ -81,9 +81,9 @@ static t_list	print_float(char c, t_spec *spec, t_ntoa *pref)
 	(void)pref;
 	(void)c;
 	// if (spec->mod == L)
-	// 	size = ft_ldtoap(&str, *val, prec);
+	// 	size = ft_ldtoap(&str, *val, prec, pref);
 	// else
-	// 	size = ft_dtoap(&str, *val, prec);
+	// 	size = ft_dtoap(&str, *val, prec, pref);
 	return ((t_list){str, size, NULL});
 }
 

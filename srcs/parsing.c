@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/15 11:23:28 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/07 18:34:01 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/09 12:05:46 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ int			process(t_format *fmt, const char *str, va_list ap)
 				return (0);
 		fmt->index = j;
 		if (str[j] == '%')
-		ret = print_arg(fmt, str, ap);
+			ret = print_arg(fmt, str, ap);
 		if (ret == 0 && i == j)
 			return (0);
 		if (ret == -1)
