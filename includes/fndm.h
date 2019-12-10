@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/12 15:28:18 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/09 17:02:31 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/10 13:41:07 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,5 @@ int				get_arg(int i, t_spec *spec, t_flags *flag, va_list ap);
 int				print_buffer(t_list *buffer, int fd, char **astr, size_t size);
 int				dispatch(t_list **tail, t_spec *spec, va_list ap);
 int				process(t_format *fmt, const char *str, va_list ap);
+void			insert_pad(char *str, int i, t_ntoa *pref);
 #endif

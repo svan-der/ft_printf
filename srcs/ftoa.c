@@ -1,28 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_abs.c                                           :+:    :+:            */
+/*   ftoa.c                                             :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/11/30 14:55:23 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/10 17:28:37 by svan-der      ########   odam.nl         */
+/*   Created: 2019/12/10 14:03:57 by svan-der       #+#    #+#                */
+/*   Updated: 2019/12/10 16:06:53 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mathlib.h"
+#include "ft_printf.h"
 
-long double	ft_ldabs(long double n)
+char	*ft_ldtoa(long double n, t_spec *spec, t_ntoa *pref)
 {
-	return (n < 0 ? -n : n);
+	char	*str;
+
+	str = NULL;
+	ft_ldtoap(&str, n, spec, pref);
+	return (str);
 }
 
-double	ft_dabs(double n)
+char	*ft_dtoa(double n, t_spec *spec, t_ntoa *pref)
 {
-	return (n < 0 ? -n : n);
+	char	*str;
+
+	str = NULL;
+	ft_dtoap(&str, n, spec, pref);
+	return (str);
 }
 
-t_ull	ft_abs(t_llong n)
-{
-	return (n < 0 ? -n : n);
-}
+// char	*ft_ftoa(float n, t_ntoa *pref)
+// {
+// 	char	*str;
+
+// 	str = NULL;
+// 	ft_ftoap(&str, n, pref);
+// 	return (str);
+// }

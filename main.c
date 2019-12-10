@@ -5,7 +5,7 @@
 
 int		main(void)
 {
-	ft_printf("this % i number", 0);
-	printf("this % i number", 0);
+	ft_printf("%3.7s%7.7s", "hello", "world");
+	printf("%3.7s%7.7s", "hello", "world");
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/22 17:57:12 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/09 17:33:01 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/10 16:04:33 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	make(char *str, t_ull n, t_uint base, t_ntoa *pref)
 		}
 	len = (i < 0) ? i * -1 : i;
 	padding = (padding && (padding - len > 0)) ? padding - len : 0;
+	// insert_pad(str, i, pref);
 	if (padding != 0)
 		ft_memset(str + i - padding, '0', padding);
 }
@@ -116,7 +117,7 @@ int		ft_utoap_base(char **astr, t_ull n, t_uint base, t_ntoa *pref)
 	if (!len[1])
 		return (0);
 	len[2] = (pref->delimit) ? (len[1] / 3) - !(len[1] % 3) : 0;
-	total = len[0] + ft_max_size((size_t)pref->prec, len[1]) + len[2];
+	total = len[0] + ft_max_size(pref->prec, len[1]) + len[2];
 	if (!*astr)
 		if (!ft_strpnew(astr, total))
 			return (-1);

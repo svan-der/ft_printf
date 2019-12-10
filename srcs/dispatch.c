@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/09 17:51:30 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/10 16:28:17 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ void	get_int_arg(t_spec *spec, va_list ap)
 /* processes float arguments */
 static t_list	print_float(char c, t_spec *spec, t_ntoa *pref)
 {
-	const t_ldb	*val;
+	t_ldb		*val;
+	t_dtoa 		dtoa;
 	char		*str;
 	size_t		size;
 	
@@ -79,10 +80,10 @@ static t_list	print_float(char c, t_spec *spec, t_ntoa *pref)
 	size = 0;
 	(void)c;
 	(void)pref;
-	// if (spec->mod == L)
-	// 	size = ft_ldtoap(&str, *val, spec, pref);
-	// else
-	// 	size = ft_dtoap(&str, *val, spec, pref);
+	if (spec->mod == L)
+		size = ft_ldtoap(&str, &dtoa, spec, pref);
+	else
+		size = ft_dtoap(&str, &dtoa, spec, pref);
 	return ((t_list){str, size, NULL});
 }
 
@@ -175,7 +176,6 @@ static t_list	print_dioux(char c, t_spec *spec, t_ntoa *pref)
 		if (pref->prec_set && spec->prec <= 0 && spec->val.oux == 0)
 			return ((t_list){str, 0, NULL});
 		size = ft_utoap(&str, spec->val.oux, base[i], pref);
-		// if (!str &&) 
 	}
 	return ((t_list){str, size, NULL});
 }
@@ -233,7 +233,6 @@ size_t	insert_prefix(char *str, t_ntoa *pref, size_t *size)
 		ft_memcpy(str, pref->prefix, pref->pre);
 		len += pref->pre;
 		*size -= pref->pre;
-		// len += (size >= (size_t)pref->pre) ? size - pref->pre : pref->pre;
 		
 	}
 	else if (pref->pre != 0 && pref->pref == 1 && pref->prefix)
@@ -241,7 +240,6 @@ size_t	insert_prefix(char *str, t_ntoa *pref, size_t *size)
 		*size = (*size >= (size_t)pref->pre) ? *size - pref->pre : *size + pref->pre;
 		ft_memcpy(str + *size, pref->prefix, pref->pre);
 		len = (pref->padding || pref->space || total) ? 0 : 2;
-		// *size -= pref->pre;
 	}
 	return (len);
 }

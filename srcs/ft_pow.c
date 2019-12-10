@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_abs.c                                           :+:    :+:            */
+/*   ft_pow.c                                           :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/11/30 14:55:23 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/10 17:28:37 by svan-der      ########   odam.nl         */
+/*   Created: 2019/12/10 17:10:10 by svan-der       #+#    #+#                */
+/*   Updated: 2019/12/10 17:14:22 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mathlib.h"
 
-long double	ft_ldabs(long double n)
+t_u128	ft_pow(t_u128 n, t_u128 pow)
 {
-	return (n < 0 ? -n : n);
-}
+	t_u128 i;
 
-double	ft_dabs(double n)
-{
-	return (n < 0 ? -n : n);
-}
-
-t_ull	ft_abs(t_llong n)
-{
-	return (n < 0 ? -n : n);
+	if (pow == 0)
+		return (1);
+	if (pow % 2 == 0)
+	{
+		i = ft_pow(n, pow / 2);
+		return (i * i);
+	}
+	else
+		return (n * ft_pow(n, pow - 1));
 }
