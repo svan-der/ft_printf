@@ -6,13 +6,14 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/12 15:28:18 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/10 13:41:07 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/12 13:23:51 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FNDM_H
 # define FNDM_H
 # include "ft_printf.h"
+# include <stdarg.h>
 
 /* conversion specifier union */
 typedef struct	s_input

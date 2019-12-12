@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/15 11:23:28 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/09 12:05:46 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/11 11:23:31 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,9 +119,11 @@ int			process(t_format *fmt, const char *str, va_list ap)
 {
 	size_t		i;
 	size_t		j;
+	size_t		argc;
 	int			ret;
 
 	i = 0;
+	argc = 0;
 	while (str[i])
 	{
 		j = i + ft_strchrni(str + i, '%');
@@ -130,13 +132,16 @@ int			process(t_format *fmt, const char *str, va_list ap)
 				return (0);
 		fmt->index = j;
 		if (str[j] == '%')
-			ret = print_arg(fmt, str, ap);
-		if (ret == 0 && i == j)
-			return (0);
-		if (ret == -1)
 		{
-			ft_lstpop(&fmt->buffer, fmt->buffer);
-			return (-1);
+			argc += 1;
+			ret = print_arg(fmt, str, ap);
+			if (ret == 0 && i == j && fmt->argc == argc)
+				return (0);
+			if (ret == -1)
+			{
+				ft_lstpop(&fmt->buffer, fmt->buffer);
+				return (-1);
+			}
 		}
 		i = fmt->index;
 	}

@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/10 16:28:17 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/12 13:32:06 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	get_int_arg(t_spec *spec, va_list ap)
 static t_list	print_float(char c, t_spec *spec, t_ntoa *pref)
 {
 	t_ldb		*val;
-	t_dtoa 		dtoa;
+	// t_dtoa 		dtoa;
 	char		*str;
 	size_t		size;
 	
@@ -80,10 +80,10 @@ static t_list	print_float(char c, t_spec *spec, t_ntoa *pref)
 	size = 0;
 	(void)c;
 	(void)pref;
-	if (spec->mod == L)
-		size = ft_ldtoap(&str, &dtoa, spec, pref);
-	else
-		size = ft_dtoap(&str, &dtoa, spec, pref);
+	// if (spec->mod == L)
+	// 	size = ft_ldtoap(&str, &dtoa, spec, pref);
+	// else
+	// 	size = ft_dtoap(&str, &dtoa, spec, pref);
 	return ((t_list){str, size, NULL});
 }
 
@@ -96,7 +96,7 @@ static void 	ft_prefix(t_ntoa *pref, t_ull val_unsign, t_spec *spec, t_flags *fl
 	zero = "0";
 	hex_up = "0X";
 	hex = "0x";
-	if (spec->c == 'o')
+	if (spec->c == 'o' && (val_unsign != 0 || (val_unsign == 0 && spec->prec <= 0 && pref->prec_set)))
 		pref->prefix = zero;
 	else if (spec->c == 'X')
 	{
@@ -108,7 +108,8 @@ static void 	ft_prefix(t_ntoa *pref, t_ull val_unsign, t_spec *spec, t_flags *fl
 		if (spec->c == 'x' && val_unsign != 0)
 			pref->prefix = hex;
 	}
-	pref->pref = ((flag->zero || flag->min) && flag->hash) ? 0 : 1;
+	(void)flag;
+	pref->pref = (!val_unsign && pref->prefix && !pref->min) || (pref->prefix && pref->zero && spec->min_fw != 0) ? 0 : 1;
 	pref->pre = (pref->prefix) ? ft_strlen(pref->prefix) : 0;
 }
 
@@ -123,17 +124,20 @@ static void		ft_spsign(t_ntoa *pref, t_spec *spec, t_flags *flag)
 		pref->sign = (flag->plus && val >= 0) ? &sign[0] : &sign[1];
 	if (!flag->plus && flag->space && (val >= 0))
 		pref->sign = &sign[2];
-	pref->pref = (pref->sign && pref->zero && spec->min_fw != 0) ? 0 : 1;
-	pref->pre = (pref->sign || pref->space) ? 1 : 0;
+	pref->pref = ((!val && pref->sign && !pref->min) || (pref->sign && pref->zero && spec->min_fw != 0)) ? 0 : 1;
+	pref->pre = (pref->sign) ? 1 : 0;
 }
 
 static void		set_flags(t_ntoa *pref, int sign, t_spec *spec, t_flags *flag)
 {
-	if (flag->zero || flag->min || (!spec->prec && flag->zero))
-		pref->padding = 1;
-	if (spec->min_fw == 0)
-		pref->padding = 0;
-	if (!flag->min && flag->zero)
+	if (spec->min_fw)
+		pref->padding = spec->min_fw;
+	if (spec->min_fw < 0)
+	{
+		pref->padding = spec->min_fw * -1;
+		pref->min = 1;
+	}
+	if (!flag->min && !pref->min && flag->zero)
 		pref->zero = 1;
 	if (flag->min)
 		pref->min = 1;
@@ -143,12 +147,12 @@ static void		set_flags(t_ntoa *pref, int sign, t_spec *spec, t_flags *flag)
 		ft_spsign(pref, spec, flag);
 	if (!pref->sign && flag->space && spec->val.di >= 0)
 		pref->space = 1;
-	if (!sign && flag->hash)
-		ft_prefix(pref, spec->val.oux, spec, flag);
-	if (spec->prec != -1 && spec->prec_set)
-		pref->prec = (size_t)spec->prec;
 	if (spec->prec_set)
 		pref->prec_set = 1;
+	if (spec->prec != -1 && spec->prec_set)
+		pref->prec = (size_t)spec->prec;
+	if (!sign && flag->hash)
+		ft_prefix(pref, spec->val.oux, spec, flag);
 	if (spec->c == 'X' || spec->c == 'F')
 		pref->upper = 1;
 }
@@ -167,7 +171,7 @@ static t_list	print_dioux(char c, t_spec *spec, t_ntoa *pref)
 	str = NULL;
 	if (i <= 1)
 	{
-		if (pref->prec_set && pref->prec <= 0 && spec->val.di == 0)
+		if (pref->prec_set && spec->prec <= 0 && spec->val.di == 0)
 			return ((t_list){str, 0, NULL});
 		size = ft_itoap(&str, spec->val.di, pref);
 	}
@@ -190,15 +194,16 @@ static t_list 	print_csp(char c, t_spec *spec, t_ntoa *pref)
 	size_t				size;
 	
 	(void)pref;
+	str = NULL;
 	if (c == 'c' || c == '%')
 	{
 		if (c == '%')
 			str = "%";
 		else if (c == 'c' && spec->val.c != 0)
-			str = (c == 'c' && spec->val.c > 64) ? &chars[spec->val.c - 31] : &chars[spec->val.c - 32];
+			str = (spec->val.c > 64) ? &chars[spec->val.c - 31] : &chars[spec->val.c - 32];
 		else if (spec->val.c == 0)
 			str = "\0";
-		size = 1;
+		size = (str) ? 1 : 0;
 	}
 	if (c == 's')
 	{
@@ -221,27 +226,23 @@ static t_list 	print_csp(char c, t_spec *spec, t_ntoa *pref)
 }
 
 
-size_t	insert_prefix(char *str, t_ntoa *pref, size_t *size)
+void	insert_prefix(char *str, t_ntoa *pref, size_t *size, int i)
 {
 	size_t len;
 	size_t total;
 	
 	total = *size;
 	len = 0;
-	if (pref->pre != 0 && pref->pref == 0 && pref->zero)
+	if (pref->pre == 1 && (!pref->pref || (pref->pref && total == 0)))
 	{
-		ft_memcpy(str, pref->prefix, pref->pre);
-		len += pref->pre;
-		*size -= pref->pre;
-		
+		len = (i == 0 && !pref->min) ? *size - 1 : 0;
+		ft_memcpy(str + len, pref->prefix, 1);
 	}
-	else if (pref->pre != 0 && pref->pref == 1 && pref->prefix)
+	else if (pref->pre == 2 && (!pref->pref || (pref->pref && total == 0)))
 	{
-		*size = (*size >= (size_t)pref->pre) ? *size - pref->pre : *size + pref->pre;
-		ft_memcpy(str + *size, pref->prefix, pref->pre);
-		len = (pref->padding || pref->space || total) ? 0 : 2;
+		len = (i == 0 && !pref->min) ? *size - 2 : 0;
+		ft_memcpy(str + len, pref->prefix, 2);
 	}
-	return (len);
 }
 
 static t_list	ft_cspad(int index, int i, size_t padding, size_t total)
@@ -277,15 +278,15 @@ static t_list	ft_intpad(int i, size_t padding, size_t total, t_ntoa *pref)
 	pad = NULL;
 	len = 0;
 	size = (total < padding && padding) ? padding - total : 0;
-	size = (size == 0 && !pref->pref && pref->pre) ? pref->pre : size;
+	size = (size == 0 && pref->pre && !pref->pref) ? pref->pre : size;
 	if (!size)
 		return((t_list){pad, size, NULL});
 	pad = ft_strnew(size);
-	if (size != 0 && padding != 0)
+	if (padding != 0)
 		ft_memset(pad, " 0"[i], size);
-	if (pref->sign && !pref->pref)
+	if (pref->sign && (!pref->pref || (pref->pref && total == 0)))
 	{
-		len = (i == 0) ? size - 1 : 0;
+		len = (i == 0 && !pref->min) ? size - 1 : 0;
 		ft_memcpy(pad + len, pref->sign, 1);
 	}
 	size = (size == (size_t)pref->pre) ? 1 : size;
@@ -301,22 +302,24 @@ static t_list	ft_uintpad(int i, size_t padding, size_t total, t_ntoa *pref)
 
 	pad = NULL;
 	len = 0;
-	size = (total < padding && padding) ? padding - total : pref->pre;
+	size = (total < padding && padding) ? padding - total : 0;
+	size = (size == 0 && pref->pre && !pref->pref) ? pref->pre : size;
 	pad_len = size;
 	if (!size)
-		return ((t_list){pad, pad_len, NULL});
+		return ((t_list){pad, size, NULL});
 	pad = ft_strnew(size);
-	len = insert_prefix(pad, pref, &size);
-	if (size != 0 && padding != 0)
-		ft_memset(pad + len, " 0"[i], size);
-	return ((t_list){pad, pad_len, NULL});
+	if (padding != 0)
+		ft_memset(pad, " 0"[i], size);
+	insert_prefix(pad, pref, &size, i);
+	size = (size == (size_t)pref->pre) ? pref->pre : size;
+	return ((t_list){pad, size, NULL});
 }
 
 static t_list 	ft_minfw(int index, t_spec *spec, size_t total, t_ntoa *pref)
 {
 	int i;
 
-	i = pref->padding && !pref->min && (spec->prec < 0);
+	i = pref->zero && !pref->min && (spec->prec < 0);
 	if (index < 4)
 		return (ft_cspad(index, i, spec->min_fw, total));
 	if (index == 4 || index == 5)
@@ -353,22 +356,23 @@ int		get_arg(int i, t_spec *spec, t_flags *flag, va_list ap)
 
 int		process_arg(t_list *ret, t_spec *spec, t_list **tail, t_ntoa *pref)
 {
-	if (!ret->content && spec->min_fw <= 0)
+	if (!ret[0].content && spec->min_fw <= 0)
 	{
-		if (spec->flags.hash && spec->c != 'o') 
+		if ((spec->flags.hash && spec->c != 'o') || (!pref->pre))
 			return (0);
 	}
-	else if (ret->content)
+	else if (!ret[0].content)
 	{
-		if (!ft_lstaddnew(tail, ret->content, ret->content_size))
-			return (0);
-	}
-	else if (!ret->content)
-	{
-		*ret = ft_minfw(spec->index, spec, ret->content_size, pref);
+		ret[0] = ft_minfw(spec->index, spec, ret->content_size, pref);
 		return (ft_lstaddnew(tail, ret->content, ret->content_size));
 	}
-	return (1);
+	else if (ret[0].content)
+		ft_lstaddnew(tail, ret[0].content, ret->content_size);
+	!spec->flags.min && ret[0].content ? tail = &(*tail)->next : 0;
+	ret[1] = ft_minfw(spec->index, spec, ret[0].content_size, pref);
+	if (ret[1].content)
+			return (ft_lstaddnew(tail, ret[1].content, ret[1].content_size));
+	return (ret[0].content_size >= spec->min_fw);
 }
 
 /**
@@ -381,20 +385,14 @@ int				dispatch(t_list **tail, t_spec *spec, va_list ap)
 	{[0 ... 3] = print_csp, [4 ... 9] = print_dioux, [10 ... 11] = print_float};
 	t_ntoa			pref = {0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, NULL, 0, 0}; 
 	t_flags *const	flag = &spec->flags;
-	t_list			ret;
+	t_list			ret[2];
 
  	spec->index = ft_strchri("csp%diouxXfF", spec->c);
 	if (spec->index == -1)
 		return (-1);
-	if (!get_arg(spec->index, spec, flag, ap) && spec->min_fw <= 0)
+	if (!get_arg(spec->index, spec, flag, ap) && (spec->min_fw <= 0 && !flag->space && !flag->plus))
 		return (0);
 	set_flags(&pref, (spec->index == 4 || spec->index == 5), spec, flag);
-	ret = f[spec->index](spec->c, spec, &pref);
-	if (!process_arg(&ret, spec, tail, &pref))
-		return (0);
-	!flag->min && ret.content ? tail = &(*tail)->next : 0;
-	ret = ft_minfw(spec->index, spec, ret.content_size, &pref);
-	if (ret.content)
-			return (ft_lstaddnew(tail, ret.content, ret.content_size));
-	return (ret.content_size >= spec->min_fw);
+	ret[0] = f[spec->index](spec->c, spec, &pref);
+	return(process_arg(ret, spec, tail, &pref));
 }

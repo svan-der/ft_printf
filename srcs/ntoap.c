@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/22 17:57:12 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/10 16:04:33 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/11 18:48:45 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,20 +109,23 @@ int		ft_itoap_base(char **astr, t_llong n, t_uint base, t_ntoa *pref)
 int		ft_utoap_base(char **astr, t_ull n, t_uint base, t_ntoa *pref)
 {
 	size_t	len[3];
+	size_t	prepad;
 	size_t	total;
 
 	*astr = NULL;
-	len[0] = pref->pre && (n != 0) && pref->min ? pref->pre : 0;
 	len[1] = ft_numlen_base(n, base);
+	prepad = len[1] + pref->pre;
 	if (!len[1])
 		return (0);
+	// pref->pref = (!pref->pref && pref->min && (prepad >= pref->padding)) ? 1 : 0;
+	len[0] = pref->pref && (n != 0) ? pref->pre : 0;
 	len[2] = (pref->delimit) ? (len[1] / 3) - !(len[1] % 3) : 0;
 	total = len[0] + ft_max_size(pref->prec, len[1]) + len[2];
 	if (!*astr)
 		if (!ft_strpnew(astr, total))
 			return (-1);
 	make(*astr + total, n, base, pref);
-	if ((pref->prefix && pref->min) || (pref->prefix && pref->pref))
+	if (pref->pre && pref->pref)
 		ft_memcpy(*astr, pref->prefix, len[0]);
 	return (total);
 }
