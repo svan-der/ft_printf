@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/22 17:57:12 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/11 18:48:45 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/12 16:25:03 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,7 @@ int		ft_utoap_base(char **astr, t_ull n, t_uint base, t_ntoa *pref)
 	prepad = len[1] + pref->pre;
 	if (!len[1])
 		return (0);
-	// pref->pref = (!pref->pref && pref->min && (prepad >= pref->padding)) ? 1 : 0;
-	len[0] = pref->pref && (n != 0) ? pref->pre : 0;
+	len[0] = pref->pref ? pref->pre : 0;
 	len[2] = (pref->delimit) ? (len[1] / 3) - !(len[1] % 3) : 0;
 	total = len[0] + ft_max_size(pref->prec, len[1]) + len[2];
 	if (!*astr)
