@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/12 15:41:25 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/12 15:47:23 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,8 +187,8 @@ static t_list	print_dioux(char c, t_spec *spec, t_ntoa *pref)
 /* processes string arguments */
 static t_list 	print_csp(char c, t_spec *spec, t_ntoa *pref)
 {
-	static char *const	chars = " !\"#$%&\'()*+,-./0123456789:;<=>?@\
-	ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+	// static char *const	chars = " !\"#$%&\'()*+,-./0123456789:;<=>?@\
+	// ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 	char				*str;
 	char				*s2;
 	size_t				size;
@@ -199,14 +199,8 @@ static t_list 	print_csp(char c, t_spec *spec, t_ntoa *pref)
 	{
 		if (c == '%')
 			str = "%";
-		else if (c == 'c' && spec->val.c != 0)
-		{
-			str = (spec->val.c > 64) ? &chars[spec->val.c - 31] : &chars[spec->val.c - 32];
-			if (spec->val.c >= 0 && spec->val.c <= 127)
-				str = ft_strdup(&spec->val.c);
-		}
-		else if (spec->val.c == 0)
-			str = "\0";
+		else
+			str = ft_strdup(&spec->val.c);
 		size = 1;
 	}
 	if (c == 's')
