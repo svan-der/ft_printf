@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/12 13:32:06 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/12 15:41:25 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void		get_floatarg(t_spec *spec, va_list ap)
 }
 
 void		get_strarg(t_spec *spec, char c, va_list ap)
-{
+{	
 	if (c == 'c')
 		spec->val.c = va_arg(ap, int);
 	if (c == 's')
@@ -200,10 +200,14 @@ static t_list 	print_csp(char c, t_spec *spec, t_ntoa *pref)
 		if (c == '%')
 			str = "%";
 		else if (c == 'c' && spec->val.c != 0)
+		{
 			str = (spec->val.c > 64) ? &chars[spec->val.c - 31] : &chars[spec->val.c - 32];
+			if (spec->val.c >= 0 && spec->val.c <= 127)
+				str = ft_strdup(&spec->val.c);
+		}
 		else if (spec->val.c == 0)
 			str = "\0";
-		size = (str) ? 1 : 0;
+		size = 1;
 	}
 	if (c == 's')
 	{
