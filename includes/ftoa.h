@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/10 14:11:54 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/10 17:34:58 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/13 17:36:09 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct  s_opt
 typedef struct  s_dtoa
 {
     t_opt       inval;
+    t_u128      frac;
     t_u128      int_val;
     t_ldb       ldb_val;
     float       fl_val;
@@ -38,11 +39,11 @@ typedef struct  s_dtoa
     t_uint      base;
 }               t_dtoa;
 
-int     ft_dtoap(char **astr, t_dtoa *dtoa, t_spec *spec, t_ntoa *pref);
-int     ft_ldtoap(char **astr, t_dtoa *dtoa, t_spec *spec, t_ntoa *pref);
-char    *ft_ldtoa(long double n, t_spec *spec, t_ntoa *pref);
-char    *ft_dtoa(double n, t_spec *spec, t_ntoa *pref);
-
+size_t  ft_dtoap(char **astr, t_dtoa *dtoa, t_spec *spec, t_ntoa *pref);
+size_t  ft_ldtoap(char **astr, t_dtoa *dtoa, t_spec *spec, t_ntoa *pref);
+t_list  ft_ldtoa(t_dtoa *dtoa, t_spec *spec, t_ntoa *pref);
+t_list  ft_dtoa(t_dtoa *dtoa, t_spec *spec, t_ntoa *pref);
+size_t	handle_invalid(char **astr, t_opt *inval, t_ntoa *pref);
 
 // typedef union   u_epf
 // {

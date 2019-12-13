@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/12 17:23:35 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/13 19:07:40 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,21 +70,28 @@ void	get_int_arg(t_spec *spec, va_list ap)
 static t_list	print_float(char c, t_spec *spec, t_ntoa *pref)
 {
 	t_ldb		*val;
-	// t_dtoa 		dtoa;
-	char		*str;
+	t_dtoa 		dtoa;
 	size_t		size;
+	// char		*str;
 	
-	spec->prec = (spec->prec < 0 || (spec->prec_set && spec->prec < 0))? 6 : spec->prec;
-	str = NULL;
+	dtoa = (t_dtoa){{0}, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	pref->prec = (spec->prec < 0)? 6 : spec->prec;
+	if (spec->prec == 0)
+		pref->prec_set = 0;
+	else
+		pref->prec_set = 1;
 	val = &spec->val.fl;
 	size = 0;
 	(void)c;
 	(void)pref;
 	// if (spec->mod == L)
-	// 	size = ft_ldtoap(&str, &dtoa, spec, pref);
+	// 	size = ft_ldtoa(&dtoa, spec, pref);
 	// else
-	// 	size = ft_dtoap(&str, &dtoa, spec, pref);
-	return ((t_list){str, size, NULL});
+	// 	size = ft_dtoa(&dtoa, spec, pref);
+	// return ((t_list){str, size, NULL});
+	if (spec->mod == L)
+		return (ft_ldtoa(&dtoa, spec, pref));
+	return (ft_dtoa(&dtoa, spec, pref));
 }
 
 static void 	ft_prefix(t_ntoa *pref, t_ull val_unsign, t_spec *spec, t_flags *flag)
@@ -330,7 +337,9 @@ static t_list 	ft_minfw(int index, t_spec *spec, size_t total, t_ntoa *pref)
 		return (ft_cspad(i, spec, total, pref));
 	if (index == 4 || index == 5)
 		return (ft_intpad(i, spec->min_fw, total, pref));
-	return (ft_uintpad(i, spec->min_fw, total, pref));
+	if (index > 6 && index < 9)
+		return (ft_uintpad(i, spec->min_fw, total, pref));
+	return ((t_list){NULL, 0, NULL});
 }
 
 int		get_arg(int i, t_spec *spec, t_flags *flag, va_list ap)

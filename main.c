@@ -5,24 +5,12 @@
 
 int		main(void)
 {
-	//Pointers - Basic
-	// static char	a01;
-	// static unsigned char a02;
-	// static short a03;
-	// static unsigned short a04;
-	// static int a05;
-	// static unsigned int a06;
-	// static long a07;
-	// static unsigned long a08;
-	// static long long a09;
-	// static unsigned long long a10;
-	// static char *a11;
-	// static void *a12;
-
-	// ft_printf("[%-70p][%-70p]%-70p%-70p%-70p%-70p%-70p%-70p%-70p%-70p%-70p%-70p]\n",&a01,&a02,&a03,&a04,&a05,&a06,&a07,&a08,&a09,&a10,&a11,&a12);
-	// printf("[%-5p]\n[%-5p]\n[%-5p]\n[%-5p]\n[%-5p]\n[%-5p]\n[%-5p]\n[%-5p]\n[%-5p]\n[%-5p]\n[%-5p]\n[%-5p]\n",&a01,&a02,&a03,&a04,&a05,&a06,&a07,&a08,&a09,&a10,&a11,&a12);
-	// ft_printf("[%-5p]\n[%-5p]\n[%-5p]\n[%-5p]\n[%-5p]\n[%-5p]\n[%-5p]\n[%-5p]\n[%-5p]\n[%-5p]\n[%-5p]\n[%-5p]\n",&a01,&a02,&a03,&a04,&a05,&a06,&a07,&a08,&a09,&a10,&a11,&a12);
-	printf("[%p]", NULL);
-	ft_printf("[%p]", NULL);
+	float f;
+	long double d;
+	
+	f = 544554564265641564626546685468545.5646848754561516848964865168468;
+	d = 5634274524452424654534567523123354534453648345631.234864312348623156348631154561234626364456780231563153;
+	printf("[%f]\n", f);
+	ft_printf("[%f]\n", f);
 	return (0);
 }
