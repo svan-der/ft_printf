@@ -6,7 +6,7 @@
 #    By: svan-der <svan-der@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/02/11 15:22:00 by svan-der       #+#    #+#                 #
-#    Updated: 2019/11/30 17:32:47 by svan-der      ########   odam.nl          #
+#    Updated: 2019/12/15 17:16:02 by svan-der      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CFLAGS = -Wall -Werror -Wextra
 HEADER = includes/
 SRCDIR = srcs/
 SRC = $(addprefix $(SRCDIR),ft_memchr.c ft_putnbr_fd.c ft_striter.c \
-	ft_strnew.c ft_atoi.c\
+	ft_strnew.c ft_atoi.c ft_pow.c\
 	ft_memcmp.c ft_putstr.c ft_itoa.c ft_gridset.c ft_abs.c\
 	ft_bzero.c ft_memcpy.c ft_putstr_fd.c ft_strjoin.c ft_strrchr.c\
 	ft_isalnum.c ft_memdel.c ft_strcat.c ft_strlcat.c ft_strstr.c\

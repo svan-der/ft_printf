@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/10 14:54:16 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/13 19:41:57 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/15 17:19:34 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,81 +14,97 @@
 
 static int		check_ldbval(t_ldb val, t_opt *inval)
 {
+	t_ldb tmp;
+
+	tmp = val;
 	if (val != val)
 		inval->nan = 1;
-	if (val > __LDBL_MAX__)
+	if (val >= __LDBL_MAX__)
 		inval->inf = 1;
-	if (val < -1 * __LDBL_MAX__)
+	if (val <= -1 * __LDBL_MAX__)
 		inval->neg_inf = 1;
 	if (inval->nan || inval->inf || inval->neg_inf)
 		return (1);
 	return (0);
 }
 
-char	*ft_addfrac(char *str, t_dtoa *dtoa, t_ntoa *pref, char *digit)
+char	*ft_addfrac(char num[500], char *str, t_dtoa *dtoa, t_ntoa *pref)
 {
-	char num[500];
 	t_uint	i;
 	t_u128 	val;
-	t_uint	base;
+	size_t	total;
+	// t_uint	base;
+	char	*digit;
 
-	ft_memcpy(num, str, dtoa->int_len);
-	i = dtoa->int_len;
-	base = dtoa->base;
-	if (dtoa->dec)
-		num[i] = '.';
-	i = pref->prec + dtoa->dec;
+	total = dtoa->int_len + dtoa->dec + dtoa->neg;
+	digit = (pref->upper) ? HEX_UP : HEX;
+	ft_memcpy(str, num, dtoa->int_len + dtoa->neg);
+	// i = pref->prec + dtoa->dec;
+	i = pref->prec;
 	val = dtoa->frac;
 	while (pref->prec && val)
 	{
-		num[i] = digit[val % base];
-		val /= base;
+		str[i] = digit[val % dtoa->base];
+		val /= dtoa->base;
 		pref->prec--;
 		i--;
 	}
 	if (val == 0)
-		ft_memset(num + dtoa->dec + dtoa->int_len, '0', pref->prec);
-	str = ft_strdup(num);
+		ft_memset(str + dtoa->int_len + dtoa->neg + dtoa->dec, '0', pref->prec);
+	i = dtoa->int_len + dtoa->neg;
+	if (dtoa->dec)
+		str[i] = '.';
 	return (str);
 }
 
 char	*make_flstr(char *str, t_u128 val, t_dtoa *dtoa, t_ntoa *pref)
 {
 	char	*digit;
+	char	num[500];
 	t_uint	base;
 	t_i128	i;
 
 	base = dtoa->base;
 	digit = (pref->upper) ? HEX_UP : HEX;
-	i = dtoa->int_len;
+	i = dtoa->int_len + dtoa->neg;
 	while (i)
 	{
 		i--;
 		if ((-i % 3 == 1) && i < -3 && pref->delimit)
 		{
-			str[i] = '.';
-			str--;
+			num[i] = '.';
+			i--;
 		}
-		str[i] = digit[val % base];
+		num[i] = digit[val % base];
 		val /= base;
 	}
+	if (dtoa->neg)
+		*num = '-';
 	if (pref->prec)
-		str = ft_addfrac(str, dtoa, pref, digit);
+		str = ft_addfrac(num, str, dtoa, pref);
 	return (str);
 }
 
-size_t		ft_dtoa_base(t_ldb n, t_uint base, t_u128 int_len)
+size_t		ft_dtoa_base(t_ldb n, t_uint base, t_u128 int_len, t_spec *spec)
 {
 	size_t len;
 	t_u128 val;
 
-	if (int_len == 0)
-		val = (t_u128)n;
-	else
-		val = n;
 	if (base == 0 || base == 1 || base > 16)
 		return (base == 1 ? (size_t)n : 0);
 	len = 1;
+	if (int_len == 0 && spec->mod != L)
+		val = (t_u128)n;
+	else
+	{
+		n = (float)n;
+		while (n / base)
+		{
+			n /= base;
+			len++;
+		}
+		return (len);
+	}
 	while (val / base)
 	{
 		val /= base;
@@ -113,8 +129,6 @@ char	*ft_ldtoa_base(char *astr, t_dtoa *dtoa, t_ntoa *pref, size_t len)
 		// frac = (t_u128)ft_ldabs(frac) % base >= (t_u128)(base / 2) ?
 		// (frac / base) + 1 : (frac / base) + 1;
 		dtoa->frac = (t_u128)ft_ldabs(frac);
-		// ft_addfrac(astr, dtoa, pref);
-		// make_flstr(*astr + i - pref->prec, (t_u128)ft_ldabs(frac), dtoa, pref);
 	}
 	astr = make_flstr(astr, dtoa->int_val, dtoa, pref);
 	return (astr);
@@ -129,14 +143,14 @@ size_t		ft_ldtoap(char **astr, t_dtoa *dtoa, t_spec *spec, t_ntoa *pref)
 	val = dtoa->ldb_val;
 	if (!astr)
 		return (-1);
-	if (spec->mod == 'L')
+	if (spec->mod == L)
 		if (check_ldbval(val, &dtoa->inval))
 			return (handle_invalid(astr, &dtoa->inval, pref));
 	dtoa->dec = (pref->prec != 0 || spec->flags.hash) ? 1 : 0;
 	dtoa->neg = (val < 0.0) ? 1 : 0;
 	// len[0] = ((spec->prec != 0) || (spec->flags.hash)) ? 1 : 0;
-	len[0] = (dtoa->dec);
-	len[1] = ft_dtoa_base(val, dtoa->base, dtoa->int_len);
+	len[0] = (dtoa->dec + dtoa->neg);
+	len[1] = ft_dtoa_base(val, dtoa->base, dtoa->int_len, spec);
 	len[2] = (pref->delimit) ? (len[1] / 3) - !(len[1] % 3) : 0;
 	total = (len[0] + ft_max_size(pref->prec + len[1], len[1]) + len[2]);
 	if (!*astr)
@@ -144,5 +158,7 @@ size_t		ft_ldtoap(char **astr, t_dtoa *dtoa, t_spec *spec, t_ntoa *pref)
 			return (-1);
 	dtoa->int_len = len[1];
 	*astr = ft_ldtoa_base(*astr, dtoa, pref, total);
+	// if (dtoa->neg)
+	// 	*astr[0] = '-';
 	return (total);
 }

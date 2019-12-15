@@ -18,7 +18,8 @@
 		"stdarg.h": "c",
 		"stdio.h": "c",
 		"mathlib.h": "c",
-		"fcntl.h": "c"
+		"fcntl.h": "c",
+		"math.h": "c"
 	},
 	"C_Cpp.intelliSenseEngineFallback": "Enabled"
 }

@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/13 19:07:40 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/15 17:25:59 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -337,7 +337,7 @@ static t_list 	ft_minfw(int index, t_spec *spec, size_t total, t_ntoa *pref)
 		return (ft_cspad(i, spec, total, pref));
 	if (index == 4 || index == 5)
 		return (ft_intpad(i, spec->min_fw, total, pref));
-	if (index > 6 && index < 9)
+	if (index > 5 && index < 9)
 		return (ft_uintpad(i, spec->min_fw, total, pref));
 	return ((t_list){NULL, 0, NULL});
 }
