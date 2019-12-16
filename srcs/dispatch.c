@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/15 17:25:59 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/16 15:45:06 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,20 +105,28 @@ static void 	ft_prefix(t_ntoa *pref, t_ull val_unsign, t_spec *spec, t_flags *fl
 	hex_up = "0X";
 	hex = "0x";
 	null = "0x0";
-	if (spec->c == 'o' && (val_unsign != 0 || (val_unsign == 0 && spec->prec <= 0 && pref->prec_set)))
-		pref->prefix = zero;
-	else if (spec->c == 'X')
+	pref->pref = (!val_unsign && !pref->min) ? 0 : 1;
+	if (spec->c == 'X')
 	{
 		if (val_unsign != 0)
 			pref->prefix = hex_up;
+		if (pref->zero && pref->padding)
+			pref->pref = 0;
 	}
 	else if (spec->c == 'x')
 	{
 		if (spec->c == 'x' && val_unsign != 0)
 			pref->prefix = hex;
+		if (pref->zero && pref->padding)
+			pref->pref = 0;
 	}
 	(void)flag;
-	pref->pref = (!val_unsign && pref->prefix && !pref->min) || (pref->prefix && pref->zero && spec->min_fw != 0) ? 0 : 1;
+	if (spec->c == 'o' && (val_unsign != 0 || (val_unsign == 0 && spec->prec <= 0 && pref->prec_set)))
+	{
+		pref->prefix = zero;
+		if (val_unsign == 0 && spec->prec <= 0 && pref->prec_set)
+			pref->pref = 0;
+	}
 	if (spec->c == 'p')
 	{
 		pref->pref = (pref->min) ? 1 : 0;
@@ -246,7 +254,7 @@ void	insert_prefix(char *str, t_ntoa *pref, size_t *size, int i)
 	
 	total = *size;
 	len = 0;
-	if (pref->pre == 1 && (!pref->pref || (pref->pref && total == 0)))
+	if ((pref->pre == 1 && (!pref->pref)) || (pref->pref && total == 0))
 	{
 		len = (i == 0 && !pref->min) ? *size - 1 : 0;
 		ft_memcpy(str + len, pref->prefix, 1);
@@ -369,7 +377,7 @@ int		get_arg(int i, t_spec *spec, t_flags *flag, va_list ap)
 	return (1);
 }
 
-int		process_arg(t_list *ret, t_spec *spec, t_list **tail, t_ntoa *pref)
+int		process_arg(t_list ret[2], t_spec *spec, t_list **tail, t_ntoa *pref)
 {
 	if (!ret[0].content && spec->min_fw <= 0)
 	{
@@ -378,11 +386,11 @@ int		process_arg(t_list *ret, t_spec *spec, t_list **tail, t_ntoa *pref)
 	}
 	if (!ret[0].content)
 	{
-		ret[0] = ft_minfw(spec->index, spec, ret->content_size, pref);
-		return (ft_lstaddnew(tail, ret->content, ret->content_size));
+		ret[0] = ft_minfw(spec->index, spec, ret[0].content_size, pref);
+		return (ft_lstaddnew(tail, ret[0].content, ret[0].content_size));
 	}
 	if (ret[0].content)
-		ft_lstaddnew(tail, ret[0].content, ret->content_size);
+		ft_lstaddnew(tail, ret[0].content, ret[0].content_size);
 	!spec->flags.min && ret[0].content ? tail = &(*tail)->next : 0;
 	ret[1] = ft_minfw(spec->index, spec, ret[0].content_size, pref);
 	if (ret[1].content)

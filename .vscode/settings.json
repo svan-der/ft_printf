@@ -19,7 +19,13 @@
 		"stdio.h": "c",
 		"mathlib.h": "c",
 		"fcntl.h": "c",
-		"math.h": "c"
+		"math.h": "c",
+		"__hash_table": "c",
+		"__split_buffer": "c",
+		"array": "c",
+		"string_view": "c",
+		"unordered_map": "c",
+		"vector": "c"
 	},
 	"C_Cpp.intelliSenseEngineFallback": "Enabled"
 }
