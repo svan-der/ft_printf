@@ -6,8 +6,8 @@
 
 int		main(void)
 {
-	printf("[%#08x]\n", 42);
-	ft_printf("[%#08x]\n", 42);
+	printf("[%7X]\n", 33);
+	ft_printf("[%7X]\n", 33);
 
 	// float f;
 	// long double d;
