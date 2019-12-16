@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/10 14:54:16 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/15 17:19:34 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/16 16:24:52 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,7 @@ char	*ft_addfrac(char num[500], char *str, t_dtoa *dtoa, t_ntoa *pref)
 	total = dtoa->int_len + dtoa->dec + dtoa->neg;
 	digit = (pref->upper) ? HEX_UP : HEX;
 	ft_memcpy(str, num, dtoa->int_len + dtoa->neg);
-	// i = pref->prec + dtoa->dec;
-	i = pref->prec;
+	i = pref->prec + dtoa->dec + dtoa->neg;
 	val = dtoa->frac;
 	while (pref->prec && val)
 	{
