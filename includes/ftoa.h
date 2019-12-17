@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/10 14:11:54 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/13 17:36:09 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/17 17:34:48 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ typedef struct  s_dtoa
     t_u128      frac;
     t_u128      int_val;
     t_ldb       ldb_val;
-    float       fl_val;
+    t_uint      total;
     t_u128      int_len;
     size_t      len;
     t_byte      dec;
