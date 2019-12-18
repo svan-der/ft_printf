@@ -6,8 +6,8 @@
 
 int		main(void)
 {
-	printf("[real: %f float]\n", 1.5);
-	ft_printf("[mine: %f float]\n", 1.5);
+	printf("[real: %.0f float]\n", 0.000001);
+	ft_printf("[mine: %.0f float]\n", 0.000001);
 
 	// float f;
 	// long double d;
