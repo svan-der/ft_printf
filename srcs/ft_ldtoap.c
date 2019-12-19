@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/10 14:54:16 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/19 17:38:29 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/19 22:26:07 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,63 +117,190 @@ int		check_five(t_ldb val, t_ull i, int x, t_ntoa *pref)
 			x--;
 		}
 	}
-	x = x - 1;
-	val = val - i;
-	i = i / 10;
-	val *= 10;
-	i = (int)val;
+	if (i == 5)
+		x += 1;
+	while (x)
+	{
+		x--;
+		val = val - i;
+		i = i / 10;
+		val *= 10;
+		i = (int)val;
+	}
 	if (i > 4)
 		bank = 1;
 	return (bank);
+}
+
+t_ull	check_big(t_ldb frac, t_ull i, int bank, int round)
+{
+	int x;
+
+	x = 1;
+	x += bank;
+	while (x && !round)
+	{
+		x--;
+		frac -= i;
+		i = i / 10;
+		frac = (frac * ft_pow(10, 1));
+		i = (t_ull)frac;
+	}
+	return (i);
+	// if (i > 4)
+	// 	round = 1;
+	// if (round && pref->prec > 0)
+	// {
+	// 	if (i % 10 != 0)
+	// 		dtoa->frac += 1;
+	// 	dtoa->frac = (t_u128)frac;
+	// 	i = (t_ull)dtoa->frac;
+	// 	if (i % 10 == 0 && nine == pref->prec)
+	// 		dtoa->int_val += 1;
+	// }
+	// dtoa->frac = (t_u128)frac;
 }
 
 void	ft_round(t_ldb frac, t_ntoa *pref, t_dtoa *dtoa)
 {
 	int		x;
 	t_ull	i;
-	t_ldb 	val;
 	int		round;
 	int		nine;
 
 	nine = 0;
 	round = 0;
-	i = dtoa->int_val;
 	x = pref->prec;
-	val = dtoa->ldb_val - i;
-	val *= 10;
-	i = (int)val;
+	frac = dtoa->ldb_val - dtoa->int_val;
+	frac = (frac * ft_pow(10, 1));
+	i = (t_ull)frac;
 	if (i == 5 && pref->prec == 0)
-		round = check_five(val, i, x, pref);
-	if (i != 5 && val)
+		round = check_five(frac, i, x, pref);
+	while (x)
 	{
-		while (x)
-		{
-			if (i == 9)
-				nine += 1;
-			x--;
-			val = val - i;
-			i = i / 10;
-			val *= 10;
-			i = (int)val;
-			if (x == 1 && i == 5)
-				round = check_five(i, val, x, pref);
-		}
-		round = (i > 4 || round) ? 1 : 0;
-		round = (pref->prec == 0 && i > 4) ? 1 : round;
+		if (i == 9)
+			nine += 1;
+		x--;
+		frac -= i;
+		i = i / 10;
+		frac = (frac * ft_pow(10, 1));
+		i = (t_ull)frac;
+		if (x == 1 && i >= 5)
+			round = check_five(frac, i, x, pref);
 	}
+	round = (i > 4 || round) ? 1 : 0;
+	round = (pref->prec == 0 && i > 4) ? 1 : round;
 	dtoa->int_val = (round == -1 && i % 2 == 0) ? dtoa->int_val - 1 : dtoa->int_val;
-	dtoa->int_val = (round && pref->prec == 0) ? dtoa->int_val + 1 : dtoa->int_val;
-	frac /= 10;
-	if (round)
+	dtoa->int_val = (pref->prec == 0 && round) ? dtoa->int_val + 1 : dtoa->int_val;
+	// round = (nine && nine == pref->prec) ? 1 : 0;
+	i = (t_ull)(frac);
+	if (i == 9)
 	{
-		frac += 1;
-		dtoa->frac = (t_u128)frac;
-		i = dtoa->frac;
+		frac -= i;
+		i = i / 10;
+		frac = (frac * ft_pow(10, 1));
+		i = (t_ull)frac;
+		if (i == 9)
+			round = 1;
+	}
+	// frac -= i;
+	// i = i / 10;
+	// frac = (frac * ft_pow(10, 1));
+	x = -1;
+	dtoa->frac = (dtoa->ldb_val - dtoa->int_val) * ft_pow(dtoa->base, pref->prec + 1);
+	if (dtoa->frac > MAX_UINT)
+		x = check_big(frac, i, i == 5, round);
+	i = (t_ull)dtoa->frac;
+	if (x > 0 && x != 9)
+		i = x;
+	// i = (x != 0 && x) ? i : (int)x;
+	// if (!nine || (nine && round))
+	// 	i = (t_ull)dtoa->frac;
+	dtoa->frac /= 10;
+	if (round && pref->prec > 0)
+	{
+		if (i % 10 != 0)
+			dtoa->frac += 1;
+		dtoa->frac = (t_u128)dtoa->frac;
+		i = (t_ull)dtoa->frac;
 		if (i % 10 == 0 && nine == pref->prec)
 			dtoa->int_val += 1;
 	}
-	dtoa->frac = frac;
+	dtoa->frac = (t_u128)dtoa->frac;
 }
+
+	// dtoa->frac = frac;
+	// // round = (i > 4 || round) ? 1 : 0;
+	// round = ((i > 4) || (pref->prec == 0 && i > 4)) ? 1 : 0;
+	// if (nine)
+	// 	round = (nine == pref->prec) ? 1 : 0;
+	// dtoa->int_val = (round == -1 && i % 2 == 0) ? dtoa->int_val - 1 : dtoa->int_val;
+	// dtoa->int_val = (round && pref->prec == 0) ? dtoa->int_val + 1 : dtoa->int_val;
+	// frac = (dtoa->ldb_val - dtoa->int_val) * ft_pow(10, pref->prec);
+	// dtoa->frac = frac;
+	// if (round)
+	// {
+	// 	frac += 1;
+	// 	dtoa->frac = (t_u128)frac;
+	// 	i = frac;
+	// 	if (i % 10 == 0 && nine == pref->prec)
+	// 		dtoa->int_val += 1;
+	// }
+
+// void	ft_round(t_ldb frac, t_ntoa *pref, t_dtoa *dtoa)
+// {
+// 	int		x;
+// 	t_ull	i;
+// 	t_ldb 	val;
+// 	int		round;
+// 	int		nine;
+
+// 	frac = 0;
+// 	nine = 0;
+// 	round = 0;
+// 	i = dtoa->int_val;
+// 	x = pref->prec;
+// 	dtoa->frac = frac;
+// 	frac /= 10;
+// 	val = dtoa->ldb_val - i;
+// 	val *= 10;
+// 	i = (int)val;
+// 	if (i == 5 && pref->prec == 0)
+// 		round = check_five(val, i, x, pref);
+// 	if (i != 5 && val)
+// 	{
+// 		while (x)
+// 		{
+// 			if (i == 9)
+// 				nine += 1;
+// 			x--;
+// 			val = val - i;
+// 			i = i / 10;
+// 			val *= 10;
+// 			i = (int)val;
+// 			if (x == 1 && i == 5)
+// 				round = check_five(i, val, x, pref);
+// 		}
+// 		round = (i > 4 || round) ? 1 : 0;
+// 		round = (pref->prec == 0 && i > 4) ? 1 : round;
+// 	}
+// 	dtoa->int_val = (round == -1 && i % 2 == 0) ? dtoa->int_val - 1 : dtoa->int_val;
+// 	dtoa->int_val = (round && pref->prec == 0) ? dtoa->int_val + 1 : dtoa->int_val;
+// 	i = (int)frac;
+// 	round = (i > 4) ? 1 : 0;
+// 	dtoa->frac /= 10;
+// 	// frac /= 100;
+// 	if (round)
+// 	{
+// 		frac += 1;
+// 		// val += 1;
+// 		dtoa->frac = (t_u128)frac;
+// 		i = dtoa->frac;
+// 		if (i % 10 == 0 && nine == pref->prec)
+// 			dtoa->int_val += 1;
+// 	}
+// 	// dtoa->frac = frac;
+// }
 
 char	*ft_ldtoa_base(char *astr, t_dtoa *dtoa, t_ntoa *pref, size_t len)
 {
@@ -181,10 +308,11 @@ char	*ft_ldtoa_base(char *astr, t_dtoa *dtoa, t_ntoa *pref, size_t len)
 	int		base;
 
 	(void)len;
+	frac = 0;
 	base = dtoa->base;
 	dtoa->ldb_val = ft_ldabs(dtoa->ldb_val);
-	frac = (dtoa->ldb_val - dtoa->int_val) * ft_pow(base, pref->prec + 1);
-	dtoa->frac = (t_u128)frac;
+	// frac = (dtoa->ldb_val - dtoa->int_val) * ft_pow(base, pref->prec + 1);
+	// dtoa->frac = (t_u128)frac;
 	ft_round(frac, pref, dtoa);
 	astr = make_flstr(astr, dtoa->int_val, dtoa, pref);
 	return (astr);
