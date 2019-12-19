@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/15 11:23:28 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/11 11:23:31 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/20 00:15:45 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ int			process(t_format *fmt, const char *str, va_list ap)
 
 	i = 0;
 	argc = 0;
+	argc = ft_strlen(str);
 	while (str[i])
 	{
 		j = i + ft_strchrni(str + i, '%');
@@ -135,7 +136,7 @@ int			process(t_format *fmt, const char *str, va_list ap)
 		{
 			argc += 1;
 			ret = print_arg(fmt, str, ap);
-			if (ret == 0 && i == j && fmt->argc == argc)
+			if (ret == 0 && i == argc)
 				return (0);
 			if (ret == -1)
 			{

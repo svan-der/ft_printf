@@ -6,11 +6,10 @@
 
 int		main(void)
 {
-	char *str;
-
-	printf("[%+d]\n", -42);
-	ft_printf("[%+d]\n", -42);
-
+	printf("%5p\n", 0);
+	ft_printf("%5p\n", 0);
+	// printf("%.o, %.0o", 0, 0);
+	// ft_printf("%.o, %.0o", 0, 0);
 	// float f;
 	// long double d;
 	// f = 544554564265641564626546685468545.5646848754561516848964865168468;

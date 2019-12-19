@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/19 23:41:25 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/20 00:25:50 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,8 +171,6 @@ static void		set_flags(t_ntoa *pref, int sign, t_spec *spec, t_flags *flag)
 		pref->delimit = 1;
 	if (sign || spec->c == 'f')
 		ft_spsign(pref, spec, flag, sign);
-	// if (flag->plus || flag->space || sign || spec->c == 'f')
-	// 	ft_spsign(pref, spec, flag, sign);
 	if (!pref->sign && flag->space && spec->val.di >= 0)
 		pref->space = 1;
 	if (spec->prec_set)
@@ -285,9 +283,13 @@ static t_list	ft_cspad(int i, t_spec *spec, size_t total, t_ntoa *pref)
 	pad = ft_strnew(size);
 	if (spec->min_fw != 0)
 		ft_memset(pad, " 0"[i], size);
-	if (spec->c == 'p' && !pref->min)
+	len = (size != 0) ? size - pre : 0;
+	if (spec->c == 'p' && !spec->val.p)
+		ft_memcpy(pad + len, pref->prefix, pref->pre);
+	if (spec->c == 'p' && !pref->min && spec->val.p)
 	{
-		len = (size != 0) ? size - pre : 0;
+		if (!pref->min)
+			len = (size != 0) ? size - pre : 0;
 		ft_memcpy(pad + len, pref->prefix, pref->pre);
 	}
 	return ((t_list){pad, size, NULL});
