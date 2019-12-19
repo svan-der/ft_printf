@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/18 18:24:52 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/19 17:19:21 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ static t_list	print_float(char c, t_spec *spec, t_ntoa *pref)
 	val = &spec->val.fl;
 	size = 0;
 	(void)c;
-	(void)pref;
 	// if (spec->mod == L)
 	// 	size = ft_ldtoa(&dtoa, spec, pref);
 	// else
@@ -138,15 +137,33 @@ static void 	ft_prefix(t_ntoa *pref, t_ull val_unsign, t_spec *spec, t_flags *fl
 static void		ft_spsign(t_ntoa *pref, t_spec *spec, t_flags *flag)
 {
 	char	*sign;
+	t_byte	neg;
 	t_llong val;
+	t_ldb	value;
 
+	neg = 0;
+	val = 0;
+	value = 0;
+	if (spec->c == 'f')
+	{
+		value = spec->val.fl;
+		if (value < 0)
+			neg = 1;
+	}
+	else
+	{
+		val = spec->val.di;
+		if (val < 0)
+			neg = 1;
+	}
 	sign = "+- ";
-	val = spec->val.di;
-	if (flag->plus || val < 0)
-		pref->sign = (flag->plus && val >= 0) ? &sign[0] : &sign[1];
-	if (!flag->plus && flag->space && (val >= 0))
+	if (flag->plus || neg)
+		pref->sign = (flag->plus && !neg) ? &sign[0] : &sign[1];
+	if (!flag->plus && flag->space && !neg)
 		pref->sign = &sign[2];
 	pref->pref = ((!val && pref->sign && !pref->min) || (pref->sign && pref->zero && spec->min_fw != 0)) ? 0 : 1;
+	if (spec->c == 'f')
+		pref->pref = ((!value && pref->sign && !pref->min) || (pref->sign && pref->zero && spec->min_fw != 0)) ? 0 : 1;
 	pref->pre = (pref->sign) ? 1 : 0;
 }
 
@@ -165,7 +182,7 @@ static void		set_flags(t_ntoa *pref, int sign, t_spec *spec, t_flags *flag)
 		pref->min = 1;
 	if ((sign || spec->c == 'c' || spec->c == 'f' || spec->c == 'F') && flag->apos)
 		pref->delimit = 1;
-	if ((sign && (flag->plus || flag->space)) || sign)
+	if (flag->plus || flag->space || sign || spec->c == 'f')
 		ft_spsign(pref, spec, flag);
 	if (!pref->sign && flag->space && spec->val.di >= 0)
 		pref->space = 1;
@@ -173,7 +190,7 @@ static void		set_flags(t_ntoa *pref, int sign, t_spec *spec, t_flags *flag)
 		pref->prec_set = 1;
 	if (spec->prec != -1 && spec->prec_set)
 		pref->prec = (size_t)spec->prec;
-	if ((!sign && flag->hash) || spec->c == 'p')
+	if ((!sign && spec->c != 'f' && flag->hash) || spec->c == 'p')
 		ft_prefix(pref, spec->val.oux, spec, flag);
 	if (spec->c == 'X' || spec->c == 'F')
 		pref->upper = 1;
@@ -336,17 +353,45 @@ static t_list	ft_uintpad(int i, size_t padding, size_t total, t_ntoa *pref)
 	return ((t_list){pad, size, NULL});
 }
 
+static t_list	ft_fltpad(int i, size_t padding, size_t total, t_ntoa *pref)
+{
+	size_t 	size;
+	size_t 	len;
+	char	*pad;
+
+	pad = NULL;
+	len = 0;
+	size = (total < padding && padding) ? padding - total : 0;
+	size = (size == 0 && pref->pre && !pref->pref) ? pref->pre : size;
+	if (!size)
+		return((t_list){pad, size, NULL});
+	pad = ft_strnew(size);
+	if (padding != 0)
+		ft_memset(pad, " 0"[i], size);
+	if (pref->sign && (!pref->pref || (pref->pref && total == 0)))
+	{
+		len = (i == 0 && !pref->min) ? size - 1 : 0;
+		ft_memcpy(pad + len, pref->sign, 1);
+	}
+	size = (size == (size_t)pref->pre) ? 1 : size;
+	return ((t_list){pad, size, NULL});
+}
+
 static t_list 	ft_minfw(int index, t_spec *spec, size_t total, t_ntoa *pref)
 {
 	int i;
 
 	i = pref->zero && !pref->min && (spec->prec < 0);
+	if (spec->c == 'f')
+		i = pref->zero && !pref->min;
 	if (index < 4)
 		return (ft_cspad(i, spec, total, pref));
 	if (index == 4 || index == 5)
 		return (ft_intpad(i, spec->min_fw, total, pref));
 	if (index > 5 && index < 10)
 		return (ft_uintpad(i, spec->min_fw, total, pref));
+	if (index > 9)
+		return (ft_fltpad(i, spec->min_fw, total, pref));
 	return ((t_list){NULL, 0, NULL});
 }
 

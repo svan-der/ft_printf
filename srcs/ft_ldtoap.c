@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/10 14:54:16 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/18 18:32:19 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/19 17:38:29 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,17 @@ static int		check_ldbval(t_ldb val, t_opt *inval)
 	return (0);
 }
 
-char	*ft_addfrac(char num[500], char *str, t_dtoa *dtoa, t_ntoa *pref)
+char	*ft_addfrac(char *str, t_dtoa *dtoa, t_ntoa *pref)
 {
 	t_uint	i;
+	t_uint	x;
 	t_u128 	val;
 	size_t	total;
-	// t_uint	base;
 	char	*digit;
 
-	total = dtoa->int_len + dtoa->neg;
+	x = (dtoa->neg) ? 1 : 0;
+	total = dtoa->int_len + x;
 	digit = (pref->upper) ? HEX_UP : HEX;
-	ft_memcpy(str, num, total);
 	i = dtoa->total - 1;
 	val = dtoa->frac;
 	while (pref->prec && val)
@@ -49,8 +49,8 @@ char	*ft_addfrac(char num[500], char *str, t_dtoa *dtoa, t_ntoa *pref)
 		i--;
 	}
 	if (val == 0 && pref->prec != 0)
-		ft_memset(str + dtoa->int_len + dtoa->neg + dtoa->dec, '0', pref->prec);
-	i = dtoa->int_len + dtoa->neg;
+		ft_memset(str + total + dtoa->dec, '0', pref->prec);
+	i = total;
 	if (dtoa->dec)
 		str[i] = '.';
 	return (str);
@@ -59,7 +59,6 @@ char	*ft_addfrac(char num[500], char *str, t_dtoa *dtoa, t_ntoa *pref)
 char	*make_flstr(char *str, t_u128 val, t_dtoa *dtoa, t_ntoa *pref)
 {
 	char	*digit;
-	char	num[500];
 	t_uint	base;
 	t_i128	i;
 
@@ -71,39 +70,26 @@ char	*make_flstr(char *str, t_u128 val, t_dtoa *dtoa, t_ntoa *pref)
 		i--;
 		if ((-i % 3 == 1) && i < -3 && pref->delimit)
 		{
-			num[i] = '.';
+			str[i] = '.';
 			i--;
 		}
-		num[i] = digit[val % base];
+		str[i] = digit[val % base];
 		val /= base;
 	}
-	if (dtoa->neg)
-		*num = '-';
-	if (pref->prec)
-		str = ft_addfrac(num, str, dtoa, pref);
+	if (pref->sign && pref->pref)
+		*str = *pref->sign;
+	if (dtoa->dec)
+		str = ft_addfrac(str, dtoa, pref);
 	return (str);
 }
 
-size_t		ft_dtoa_base(t_ldb n, t_uint base, t_u128 int_len, t_spec *spec)
+size_t		ft_dtoa_base(t_ldb n, t_uint base)
 {
 	size_t len;
 	t_u128 val;
 
-	if (base == 0 || base == 1 || base > 16)
-		return (base == 1 ? (size_t)n : 0);
 	len = 1;
-	if (int_len == 0 && spec->mod != L && n >= -1 * __LDBL_MAX__ && n <= __LDBL_MAX__)
-		val = (t_u128)n;
-	else
-	{
-		n = (float)n;
-		while (n / base)
-		{
-			n /= base;
-			len++;
-		}
-		return (len);
-	}
+	val = (t_u128)n;
 	while (val / base)
 	{
 		val /= base;
@@ -112,25 +98,14 @@ size_t		ft_dtoa_base(t_ldb n, t_uint base, t_u128 int_len, t_spec *spec)
 	return (len);
 }
 
-void	ft_round(t_ldb frac, t_ntoa *pref, t_dtoa *dtoa)
+int		check_five(t_ldb val, t_ull i, int x, t_ntoa *pref)
 {
-	int		x;
-	t_ull	i;
-	t_ldb 	val;
-	int		round;
-	int		uneven;
-	int		bank;
+	int	bank;
 
-	uneven = 0;
-	round = 0;
 	bank = 0;
-	i = dtoa->int_val;
-	x = 500;
-	val = dtoa->ldb_val - i;
-	val *= 10;
-	i = (int)val;
 	if (i == 5 && pref->prec == 0)
 	{
+		x = 500;
 		while (x)
 		{
 			val = val - i;
@@ -138,44 +113,67 @@ void	ft_round(t_ldb frac, t_ntoa *pref, t_dtoa *dtoa)
 			val *= 10;
 			i = (int)val;
 			if (i > 0)
-				bank = 1;
+				bank = -1;
 			x--;
 		}
 	}
-	x = (pref->prec != 0) ? pref->prec : 1;
+	x = x - 1;
+	val = val - i;
+	i = i / 10;
+	val *= 10;
+	i = (int)val;
+	if (i > 4)
+		bank = 1;
+	return (bank);
+}
+
+void	ft_round(t_ldb frac, t_ntoa *pref, t_dtoa *dtoa)
+{
+	int		x;
+	t_ull	i;
+	t_ldb 	val;
+	int		round;
+	int		nine;
+
+	nine = 0;
+	round = 0;
+	i = dtoa->int_val;
+	x = pref->prec;
+	val = dtoa->ldb_val - i;
+	val *= 10;
+	i = (int)val;
+	if (i == 5 && pref->prec == 0)
+		round = check_five(val, i, x, pref);
 	if (i != 5 && val)
 	{
 		while (x)
 		{
+			if (i == 9)
+				nine += 1;
+			x--;
 			val = val - i;
 			i = i / 10;
 			val *= 10;
 			i = (int)val;
-			x--;
-			if (x == 1)
-				uneven = (i % 2 != 0) ? 1 : 0;
+			if (x == 1 && i == 5)
+				round = check_five(i, val, x, pref);
 		}
-		round = (i > 5 || (i == 5 && uneven)) ? 1 : 0;
-		round = (pref->prec == 0 && i % 2 == 0) ? 1 : 0;
+		round = (i > 4 || round) ? 1 : 0;
+		round = (pref->prec == 0 && i > 4) ? 1 : round;
 	}
-	dtoa->int_val = (bank && i % 2 == 0) ? dtoa->int_val - 1 : dtoa->int_val;
+	dtoa->int_val = (round == -1 && i % 2 == 0) ? dtoa->int_val - 1 : dtoa->int_val;
+	dtoa->int_val = (round && pref->prec == 0) ? dtoa->int_val + 1 : dtoa->int_val;
 	frac /= 10;
 	if (round)
 	{
 		frac += 1;
 		dtoa->frac = (t_u128)frac;
 		i = dtoa->frac;
-		if (i >= 10)
-		{
-			while (i >= 10)
-				i = i / 10;
-			if ((int)i == 1)
-				dtoa->int_val += 1;
-		}
+		if (i % 10 == 0 && nine == pref->prec)
+			dtoa->int_val += 1;
 	}
 	dtoa->frac = frac;
 }
-
 
 char	*ft_ldtoa_base(char *astr, t_dtoa *dtoa, t_ntoa *pref, size_t len)
 {
@@ -205,11 +203,11 @@ size_t		ft_ldtoap(char **astr, t_dtoa *dtoa, t_spec *spec, t_ntoa *pref)
 		if (check_ldbval(val, &dtoa->inval))
 			return (handle_invalid(astr, &dtoa->inval, pref));
 	dtoa->dec = (pref->prec != 0 || spec->flags.hash) ? 1 : 0;
-	dtoa->neg = (val < 0.0) ? 1 : 0;
+	dtoa->neg = (pref->sign && pref->pref) ? 1 : 0;
 	dtoa->int_val = (t_u128)ft_ldabs(dtoa->ldb_val);
 	// len[0] = ((spec->prec != 0) || (spec->flags.hash)) ? 1 : 0;
 	len[0] = (dtoa->dec + dtoa->neg);
-	len[1] = ft_dtoa_base(dtoa->int_val, dtoa->base, dtoa->int_len, spec);
+	len[1] = ft_dtoa_base(dtoa->int_val, dtoa->base);
 	len[2] = (pref->delimit) ? (len[1] / 3) - !(len[1] % 3) : 0;
 	total = (len[0] + ft_max_size(pref->prec + len[1], len[1]) + len[2]);
 	if (!*astr)
