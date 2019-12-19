@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/19 23:04:31 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/19 23:41:25 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ static void 	ft_prefix(t_ntoa *pref, t_ull val_unsign, t_spec *spec, t_flags *fl
 	pref->pre = (pref->prefix) ? ft_strlen(pref->prefix) : 0;
 }
 
-static void		ft_spsign(t_ntoa *pref, t_spec *spec, t_flags *flag)
+static void		ft_spsign(t_ntoa *pref, t_spec *spec, t_flags *flag, int integer)
 {
 	char	*sign;
 	int		neg;
@@ -139,19 +139,12 @@ static void		ft_spsign(t_ntoa *pref, t_spec *spec, t_flags *flag)
 	val = 0;
 	value = 0;
 	if (spec->c == 'f')
-	{
 		value = spec->val.fl;
-		if (value < 0)
-			neg = 1;
-	}
-	else
-	{
+	if (integer)
 		val = spec->val.di;
-		if (val < 0)
-			neg = 1;
-	}
+	neg = (val < 0 || value < 0) ? 1 : 0;
 	sign = "+- ";
-	if (flag->plus || ((neg == 0) && spec->val.c == 'f') || val < 0)
+	if (flag->plus || (neg && spec->c == 'f') || val < 0)
 		pref->sign = (flag->plus && !neg) ? &sign[0] : &sign[1];
 	if (!flag->plus && flag->space && !neg)
 		pref->sign = &sign[2];
@@ -177,7 +170,7 @@ static void		set_flags(t_ntoa *pref, int sign, t_spec *spec, t_flags *flag)
 	if ((sign || spec->c == 'c' || spec->c == 'f' || spec->c == 'F') && flag->apos)
 		pref->delimit = 1;
 	if (sign || spec->c == 'f')
-		ft_spsign(pref, spec, flag);
+		ft_spsign(pref, spec, flag, sign);
 	// if (flag->plus || flag->space || sign || spec->c == 'f')
 	// 	ft_spsign(pref, spec, flag, sign);
 	if (!pref->sign && flag->space && spec->val.di >= 0)
@@ -191,7 +184,6 @@ static void		set_flags(t_ntoa *pref, int sign, t_spec *spec, t_flags *flag)
 	if (spec->c == 'X' || spec->c == 'F')
 		pref->upper = 1;
 }
-
 
 /* processes integer arguments */
 static t_list	print_dioux(char c, t_spec *spec, t_ntoa *pref)
@@ -222,8 +214,6 @@ static t_list	print_dioux(char c, t_spec *spec, t_ntoa *pref)
 /* processes string arguments */
 static t_list 	print_csp(char c, t_spec *spec, t_ntoa *pref)
 {
-	// static char *const	chars = " !\"#$%&\'()*+,-./0123456789:;<=>?@\
-	// ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 	char				*str;
 	char				*s2;
 	size_t				size;

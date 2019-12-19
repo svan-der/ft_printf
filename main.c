@@ -6,8 +6,10 @@
 
 int		main(void)
 {
-	printf("[% d]\n", 42);
-	ft_printf("[% d]\n", 42);
+	char *str;
+
+	printf("[%+d]\n", -42);
+	ft_printf("[%+d]\n", -42);
 
 	// float f;
 	// long double d;
