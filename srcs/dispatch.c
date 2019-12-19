@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/19 21:01:16 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/19 23:04:31 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ static t_list	print_float(char c, t_spec *spec, t_ntoa *pref)
 	t_ldb		*val;
 	t_dtoa 		dtoa;
 	size_t		size;
-	// char		*str;
 	
 	dtoa = (t_dtoa){{0}, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	pref->prec = (spec->prec < 0)? 6 : spec->prec;
@@ -83,11 +82,6 @@ static t_list	print_float(char c, t_spec *spec, t_ntoa *pref)
 	val = &spec->val.fl;
 	size = 0;
 	(void)c;
-	// if (spec->mod == L)
-	// 	size = ft_ldtoa(&dtoa, spec, pref);
-	// else
-	// 	size = ft_dtoa(&dtoa, spec, pref);
-	// return ((t_list){str, size, NULL});
 	if (spec->mod == L)
 		return (ft_ldtoa(&dtoa, spec, pref));
 	return (ft_dtoa(&dtoa, spec, pref));
@@ -137,7 +131,7 @@ static void 	ft_prefix(t_ntoa *pref, t_ull val_unsign, t_spec *spec, t_flags *fl
 static void		ft_spsign(t_ntoa *pref, t_spec *spec, t_flags *flag)
 {
 	char	*sign;
-	t_byte	neg;
+	int		neg;
 	t_llong val;
 	t_ldb	value;
 
@@ -157,7 +151,7 @@ static void		ft_spsign(t_ntoa *pref, t_spec *spec, t_flags *flag)
 			neg = 1;
 	}
 	sign = "+- ";
-	if (flag->plus || neg)
+	if (flag->plus || ((neg == 0) && spec->val.c == 'f') || val < 0)
 		pref->sign = (flag->plus && !neg) ? &sign[0] : &sign[1];
 	if (!flag->plus && flag->space && !neg)
 		pref->sign = &sign[2];
@@ -182,8 +176,10 @@ static void		set_flags(t_ntoa *pref, int sign, t_spec *spec, t_flags *flag)
 		pref->min = 1;
 	if ((sign || spec->c == 'c' || spec->c == 'f' || spec->c == 'F') && flag->apos)
 		pref->delimit = 1;
-	if (flag->plus || flag->space || sign || spec->c == 'f')
+	if (sign || spec->c == 'f')
 		ft_spsign(pref, spec, flag);
+	// if (flag->plus || flag->space || sign || spec->c == 'f')
+	// 	ft_spsign(pref, spec, flag, sign);
 	if (!pref->sign && flag->space && spec->val.di >= 0)
 		pref->space = 1;
 	if (spec->prec_set)

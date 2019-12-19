@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/22 17:57:12 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/16 15:21:37 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/19 22:52:32 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	make(char *str, t_ull n, t_uint base, t_ntoa *pref)
 	// padding = (pref->pre == 1 && len + pref->pre)
 	// str = ins_pad(str, i, pref);
 	ft_memset(str + i - padding, '0', padding);
+	// ft_memset(str + i - padding, " 0"[base > 10], padding);
 	// if (str[i - padding] != '0' && pref->pref && pref->pre == 1)
 	// 	ft_memset(str + i - 1, '0', pref->pre);
 }
