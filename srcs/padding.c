@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/21 18:06:51 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/21 22:03:36 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/21 23:23:22 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,14 @@ static t_list	ft_cspad(int i, t_spec *spec, size_t total, t_ntoa *pref)
 	return ((t_list){pad, size, NULL});
 }
 
-static t_list	ft_intpad(int i, size_t padding, size_t total, t_ntoa *pref)
+static t_list	ft_intpad(int i, t_spec *spec, size_t total, t_ntoa *pref)
 {
 	size_t	size;
 	size_t	len;
 	char	*pad;
+	size_t	padding;
 
+	padding = spec->min_fw;
 	pad = NULL;
 	len = 0;
 	size = (total < padding && padding) ? padding - total : 0;
@@ -66,13 +68,15 @@ static t_list	ft_intpad(int i, size_t padding, size_t total, t_ntoa *pref)
 	return ((t_list){pad, size, NULL});
 }
 
-static t_list	ft_uintpad(int i, size_t padding, size_t total, t_ntoa *pref)
+static t_list	ft_uintpad(int i, t_spec *spec, size_t total, t_ntoa *pref)
 {
 	size_t	size;
 	size_t	pad_len;
 	size_t	len;
 	char	*pad;
+	size_t	padding;
 
+	padding = spec->min_fw;
 	pad = NULL;
 	len = 0;
 	size = (total < padding && padding) ? padding - total : 0;
@@ -89,13 +93,15 @@ static t_list	ft_uintpad(int i, size_t padding, size_t total, t_ntoa *pref)
 	return ((t_list){pad, size, NULL});
 }
 
-static t_list	ft_fltpad(int i, size_t padding, size_t total, t_ntoa *pref)
+static t_list	ft_fltpad(int i, t_spec *spec, size_t total, t_ntoa *pref)
 {
 	size_t	size;
 	size_t	len;
+	size_t	padding;
 	char	*pad;
 
 	pad = NULL;
+	padding = spec->min_fw;
 	len = 0;
 	size = (total < padding && padding) ? padding - total : 0;
 	size = (size == 0 && pref->pre && !pref->pref) ? pref->pre : size;
@@ -116,18 +122,17 @@ static t_list	ft_fltpad(int i, size_t padding, size_t total, t_ntoa *pref)
 
 t_list			ft_minfw(int index, t_spec *spec, size_t total, t_ntoa *pref)
 {
-	int i;
+	static t_list	(*f[])(int, t_spec*, size_t, t_ntoa*) = \
+	{[0 ... 3] = ft_cspad, [4 ... 5] = ft_intpad, [6 ... 9] = ft_uintpad,\
+	[10 ... 11] = ft_fltpad};
+	t_list 			padding;
+	int 			i;
 
 	i = pref->zero && !pref->min && (spec->prec < 0);
 	if (spec->c == 'f')
 		i = pref->zero && !pref->min;
-	if (index < 4)
-		return (ft_cspad(i, spec, total, pref));
-	if (index == 4 || index == 5)
-		return (ft_intpad(i, spec->min_fw, total, pref));
-	if (index > 5 && index < 10)
-		return (ft_uintpad(i, spec->min_fw, total, pref));
-	if (index > 9)
-		return (ft_fltpad(i, spec->min_fw, total, pref));
+	padding = f[index](i, spec, total, pref);
+	if (padding.content_size)
+		return(padding);
 	return ((t_list){NULL, 0, NULL});
 }
