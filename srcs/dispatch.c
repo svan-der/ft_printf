@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/20 00:25:50 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/21 01:21:32 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,8 +233,9 @@ static t_list 	print_csp(char c, t_spec *spec, t_ntoa *pref)
 		str = spec->val.s;
 		if(!str)
 		{
-			ft_strpnew(&str, 7);
-			ft_memcpy(str, s2, 7);
+			// ft_strpnew(&str, 7);
+			// ft_memcpy(str, s2, 7);
+			str = s2;
 			size = ft_strlen(str);
 		}
 		if (pref->prec >= 0 && pref->prec_set)
@@ -292,6 +293,7 @@ static t_list	ft_cspad(int i, t_spec *spec, size_t total, t_ntoa *pref)
 			len = (size != 0) ? size - pre : 0;
 		ft_memcpy(pad + len, pref->prefix, pref->pre);
 	}
+	free(pad);
 	return ((t_list){pad, size, NULL});
 }
 
@@ -316,6 +318,7 @@ static t_list	ft_intpad(int i, size_t padding, size_t total, t_ntoa *pref)
 		ft_memcpy(pad + len, pref->sign, 1);
 	}
 	size = (size == (size_t)pref->pre) ? 1 : size;
+	free(pad);
 	return ((t_list){pad, size, NULL});
 }
 
@@ -338,6 +341,7 @@ static t_list	ft_uintpad(int i, size_t padding, size_t total, t_ntoa *pref)
 		ft_memset(pad, " 0"[i], size);
 	insert_prefix(pad, pref, &size, i);
 	size = (size == (size_t)pref->pre) ? pref->pre : size;
+	free(pad);
 	return ((t_list){pad, size, NULL});
 }
 
@@ -362,6 +366,7 @@ static t_list	ft_fltpad(int i, size_t padding, size_t total, t_ntoa *pref)
 		ft_memcpy(pad + len, pref->sign, 1);
 	}
 	size = (size == (size_t)pref->pre) ? 1 : size;
+	free(pad);
 	return ((t_list){pad, size, NULL});
 }
 

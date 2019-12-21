@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/22 17:57:12 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/19 23:55:58 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/21 00:47:30 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ int		ft_itoap_base(char **astr, t_llong n, t_uint base, t_ntoa *pref)
 		make_signstr(*astr + total, n, base, pref);
 	if (pref->pref && pref->sign)
 		*astr[0] = *pref->sign;
+	free(*astr);
 	return (total);
 }
 
@@ -133,6 +134,7 @@ int		ft_utoap_base(char **astr, t_ull n, t_uint base, t_ntoa *pref)
 	make(*astr + total, n, base, pref);
 	if (pref->pref && pref->pre == 2)
 		ft_memcpy(*astr, pref->prefix, len[0]);
+	free(*astr);
 	return (total);
 }
 
