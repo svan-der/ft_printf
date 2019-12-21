@@ -6,13 +6,13 @@
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/02/22 15:05:54 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/07 18:04:31 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/21 17:21:55 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "list.h"
 
-void	ft_lstpop(t_list **aparent, t_list *elem)
+void		ft_lstpop(t_list **aparent, t_list *elem)
 {
 	t_list	*next;
 
@@ -35,7 +35,7 @@ void		content_del(void *content, size_t size)
 	(void)size;
 }
 
-void	ft_lstdelone(t_list **alst, void (*del)(void *, size_t))
+void		ft_lstdelone(t_list **alst, void (*del)(void *, size_t))
 {
 	if (alst)
 	{

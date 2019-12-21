@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/10 14:19:09 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/13 12:10:59 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/21 17:21:34 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,3 @@ size_t		ft_dtoap(char **astr, t_dtoa *dtoa, t_spec *spec, t_ntoa *pref)
 // 		return (handle_invalid(astr, &dtoa->inval, &pref));
 // 	return (ft_ldtoap(astr, dtoa, spec, pref));
 // }
-

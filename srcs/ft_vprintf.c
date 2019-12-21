@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/12 15:08:04 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/21 16:38:25 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/21 17:22:20 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int		ft_dprintf(int fd, const char *format, va_list ap)
 	return (ft_vdprintf(fd, format, ap));
 }
 
-int				ft_printf(const char *format, ...)
+int		ft_printf(const char *format, ...)
 {
 	va_list	ap;
 	int		ret;
