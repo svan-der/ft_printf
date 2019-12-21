@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/21 20:39:14 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/21 21:52:56 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,34 +76,25 @@ static t_list 	print_csp(char c, t_spec *spec, t_ntoa *pref)
 	char				*s2;
 	size_t				size;
 	
-	size = 0;
 	str = NULL;
 	if (c == 'c' || c == '%')
 	{
 		if (c == '%')
 			str = "%";
 		else
-		{
-			str = ft_strdup(&spec->val.c);
-			free(str);
-		}
+			str = &spec->val.c;
 		size = 1;
 	}
 	if (c == 's')
 	{
 		s2 = "(null)";
-		str = spec->val.s;
-		if(!str)
-		{
-			str = s2;
-			size = ft_strlen(str);
-		}
+		str = (spec->val.s) ? spec->val.s : s2;
 		if (pref->prec >= 0 && pref->prec_set)
 			size = ft_min_size(ft_strlen(str), pref->prec);
 		else
 			size = ft_strlen(str);
 	}
-	if (c == 'p' && spec->val.p != 0)
+	if (c == 'p')
 		size = ft_utoap_base(&str, spec->val.p, 16, pref);
 	return ((t_list){str, size, NULL});
 }
@@ -140,15 +131,14 @@ int				dispatch(t_list **tail, t_spec *spec, va_list ap)
 	{[0 ... 3] = print_csp, [4 ... 9] = print_dioux, [10 ... 11] = print_float};
 	t_ntoa			pref = {0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, NULL, 0, 0}; 
 	t_flags *const	flag = &spec->flags;
-	t_spec 	*const	specs = spec;
 	t_list			ret[2];
 
  	spec->index = ft_strchri("csp%diouxXfF", spec->c);
 	if (spec->index == -1)
 		return (-1);
-	if (!get_arg(spec->index, specs, flag, ap) && (spec->min_fw <= 0 && !flag->space && !flag->plus))
+	if (!get_arg(spec->index, spec, flag, ap) && (spec->min_fw <= 0 && !flag->space && !flag->plus))
 		return (0);
-	parse_flags(&pref, (spec->index == 4 || spec->index == 5), specs, flag);
-	ret[0] = f[spec->index](spec->c, specs, &pref);
-	return(process_arg(ret, specs, tail, &pref));
+	parse_flags(&pref, (spec->index == 4 || spec->index == 5), spec, flag);
+	ret[0] = f[spec->index](spec->c, spec, &pref);
+	return(process_arg(ret, spec, tail, &pref));
 }

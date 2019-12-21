@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/21 13:42:55 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/21 20:51:22 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/21 22:00:59 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ static void		ft_prefix(t_ntoa *pref, t_ull val_unsign, t_spec *spec)
 	}
 	if (spec->c == 'p')
 	{
-		pref->pref = (pref->min) ? 1 : 0;
-		pref->prefix = (spec->val.p == 0) ? null : hex;
+		pref->pref = (pref->min || spec->val.p == 0) ? 1 : 0;
+		pref->prefix = hex;
 	}
 	pref->pre = (pref->prefix) ? ft_strlen(pref->prefix) : 0;
 }
