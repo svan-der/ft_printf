@@ -6,48 +6,35 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/21 13:42:55 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/21 22:00:59 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/21 22:43:46 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static void		ft_prefix(t_ntoa *pref, t_ull val_unsign, t_spec *spec)
+static void		ft_prefix(t_ntoa *pref, t_ull val, t_spec *spec)
 {
-	char	*hex_up;
-	char 	*hex;
-	char	*zero;
-	char	*null;
-
-	zero = "0";
-	hex_up = "0X";
-	hex = "0x";
-	null = "0x0";
-	pref->pref = (!val_unsign && !pref->min) ? 0 : 1;
-	if (spec->c == 'X')
+	pref->pref = (!val && !pref->min) ? 0 : 1;
+	if (spec->c == 'X' || spec->c == 'x')
 	{
-		if (val_unsign != 0)
-			pref->prefix = hex_up;
+		if (spec->c == 'x' && val)
+			pref->prefix = "0x";
+		if (spec->c == 'X' && val)
+			pref->prefix = "0X";
 		if (pref->zero && pref->padding)
 			pref->pref = 0;
 	}
-	else if (spec->c == 'x')
+	if (spec->c == 'o')
 	{
-		if (spec->c == 'x' && val_unsign != 0)
-			pref->prefix = hex;
-		if (pref->zero && pref->padding)
-			pref->pref = 0;
-	}
-	if (spec->c == 'o' && (val_unsign != 0 || (val_unsign == 0 && spec->prec <= 0 && pref->prec_set)))
-	{
-		pref->prefix = zero;
-		if (val_unsign == 0 && spec->prec <= 0 && pref->prec_set)
+		if (val != 0 || (!val && spec->prec <= 0 && pref->prec_set))
+			pref->prefix = "0";
+		if (val == 0 && spec->prec <= 0 && pref->prec_set)
 			pref->pref = 0;
 	}
 	if (spec->c == 'p')
 	{
 		pref->pref = (pref->min || spec->val.p == 0) ? 1 : 0;
-		pref->prefix = hex;
+		pref->prefix = "0x";
 	}
 	pref->pre = (pref->prefix) ? ft_strlen(pref->prefix) : 0;
 }

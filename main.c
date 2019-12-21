@@ -6,8 +6,8 @@
 
 int		main(void)
 {
-	printf("[%p]\n", NULL);
-	ft_printf("[%p]\n", NULL);
+	printf("[%#5x]\n", 52625);
+	ft_printf("[%#5x]\n", 52625);
 	// printf("%.o, %.0o", 0, 0);
 	// ft_printf("%.o, %.0o", 0, 0);
 	// float f;

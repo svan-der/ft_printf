@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/21 18:06:51 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/21 21:54:33 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/21 22:03:36 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static t_list	ft_cspad(int i, t_spec *spec, size_t total, t_ntoa *pref)
 {
-	size_t 	pre;
-	size_t 	size;
-	size_t 	len;
+	size_t	pre;
+	size_t	size;
+	size_t	len;
 	char	*pad;
 
 	len = 0;
@@ -43,8 +43,8 @@ static t_list	ft_cspad(int i, t_spec *spec, size_t total, t_ntoa *pref)
 
 static t_list	ft_intpad(int i, size_t padding, size_t total, t_ntoa *pref)
 {
-	size_t 	size;
-	size_t 	len;
+	size_t	size;
+	size_t	len;
 	char	*pad;
 
 	pad = NULL;
@@ -52,7 +52,7 @@ static t_list	ft_intpad(int i, size_t padding, size_t total, t_ntoa *pref)
 	size = (total < padding && padding) ? padding - total : 0;
 	size = (size == 0 && pref->pre && !pref->pref) ? pref->pre : size;
 	if (!size)
-		return((t_list){pad, size, NULL});
+		return ((t_list){pad, size, NULL});
 	pad = ft_strnew(size);
 	if (padding != 0)
 		ft_memset(pad, " 0"[i], size);
@@ -68,9 +68,9 @@ static t_list	ft_intpad(int i, size_t padding, size_t total, t_ntoa *pref)
 
 static t_list	ft_uintpad(int i, size_t padding, size_t total, t_ntoa *pref)
 {
-	size_t 	size;
+	size_t	size;
 	size_t	pad_len;
-	size_t 	len;
+	size_t	len;
 	char	*pad;
 
 	pad = NULL;
@@ -91,8 +91,8 @@ static t_list	ft_uintpad(int i, size_t padding, size_t total, t_ntoa *pref)
 
 static t_list	ft_fltpad(int i, size_t padding, size_t total, t_ntoa *pref)
 {
-	size_t 	size;
-	size_t 	len;
+	size_t	size;
+	size_t	len;
 	char	*pad;
 
 	pad = NULL;
@@ -100,7 +100,7 @@ static t_list	ft_fltpad(int i, size_t padding, size_t total, t_ntoa *pref)
 	size = (total < padding && padding) ? padding - total : 0;
 	size = (size == 0 && pref->pre && !pref->pref) ? pref->pre : size;
 	if (!size)
-		return((t_list){pad, size, NULL});
+		return ((t_list){pad, size, NULL});
 	pad = ft_strnew(size);
 	if (padding != 0)
 		ft_memset(pad, " 0"[i], size);
