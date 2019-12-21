@@ -6,7 +6,7 @@
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/02/05 15:48:35 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/30 15:28:56 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/21 17:14:24 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ size_t	ft_count_num(t_llong num)
 	return (len);
 }
 
-char			*ft_itoa(int n)
+char	*ft_itoa(int n)
 {
 	char	*str;
 	int		s;

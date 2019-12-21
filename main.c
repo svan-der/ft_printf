@@ -6,8 +6,8 @@
 
 int		main(void)
 {
-	printf("%.0p, %.p", 0, 0);
-	ft_printf("%.0p, %.p", 0, 0);
+	printf("%+.i", 0);
+	ft_printf("%+.i", 0);
 	// printf("%.o, %.0o", 0, 0);
 	// ft_printf("%.o, %.0o", 0, 0);
 	// float f;

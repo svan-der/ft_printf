@@ -6,7 +6,7 @@
 /*   By: svan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/20 14:22:39 by svan-der       #+#    #+#                */
-/*   Updated: 2019/11/15 17:07:51 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/21 17:14:02 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	ft_putstr_fd(char const *s, int fd)
 	}
 }
 
-void		ft_putchar_fd(char c, int fd)
+void	ft_putchar_fd(char c, int fd)
 {
 	write(fd, &c, 1);
 }

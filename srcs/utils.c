@@ -6,96 +6,119 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/21 13:42:55 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/21 17:10:19 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/21 20:51:22 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static int	get_fl_arg(t_spec *spec, char c, va_list ap)
+static void		ft_prefix(t_ntoa *pref, t_ull val_unsign, t_spec *spec)
 {
-	if (c == 'f')
+	char	*hex_up;
+	char 	*hex;
+	char	*zero;
+	char	*null;
+
+	zero = "0";
+	hex_up = "0X";
+	hex = "0x";
+	null = "0x0";
+	pref->pref = (!val_unsign && !pref->min) ? 0 : 1;
+	if (spec->c == 'X')
 	{
-		if (spec->mod == L)
-			spec->val.fl = va_arg(ap, t_ldb);
-		else
-			spec->val.fl = (t_ldb)va_arg(ap, double);
+		if (val_unsign != 0)
+			pref->prefix = hex_up;
+		if (pref->zero && pref->padding)
+			pref->pref = 0;
 	}
-	return (1);
+	else if (spec->c == 'x')
+	{
+		if (spec->c == 'x' && val_unsign != 0)
+			pref->prefix = hex;
+		if (pref->zero && pref->padding)
+			pref->pref = 0;
+	}
+	if (spec->c == 'o' && (val_unsign != 0 || (val_unsign == 0 && spec->prec <= 0 && pref->prec_set)))
+	{
+		pref->prefix = zero;
+		if (val_unsign == 0 && spec->prec <= 0 && pref->prec_set)
+			pref->pref = 0;
+	}
+	if (spec->c == 'p')
+	{
+		pref->pref = (pref->min) ? 1 : 0;
+		pref->prefix = (spec->val.p == 0) ? null : hex;
+	}
+	pref->pre = (pref->prefix) ? ft_strlen(pref->prefix) : 0;
 }
 
-static int	get_strarg(t_spec *spec, char c, va_list ap)
+static void		ft_spsign(t_ntoa *pref, t_input *val, t_flags *flag, int i)
 {
-	if (c == 'c')
-		spec->val.c = va_arg(ap, int);
-	if (c == 's')
-		spec->val.s = va_arg(ap, char *);
-	if (c == 'p')
-		spec->val.p = va_arg(ap, unsigned long long);
-	return (1);
+	char	*sign;
+	int		neg;
+	t_llong int_val;
+	t_ldb	value;
+	int		padding;
+
+	padding = pref->padding;
+	neg = 0;
+	int_val = val->di;
+	value = val->fl;
+	pref->pref = (!pref->min && ((!value && !i) || (!int_val && i))) ? 0 : 1;
+	neg = ((int_val < 0 && i) || (value < 0 && !i)) ? 1 : 0;
+	sign = "+- ";
+	if (flag->plus || (neg && !i) || int_val < 0)
+		pref->sign = (flag->plus && !neg) ? &sign[0] : &sign[1];
+	if (!flag->plus && flag->space && !neg)
+		pref->sign = &sign[2];
+	pref->pref = (pref->sign && pref->zero && padding != 0) ? 0 : pref->pref;
+	pref->pre = (pref->sign) ? 1 : 0;
 }
 
-static int	get_uint_arg(t_spec *spec, va_list ap, t_flags *flag)
+void			parse_flags(t_ntoa *pref, int sign, t_spec *spec, t_flags *flag)
 {
-	t_llong val;
-	int		prec_set;
-
-	prec_set = spec->prec_set;
-	if (spec->mod == l)
-		val = va_arg(ap, unsigned long);
-	else if (spec->mod == ll)
-		val = va_arg(ap, unsigned long long);
-	else if (spec->mod == hh)
-		val = (unsigned char)va_arg(ap, int);
-	else if (spec->mod == h)
-		val = (unsigned short int)va_arg(ap, int);
-	else
-		val = va_arg(ap, unsigned int);
-	spec->val.oux = val;
-	if (spec->val.oux == 0)
-		if (spec->min_fw <= 0)
-		{
-			if (prec_set == 1 && spec->prec <= 0 && !flag->hash)
-				return (0);
-			if (prec_set == 1 && spec->prec <= 0 && !flag->hash)
-				return (0);
-		}
-	return (1);
+	if (spec->min_fw)
+		pref->padding = spec->min_fw;
+	if (spec->min_fw < 0)
+	{
+		pref->padding = spec->min_fw * -1;
+		pref->min = 1;
+	}
+	if (!flag->min && !pref->min && flag->zero)
+		pref->zero = 1;
+	if (flag->min)
+		pref->min = 1;
+	if ((sign || spec->c == 'f' || spec->c == 'F') && flag->apos)
+		pref->delimit = 1;
+	if (sign || spec->c == 'f' || spec->c == 'F')
+		ft_spsign(pref, &spec->val, flag, sign);
+	if (!pref->sign && flag->space && spec->val.di >= 0)
+		pref->space = 1;
+	if (spec->prec_set)
+		pref->prec_set = 1;
+	if (spec->prec != -1 && spec->prec_set)
+		pref->prec = (size_t)spec->prec;
+	if ((!sign && spec->c != 'f' && flag->hash) || spec->c == 'p')
+		ft_prefix(pref, spec->val.oux, spec);
+	if (spec->c == 'X' || spec->c == 'F')
+		pref->upper = 1;
 }
 
-static int	get_int_arg(t_spec *spec, va_list ap)
+void			insert_prefix(char *str, t_ntoa *pref, size_t *size, int i)
 {
-	t_llong val;
-	int		prec_set;
+	size_t len;
+	size_t total;
 
-	prec_set = spec->prec_set;
-	if (spec->mod == l)
-		val = va_arg(ap, long);
-	else if (spec->mod == ll)
-		val = va_arg(ap, t_llong);
-	else if (spec->mod == hh)
-		val = (signed char)va_arg(ap, int);
-	else if (spec->mod == h)
-		val = (short int)va_arg(ap, int);
-	else
-		val = va_arg(ap, int);
-	spec->val.di = val;
-	if (spec->val.di == 0 && prec_set && spec->prec <= 0 && spec->min_fw <= 0)
-		return (0);
-	return (1);
-}
-
-int			get_arg(int i, t_spec *spec, t_flags *flag, va_list ap)
-{
-	int prec_set;
-
-	prec_set = spec->prec_set;
-	if (i < 4)
-		return (get_strarg(spec, spec->c, ap));
-	if (i == 4 || i == 5)
-		return (get_int_arg(spec, ap));
-	if (i > 9)
-		return (get_fl_arg(spec, spec->c, ap));
-	else
-		return (get_uint_arg(spec, ap, flag));
+	total = *size;
+	len = 0;
+	if ((pref->pre == 1 && (!pref->pref)) || (pref->pref && total == 0))
+	{
+		len = (i == 0 && !pref->min) ? *size - 1 : 0;
+		ft_memcpy(str + len, pref->prefix, 1);
+	}
+	else if (pref->pre == 2 && (!pref->pref || (pref->pref && total == 0)))
+	{
+		len = (i == 0 && !pref->min) ? *size - 2 : 0;
+		ft_memcpy(str + len, pref->prefix, 2);
+	}
 }
