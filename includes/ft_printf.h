@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/12 15:09:50 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/10 14:13:49 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/21 01:32:35 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdarg.h>
 
 int				ft_vdprintf(int fd, const char *fmt, va_list ap);
+int             ft_dprintf(int fd, const char *format, va_list ap);
 int				ft_vprintf(const char *fmt, va_list ap);
 int				ft_printf(const char *fmt, ...);
 #endif
