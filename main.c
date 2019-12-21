@@ -6,8 +6,8 @@
 
 int		main(void)
 {
-	printf("[%32s]\n", "abc");
-	ft_printf("[%32s]\n", "abc");
+	printf("this %X number", 17);
+	ft_printf("this %X number", 17);
 	// printf("%.o, %.0o", 0, 0);
 	// ft_printf("%.o, %.0o", 0, 0);
 	// float f;
