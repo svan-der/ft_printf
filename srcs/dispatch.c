@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/21 01:21:32 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/21 16:47:37 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,10 @@ void	get_int_arg(t_spec *spec, va_list ap)
 	spec->val.di = val;
 }
 
-/* processes float arguments */
+/*
+** processes float arguments
+*/
+
 static t_list	print_float(char c, t_spec *spec, t_ntoa *pref)
 {
 	t_ldb		*val;
@@ -183,7 +186,10 @@ static void		set_flags(t_ntoa *pref, int sign, t_spec *spec, t_flags *flag)
 		pref->upper = 1;
 }
 
-/* processes integer arguments */
+/* 
+** processes integer arguments
+*/
+
 static t_list	print_dioux(char c, t_spec *spec, t_ntoa *pref)
 {
 	char			*str;
@@ -209,7 +215,10 @@ static t_list	print_dioux(char c, t_spec *spec, t_ntoa *pref)
 	return ((t_list){str, size, NULL});
 }
 
-/* processes string arguments */
+/*
+** processes string arguments
+*/
+
 static t_list 	print_csp(char c, t_spec *spec, t_ntoa *pref)
 {
 	char				*str;
@@ -388,33 +397,6 @@ static t_list 	ft_minfw(int index, t_spec *spec, size_t total, t_ntoa *pref)
 	return ((t_list){NULL, 0, NULL});
 }
 
-int		get_arg(int i, t_spec *spec, t_flags *flag, va_list ap)
-{
-	if (i < 4)
-		get_strarg(spec, spec->c, ap);
-	else if (i > 9)
-		get_floatarg(spec, ap);
-	else if (i == 4 || i == 5)
-	{
-		get_int_arg(spec, ap);
-		if (spec->val.di == 0 && spec->prec_set && spec->prec <= 0 && spec->min_fw <= 0)
-			return (0); 
-	}
-	else
-	{
-		get_uint_arg(spec, ap);
-		if (spec->val.oux == 0)
-		{
-			if (spec->min_fw <= 0) 
-				if (spec->prec_set == 1 && spec->prec <= 0 && !flag->hash)
-					return (0);
-			if (spec->prec_set == 1 && spec->prec <= 0 && !flag->hash)
-				return (0);
-		}
-	}
-	return (1);
-}
-
 int		process_arg(t_list ret[2], t_spec *spec, t_list **tail, t_ntoa *pref)
 {
 	if (!ret[0].content && spec->min_fw <= 0)
@@ -436,10 +418,11 @@ int		process_arg(t_list ret[2], t_spec *spec, t_list **tail, t_ntoa *pref)
 	return (ret[0].content_size >= spec->min_fw);
 }
 
-/**
-  * searches and executes corresponding function of the conversion specifier
-  * saves the address and value of the argument in val variable
-*/ 
+/*
+** searches and executes corresponding function of the conversion specifier
+** saves the address and value of the argument in val variable
+*/
+
 int				dispatch(t_list **tail, t_spec *spec, va_list ap)
 {
 	static t_list	(*const f[])(char, t_spec*, t_ntoa*) = \

@@ -6,14 +6,17 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/12 15:08:04 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/21 01:31:53 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/21 16:38:25 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "fndm.h"
 
-/*  write output to given filedescriptor */
+/*
+** write output to given filedescriptor
+*/
+
 int		ft_vdprintf(int fd, const char *format, va_list ap)
 {
 	t_format	fmt;
@@ -24,11 +27,18 @@ int		ft_vdprintf(int fd, const char *format, va_list ap)
 	return (print_buffer(fmt.buffer, fd, NULL, 0));
 }
 
-/* writes argument to standard output */
+/*
+** writes argument to standard output
+*/
+
 int		ft_vprintf(const char *format, va_list ap)
 {
 	return (ft_vdprintf(1, format, ap));
 }
+
+/*
+** writes argument to given filedescriptor
+*/
 
 int		ft_dprintf(int fd, const char *format, va_list ap)
 {

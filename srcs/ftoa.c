@@ -6,17 +6,17 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/10 14:03:57 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/20 00:06:30 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/21 17:08:46 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-t_list  ft_ldtoa(t_dtoa *dtoa, t_spec *spec, t_ntoa *pref)
+t_list	ft_ldtoa(t_dtoa *dtoa, t_spec *spec, t_ntoa *pref)
 {
 	char	*str;
-    size_t  size;
-    
+	size_t	size;
+
 	dtoa->base = 10;
 	dtoa->ldb_val = spec->val.fl;
 	str = NULL;
@@ -24,10 +24,10 @@ t_list  ft_ldtoa(t_dtoa *dtoa, t_spec *spec, t_ntoa *pref)
 	return ((t_list){str, size, NULL});
 }
 
-t_list  ft_dtoa(t_dtoa *dtoa, t_spec *spec, t_ntoa *pref)
+t_list	ft_dtoa(t_dtoa *dtoa, t_spec *spec, t_ntoa *pref)
 {
 	char	*str;
-    size_t  size;
+	size_t	size;
 
 	str = NULL;
 	dtoa->base = 10;

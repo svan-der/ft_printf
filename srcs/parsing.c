@@ -6,14 +6,16 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/15 11:23:28 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/20 00:15:45 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/21 16:41:48 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "fndm.h"
 
-/* checks how the integer or float must be represented */
+/*
+** checks how the integer or float must be represented
+*/
 
 static void		adj_len(t_format *fmt, const char *str, t_spec *spec)
 {
@@ -44,9 +46,11 @@ static void		adj_len(t_format *fmt, const char *str, t_spec *spec)
 	}
 }
 
-/* determines which flags needs to be set */
+/*
+** determines which flags needs to be set
+*/
 
-static void	set_flags(t_format *fmt, const char *str, t_flags *flag)
+static void		set_flags(t_format *fmt, const char *str, t_flags *flag)
 {
 	int			i;
 	int			j;
@@ -65,9 +69,11 @@ static void	set_flags(t_format *fmt, const char *str, t_flags *flag)
 	fmt->index = i;
 }
 
-/* determines the minimal field width */
+/*
+** determines the minimal field width
+*/
 
-static void	argi_minfw_prec(t_format *fmt, const char *str, t_spec *spec)
+static void		argi_minfw_prec(t_format *fmt, const char *str, t_spec *spec)
 {
 	int		i;
 	int		num;
@@ -87,9 +93,11 @@ static void	argi_minfw_prec(t_format *fmt, const char *str, t_spec *spec)
 	fmt->index = i;
 }
 
-/* sets conversion specifications */
+/*
+** sets conversion specifications
+*/
 
-static int	print_arg(t_format *fmt, const char *str, va_list ap)
+static int		print_arg(t_format *fmt, const char *str, va_list ap)
 {
 	const t_list	*tail = fmt->buffer;
 	t_list			**alst;
@@ -113,18 +121,18 @@ static int	print_arg(t_format *fmt, const char *str, va_list ap)
 	return (1);
 }
 
-/* searches in format string for format specifier and processes this string */
+/*
+** searches in format string for format specifier and processes this string
+*/
 
-int			process(t_format *fmt, const char *str, va_list ap)
+int				process(t_format *fmt, const char *str, va_list ap)
 {
 	size_t		i;
 	size_t		j;
-	size_t		argc;
 	int			ret;
 
 	i = 0;
-	argc = 0;
-	argc = ft_strlen(str);
+	fmt->argc = ft_strlen(str);
 	while (str[i])
 	{
 		j = i + ft_strchrni(str + i, '%');
@@ -134,9 +142,9 @@ int			process(t_format *fmt, const char *str, va_list ap)
 		fmt->index = j;
 		if (str[j] == '%')
 		{
-			argc += 1;
+			fmt->argc += 1;
 			ret = print_arg(fmt, str, ap);
-			if (ret == 0 && i == argc)
+			if (ret == 0 && i == fmt->argc)
 				return (0);
 			if (ret == -1)
 			{
