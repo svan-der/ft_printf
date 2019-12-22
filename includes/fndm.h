@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/12 15:28:18 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/22 01:02:02 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/23 00:19:07 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define FNDM_H
 # include "ft_printf.h"
 # include <stdarg.h>
+# include "ntoa.h"
 
 /*
 ** conversion specifier union
@@ -25,7 +26,7 @@ typedef struct	s_input
 	char		*s;
 	t_ull		p;
 	t_llong		di;
-	t_ull 		oux;
+	t_ull		oux;
 	t_ldb		fl;
 }				t_input;
 
@@ -38,18 +39,14 @@ typedef enum	e_mods
 	null, h, hh, l, ll, L
 }				t_mods;
 
-typedef union	u_flags
+typedef struct	s_flags
 {
-	t_ull	val;
-	t_byte	arr[1];
-	struct {
-		t_byte	hash;
-		t_byte	zero;
-		t_byte	min;
-		t_byte	space;
-		t_byte	plus;
-		t_byte	apos;
-	};
+	int			hash;
+	int			zero;
+	int			min;
+	int			space;
+	int			plus;
+	int			apos;
 }				t_flags;
 
 /*
@@ -88,9 +85,10 @@ typedef struct	s_format
 t_list			ft_minfw(int i, t_spec *spec, size_t len, t_ntoa *s);
 void			insert_pad(char *str, int i, t_ntoa *pref, t_uint base);
 void			insert_prefix(char *str, t_ntoa *pref, size_t *size, int i);
-void			parse_flags(t_ntoa *pref, int sign, t_spec *spec, t_flags *flag);
+void			parse_flags(t_ntoa *pref, int i, t_spec *spec, t_flags *flag);
 int				get_arg(int i, t_spec *spec, t_flags *flag, va_list ap);
 int				print_buffer(t_list *buffer, int fd, char **astr, size_t size);
 int				dispatch(t_list **tail, t_spec *spec, va_list ap);
 int				process(t_format *fmt, const char *str, va_list ap);
+
 #endif
