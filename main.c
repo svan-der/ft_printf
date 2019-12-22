@@ -6,8 +6,8 @@
 
 int		main(void)
 {
-	printf("this %X number", 17);
-	ft_printf("this %X number", 17);
+	printf("%.3u", 13862);
+	ft_printf("%.3u", 13862);
 	// printf("%.o, %.0o", 0, 0);
 	// ft_printf("%.o, %.0o", 0, 0);
 	// float f;

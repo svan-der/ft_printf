@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/22 00:36:53 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/22 01:04:53 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static t_list	print_dioux(char c, t_spec *spec, t_ntoa *pref)
 	{
 		if (pref->prec_set && spec->prec <= 0 && spec->val.di == 0)
 			return ((t_list){str, 0, NULL});
-		size = ft_itoap(&str, spec->val.di, pref);
+		size = ft_itoap_base(&str, spec->val.di, 10, pref);
 	}
 	else
 	{
@@ -64,7 +64,7 @@ static t_list	print_dioux(char c, t_spec *spec, t_ntoa *pref)
 			base = 10;
 		if (spec->index == 8 || spec->index == 9)
 			base = 16;
-		size = ft_utoap(&str, spec->val.oux, base, pref);
+		size = ft_utoap_base(&str, spec->val.oux, base, pref);
 	}
 	return ((t_list){str, size, NULL});
 }
@@ -105,10 +105,8 @@ static t_list	print_csp(char c, t_spec *spec, t_ntoa *pref)
 static int		add(t_list ret[2], t_spec *spec, t_list **tail, t_ntoa *pref)
 {
 	if (!ret[0].content && spec->min_fw <= 0)
-	{
 		if ((spec->flags.hash && spec->c != 'o') || (!pref->pre))
 			return (0);
-	}
 	if (!ret[0].content)
 	{
 		ret[0] = ft_minfw(spec->index, spec, ret[0].content_size, pref);

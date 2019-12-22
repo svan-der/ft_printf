@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/12 15:28:18 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/21 20:38:43 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/22 01:02:02 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ typedef struct	s_format
 }				t_format;
 
 t_list			ft_minfw(int i, t_spec *spec, size_t len, t_ntoa *s);
+void			insert_pad(char *str, int i, t_ntoa *pref, t_uint base);
 void			insert_prefix(char *str, t_ntoa *pref, size_t *size, int i);
 void			parse_flags(t_ntoa *pref, int sign, t_spec *spec, t_flags *flag);
 int				get_arg(int i, t_spec *spec, t_flags *flag, va_list ap);

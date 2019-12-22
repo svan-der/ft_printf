@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/21 13:42:55 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/21 22:43:46 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/22 01:01:07 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,3 +109,18 @@ void			insert_prefix(char *str, t_ntoa *pref, size_t *size, int i)
 		ft_memcpy(str + len, pref->prefix, 2);
 	}
 }
+
+void	insert_pad(char *str, int i, t_ntoa *pref, t_uint base)
+{
+	int		padding;
+	int		len;
+
+	padding = pref->prec;
+	len = (i < 0) ? i * -1 : i;
+	padding = (padding && (padding - len > 0)) ? padding - len : 0;
+	if (padding == 0 && base == 8)
+		padding = (pref->pref && pref->pre == 1 && str[i] != 0) ? pref->pre : 0;
+	if (padding != 0)
+		ft_memset(str + i - padding, '0', padding);
+}
+

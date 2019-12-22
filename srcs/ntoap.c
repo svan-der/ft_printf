@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/22 17:57:12 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/21 21:20:15 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/22 01:05:00 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,8 @@
 void	make(char *str, t_ull n, t_uint base, t_ntoa *pref)
 {
 	char	*digit;
-	int		len;
-	int		padding;
 	int		i;
 
-	padding = pref->prec;
 	digit = (pref->upper) ? HEX_UP : HEX;
 	i = -(n == 0);
 	if (n == 0)
@@ -40,27 +37,14 @@ void	make(char *str, t_ull n, t_uint base, t_ntoa *pref)
 			str[i] = digit[n % base];
 			n /= base;
 		}
-	len = (i < 0) ? i * -1 : i;
-	padding = (padding && (padding - len > 0)) ? padding - len : 0;
-	if (padding == 0)
-		padding = (pref->pref && pref->pre == 1 && str[i] != 0) ? pref->pre : 0;
-	// padding = (pref->pre == 1 && padding - pref->pre > 0) ? padding - pref->pre : padding;
-	// padding = (pref->pre == 1 && len + pref->pre)
-	// str = ins_pad(str, i, pref);
-	ft_memset(str + i - padding, '0', padding);
-	// ft_memset(str + i - padding, " 0"[base > 10], padding);
-	// if (str[i - padding] != '0' && pref->pref && pref->pre == 1)
-	// 	ft_memset(str + i - 1, '0', pref->pre);
+	insert_pad(str, i, pref, base);
 }
 
 void	make_signstr(char *str, t_llong n, t_uint base, t_ntoa *pref)
 {
 	char	*digit;
-	int		padding;
-	int		len;
 	int		i;
 
-	padding = pref->prec;
 	n = (n < 0) ? -n : n;
 	digit = (pref->upper) ? HEX_UP : HEX;
 	i = -(n == 0);
@@ -78,10 +62,7 @@ void	make_signstr(char *str, t_llong n, t_uint base, t_ntoa *pref)
 			str[i] = digit[n % base];
 			n /= base;
 		}
-	len = (i < 0) ? i * -1 : i;
-	padding = (padding && padding - len > 0) ? padding - len : 0;
-	if (padding != 0)
-		ft_memset(str + i - padding, '0', padding);
+	insert_pad(str, i, pref, base);
 }
 
 int		ft_itoap_base(char **astr, t_llong n, t_uint base, t_ntoa *pref)
@@ -136,14 +117,4 @@ int		ft_utoap_base(char **astr, t_ull n, t_uint base, t_ntoa *pref)
 		ft_memcpy(*astr, pref->prefix, len[0]);
 	free(*astr);
 	return (total);
-}
-
-int			ft_utoap(char **astr, t_ull n, t_uint base, t_ntoa *pref)
-{
-	return (ft_utoap_base(astr, n, base, pref));
-}
-
-int			ft_itoap(char **astr, t_llong n, t_ntoa *pref)
-{
-	return (ft_itoap_base(astr, n, 10, pref));
 }
