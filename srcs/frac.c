@@ -6,13 +6,13 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/22 01:29:46 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/22 20:52:54 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/22 21:08:49 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ftoa.h"
 
-int		check_five(t_ldb val, t_ull i, int x)
+static int	check_five(t_ldb val, t_ull i, int x)
 {
 	int	bank;
 	int round;
@@ -36,7 +36,7 @@ int		check_five(t_ldb val, t_ull i, int x)
 	return (round);
 }
 
-int			frac_calc(t_ldb *value, t_ull *i, int x, int *nine)
+static int	frac_calc(t_ldb *value, t_ull *i, int x, int *nine)
 {
 	t_ldb	val;
 	int		round;
@@ -64,7 +64,7 @@ int			frac_calc(t_ldb *value, t_ull *i, int x, int *nine)
 	return (round);
 }
 
-char	*ft_addfrac(char *str, t_dtoa *dtoa, t_ntoa *pref)
+char		*ft_addfrac(char *str, t_dtoa *dtoa, t_ntoa *pref)
 {
 	t_uint	i;
 	t_uint	x;
@@ -92,7 +92,7 @@ char	*ft_addfrac(char *str, t_dtoa *dtoa, t_ntoa *pref)
 	return (str);
 }
 
-void	frac_sum(int prec, t_dtoa *dtoa, int nine, int round)
+static void	frac_sum(int prec, t_dtoa *dtoa, int nine, int round)
 {
 	t_ull i;
 
@@ -110,7 +110,7 @@ void	frac_sum(int prec, t_dtoa *dtoa, int nine, int round)
 	dtoa->frac = (t_u128)dtoa->frac;
 }
 
-void	ft_round(t_ldb frac, t_ntoa *pref, t_dtoa *dtoa)
+void		ft_round(t_ldb frac, t_ntoa *pref, t_dtoa *dtoa)
 {
 	int		x;
 	t_ull	i;
