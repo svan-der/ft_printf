@@ -6,8 +6,8 @@
 
 int		main(void)
 {
-	printf("%.3u", 13862);
-	ft_printf("%.3u", 13862);
+	printf("real %.20f float\n",  1.025978542436587568678);
+	ft_printf("this %.20f float\n",  1.025978542436587568678);
 	// printf("%.o, %.0o", 0, 0);
 	// ft_printf("%.o, %.0o", 0, 0);
 	// float f;

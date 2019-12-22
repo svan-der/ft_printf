@@ -1,0 +1,138 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   frac.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2019/12/22 01:29:46 by svan-der       #+#    #+#                */
+/*   Updated: 2019/12/22 20:52:54 by svan-der      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "ftoa.h"
+
+int		check_five(t_ldb val, t_ull i, int x)
+{
+	int	bank;
+	int round;
+
+	round = 0;
+	x = (i == 5 && x == 0) ? 500 : x;
+	x = (i == 5 && x != 500) ? x + 1 : x;
+	bank = (x == 500) ? 1 : 0;
+	while (x)
+	{
+		val = val - i;
+		i = i / 10;
+		val *= 10;
+		i = (int)val;
+		if (i > 0 && bank)
+			round = -1;
+		x--;
+	}
+	if (i > 4)
+		round = 1;
+	return (round);
+}
+
+int			frac_calc(t_ldb *value, t_ull *i, int x, int *nine)
+{
+	t_ldb	val;
+	int		round;
+	int		prec;
+
+	prec = x;
+	val = *value;
+	while (x)
+	{
+		if (*i == 9)
+			*nine += 1;
+		x -= 1;
+		val -= *i;
+		*i = *i / 10;
+		val = (val * 10);
+		*i = (t_ull)val;
+		if (x == 1 && *i >= 5)
+			round = check_five(val, *i, x);
+		x = (*nine == prec && x == 0 && *i == 9) ? 1 : x;
+		x = (*value > MAX_UINT && x == 0) ? 1 + round : x;
+	}
+	if (*i == 9)
+		round = 1;
+	*value = val;
+	return (round);
+}
+
+char	*ft_addfrac(char *str, t_dtoa *dtoa, t_ntoa *pref)
+{
+	t_uint	i;
+	t_uint	x;
+	t_u128	val;
+	size_t	total;
+	char	*digit;
+
+	x = (dtoa->neg) ? 1 : 0;
+	total = dtoa->int_len + x;
+	digit = (pref->upper) ? HEX_UP : HEX;
+	i = dtoa->total - 1;
+	val = dtoa->frac;
+	while (pref->prec && val)
+	{
+		str[i] = digit[val % dtoa->base];
+		val /= dtoa->base;
+		pref->prec--;
+		i--;
+	}
+	if (val == 0 && pref->prec != 0)
+		ft_memset(str + total + dtoa->dec, '0', pref->prec);
+	i = total;
+	if (dtoa->dec)
+		str[i] = '.';
+	return (str);
+}
+
+void	frac_sum(int prec, t_dtoa *dtoa, int nine, int round)
+{
+	t_ull i;
+
+	dtoa->frac /= 10;
+	i = dtoa->len;
+	if (round && prec > 0)
+	{
+		if (i % 10 != 0)
+			dtoa->frac += 1;
+		dtoa->frac = (t_u128)dtoa->frac;
+		i = (t_ull)dtoa->frac;
+		if (i % 10 == 0 && nine >= prec)
+			dtoa->int_val += 1;
+	}
+	dtoa->frac = (t_u128)dtoa->frac;
+}
+
+void	ft_round(t_ldb frac, t_ntoa *pref, t_dtoa *dtoa)
+{
+	int		x;
+	t_ull	i;
+	int		round;
+	int		nine;
+	t_u128	int_val;
+
+	int_val = dtoa->int_val;
+	nine = 0;
+	round = 0;
+	x = pref->prec;
+	frac = dtoa->ldb_val - dtoa->int_val;
+	frac = (frac * ft_pow(10, 1));
+	i = (t_ull)frac;
+	if (i == 5 && pref->prec == 0)
+		round = check_five(frac, i, x);
+	round = frac_calc(&frac, &i, x, &nine);
+	round = (round || i > 4 || (i > 4 && !pref->prec)) ? 1 : round;
+	dtoa->int_val = (round == -1 && i % 2 == 0) ? int_val - 1 : int_val;
+	dtoa->int_val = (pref->prec == 0 && round) ? int_val + 1 : int_val;
+	x = i;
+	i = (t_ull)dtoa->frac;
+	dtoa->len = (x > 0 && x != 9) ? x : i;
+	frac_sum(pref->prec, dtoa, nine, round);
+}

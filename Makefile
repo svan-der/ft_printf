@@ -6,7 +6,7 @@
 #    By: svan-der <svan-der@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/11/08 17:46:48 by svan-der       #+#    #+#                 #
-#    Updated: 2019/12/21 18:43:01 by svan-der      ########   odam.nl          #
+#    Updated: 2019/12/22 17:07:58 by svan-der      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ HEADER = ./includes
 SRC = $(addprefix srcs/,dispatch.c finish.c ft_vprintf.c ntoap.c parsing.c\
 	ft_memchr.c ft_putnbr_fd.c ft_abs.c ftoa.c ft_ldtoap.c ft_ftoap.c\
 	ft_striter.c ft_strnew.c ft_atoi.c ft_pow.c utils.c padding.c\
-	ft_memcmp.c ft_putstr.c ft_itoa.c ft_gridset.c getarg.c\
+	ft_memcmp.c ft_putstr.c ft_itoa.c ft_gridset.c getarg.c frac.c\
 	ft_bzero.c ft_memcpy.c ft_putstr_fd.c ft_strjoin.c ft_strrchr.c\
 	ft_isalnum.c ft_memdel.c ft_strcat.c ft_strlcat.c ft_strstr.c\
 	ft_memmove.c ft_strchr.c ft_strlen.c ft_strsub.c\
