@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/10 14:54:16 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/22 18:55:40 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/22 21:06:10 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int		check_ldbval(t_ldb val, t_opt *inval)
 	return (0);
 }
 
-char	*make_flstr(char *str, t_u128 val, t_dtoa *dtoa, t_ntoa *pref)
+static char		*make_flstr(char *str, t_u128 val, t_dtoa *dtoa, t_ntoa *pref)
 {
 	char	*digit;
 	t_uint	base;
@@ -55,7 +55,7 @@ char	*make_flstr(char *str, t_u128 val, t_dtoa *dtoa, t_ntoa *pref)
 	return (str);
 }
 
-size_t		ft_dtoa_base(t_ldb n, t_uint base)
+static size_t	ft_dtoa_base(t_ldb n, t_uint base)
 {
 	size_t len;
 	t_u128 val;
@@ -70,12 +70,11 @@ size_t		ft_dtoa_base(t_ldb n, t_uint base)
 	return (len);
 }
 
-char	*ft_ldtoa_base(char *astr, t_dtoa *dtoa, t_ntoa *pref, size_t len)
+static char		*ft_ldtoa_base(char *astr, t_dtoa *dtoa, t_ntoa *pref)
 {
 	t_ldb	frac;
 	int		base;
 
-	(void)len;
 	frac = 0;
 	base = dtoa->base;
 	dtoa->ldb_val = ft_ldabs(dtoa->ldb_val);
@@ -85,7 +84,7 @@ char	*ft_ldtoa_base(char *astr, t_dtoa *dtoa, t_ntoa *pref, size_t len)
 	return (astr);
 }
 
-size_t		ft_ldtoap(char **astr, t_dtoa *dtoa, t_spec *spec, t_ntoa *pref)
+size_t			ft_ldtoap(char **astr, t_dtoa *dtoa, t_spec *spec, t_ntoa *pref)
 {
 	t_ldb	val;
 	size_t	len[3];
@@ -109,6 +108,6 @@ size_t		ft_ldtoap(char **astr, t_dtoa *dtoa, t_spec *spec, t_ntoa *pref)
 			return (-1);
 	dtoa->int_len = len[1];
 	dtoa->total = total;
-	*astr = ft_ldtoa_base(*astr, dtoa, pref, total);
+	*astr = ft_ldtoa_base(*astr, dtoa, pref);
 	return (total);
 }
