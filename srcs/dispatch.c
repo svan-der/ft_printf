@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/23 09:19:47 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/23 10:06:20 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 static t_list	print_float(char c, t_spec *spec, t_ntoa *pref)
 {
-	t_ldb		*val;
+	t_ldbl		*val;
 	t_dtoa		dtoa;
 
 	ft_memset(&dtoa, 0, sizeof(dtoa));

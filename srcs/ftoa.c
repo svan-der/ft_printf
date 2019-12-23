@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/10 14:03:57 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/23 01:40:29 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/23 10:05:12 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_list	ft_dtoa(t_dtoa *dtoa, t_spec *spec, t_ntoa *pref)
 
 	str = NULL;
 	dtoa->base = 10;
-	dtoa->ldb_val = (t_ldb)spec->val.fl;
+	dtoa->ldb_val = (t_ldbl)spec->val.fl;
 	size = ft_dtoap(&str, dtoa, pref, 0);
 	return ((t_list){str, size, NULL});
 }

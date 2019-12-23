@@ -6,13 +6,13 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/22 01:29:46 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/23 05:32:30 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/23 10:08:23 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ftoa.h"
 
-static int	check_five(t_ldb val, t_ull i, int x)
+static int	check_five(t_ldbl val, t_ull i, int x)
 {
 	int	bank;
 	int round;
@@ -36,9 +36,9 @@ static int	check_five(t_ldb val, t_ull i, int x)
 	return (round);
 }
 
-static int	frac_calc(t_ldb *value, t_ull *i, int x, int *nine)
+static int	frac_calc(t_ldbl *value, t_ull *i, int x, int *nine)
 {
-	t_ldb	val;
+	t_ldbl	val;
 	int		round;
 	int		prec;
 
@@ -110,7 +110,7 @@ static void	frac_sum(int prec, t_dtoa *dtoa, int nine, int round)
 	}
 }
 
-void		ft_round(t_ldb frac, t_ntoa *pref, t_dtoa *dtoa)
+void		ft_round(t_ldbl frac, t_ntoa *pref, t_dtoa *dtoa)
 {
 	int		x;
 	t_ull	i;

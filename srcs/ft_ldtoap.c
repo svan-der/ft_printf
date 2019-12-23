@@ -6,15 +6,15 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/10 14:54:16 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/23 09:25:39 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/23 10:06:59 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ftoa.h"
 
-static int		check_ldbval(t_ldb val, t_opt *inval)
+static int		check_ldbval(t_ldbl val, t_opt *inval)
 {
-	t_ldb tmp;
+	t_ldbl tmp;
 
 	tmp = val;
 	if (val != val)
@@ -53,7 +53,7 @@ static char		*make_flstr(char *str, t_dtoa *dtoa, t_ntoa *pref, size_t len)
 	return (str);
 }
 
-static size_t	ft_dtoa_base(t_ldb n, t_uint base)
+static size_t	ft_dtoa_base(t_ldbl n, t_uint base)
 {
 	size_t len;
 	t_u128 val;
@@ -70,7 +70,7 @@ static size_t	ft_dtoa_base(t_ldb n, t_uint base)
 
 static char		*ft_ldtoa_base(char *astr, t_dtoa *dtoa, t_ntoa *pref, size_t i)
 {
-	t_ldb	frac;
+	t_ldbl	frac;
 	int		base;
 
 	frac = 0;
@@ -84,7 +84,7 @@ static char		*ft_ldtoa_base(char *astr, t_dtoa *dtoa, t_ntoa *pref, size_t i)
 
 size_t			ft_ldtoap(char **astr, t_dtoa *dtoa, t_ntoa *pref, int lng)
 {
-	t_ldb	val;
+	t_ldbl	val;
 	size_t	len[3];
 	size_t	total;
 

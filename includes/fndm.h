@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/12 15:28:18 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/23 00:19:07 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/23 10:05:47 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct	s_input
 	t_ull		p;
 	t_llong		di;
 	t_ull		oux;
-	t_ldb		fl;
+	t_ldbl		fl;
 }				t_input;
 
 /*
@@ -64,7 +64,7 @@ typedef struct	s_spec
 	char		*pref;
 	int			pre;
 	int			index;
-	t_ldb		ldb_reg;
+	t_ldbl		ldb_reg;
 	t_input		val;
 }				t_spec;
 
