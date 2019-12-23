@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/22 22:39:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/23 06:47:09 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/23 08:13:41 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,20 @@
 #include "../../../Downloads/printf_test/header.h"
 #include <stdio.h>
 
-int main(void)
-{
-	char	*str;
+// int main(void)
+// {
+	// char	*str;
+    // char    *c;
+    // unsigned int  dec;
+//     char    *input;
+//     int     ret;
+//     int     ret1;
+    
+// 	input = "[%-698c]\n";
 
-	char	*input;
-
-
-	str = "Q the cat is great!";
-	input = "|%.5s| |%056.4s| |%scxod|\n";
-
-	printf(input, str, str, str);
-	ft_printf(input, str, str, str);
-	return (0);
-}
+// 	ret = printf(input, 'q', 896, "boom");
+// 	ret1 = ft_printf(input, 'q', 896, "boom");
+//     printf("%d\n", ret);
+//     printf("%d\n", ret1);
+// 	return (0);
+// }

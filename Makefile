@@ -6,7 +6,7 @@
 #    By: svan-der <svan-der@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/11/08 17:46:48 by svan-der       #+#    #+#                 #
-#    Updated: 2019/12/23 00:54:59 by svan-der      ########   odam.nl          #
+#    Updated: 2019/12/23 07:50:45 by svan-der      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ SRC = $(addprefix srcs/,dispatch.c finish.c ft_vprintf.c ntoap.c parsing.c\
 	ft_bzero.c ft_memcpy.c ft_putstr_fd.c ft_strjoin.c ft_strrchr.c\
 	ft_isalnum.c ft_memdel.c ft_strcat.c ft_strlcat.c ft_strstr.c\
 	ft_memmove.c ft_strchr.c ft_strlen.c ft_strsub.c ft_printf.c\
-	ft_isascii.c ft_memset.c ft_tolower.c ft_printf.c\
+	ft_isascii.c ft_memset.c ft_tolower.c\
 	ft_isdigit.c ft_strcmp.c ft_min_max.c ft_numlen.c\
 	ft_strcpy.c ft_strncat.c ft_strsplit.c\
 	ft_strdel.c ft_memalloc.c \
