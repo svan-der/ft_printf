@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/21 18:06:51 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/22 00:32:08 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/23 06:58:19 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ static t_list	ft_intpad(int i, t_spec *spec, size_t total, t_ntoa *pref)
 	char	*pad;
 	size_t	padding;
 
+	i = pref->zero && !pref->min && (spec->prec < 0);
 	padding = spec->min_fw;
 	pad = NULL;
 	len = 0;
@@ -76,6 +77,7 @@ static t_list	ft_uintpad(int i, t_spec *spec, size_t total, t_ntoa *pref)
 	char	*pad;
 	size_t	padding;
 
+	i = pref->zero && !pref->min && (spec->prec < 0);
 	padding = spec->min_fw;
 	pad = NULL;
 	len = 0;
@@ -128,9 +130,7 @@ t_list			ft_minfw(int index, t_spec *spec, size_t total, t_ntoa *pref)
 	t_list			padding;
 	int				i;
 
-	i = pref->zero && !pref->min && (spec->prec < 0);
-	if (spec->c == 'f')
-		i = pref->zero && !pref->min;
+	i = pref->zero && !pref->min;
 	padding = f[index](i, spec, total, pref);
 	if (padding.content_size)
 		return (padding);
