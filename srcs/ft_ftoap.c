@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/10 14:19:09 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/22 21:05:02 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/23 01:41:22 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ static int	check_dbval(double val, t_opt *inval)
 	return (0);
 }
 
-size_t		ft_dtoap(char **astr, t_dtoa *dtoa, t_spec *spec, t_ntoa *pref)
+size_t		ft_dtoap(char **astr, t_dtoa *dtoa, t_ntoa *pref, int i)
 {
 	if (check_dbval(dtoa->ldb_val, &dtoa->inval))
 		return (handle_invalid(astr, &dtoa->inval, pref));
-	return (ft_ldtoap(astr, dtoa, spec, pref));
+	return (ft_ldtoap(astr, dtoa, pref, i));
 }

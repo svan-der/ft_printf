@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/22 01:29:46 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/22 21:08:49 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/23 04:54:41 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ static int	frac_calc(t_ldb *value, t_ull *i, int x, int *nine)
 	return (round);
 }
 
-char		*ft_addfrac(char *str, t_dtoa *dtoa, t_ntoa *pref)
+char	*ft_addfrac(char *str, t_dtoa *dtoa, t_ntoa *pref)
 {
-	t_uint	i;
+	int		i;
 	t_uint	x;
 	t_u128	val;
 	size_t	total;
@@ -77,15 +77,16 @@ char		*ft_addfrac(char *str, t_dtoa *dtoa, t_ntoa *pref)
 	digit = (pref->upper) ? HEX_UP : HEX;
 	i = dtoa->total - 1;
 	val = dtoa->frac;
-	while (pref->prec && val)
+	x = pref->prec;
+	while (x)
 	{
 		str[i] = digit[val % dtoa->base];
 		val /= dtoa->base;
-		pref->prec--;
+		x--;
 		i--;
 	}
-	if (val == 0 && pref->prec != 0)
-		ft_memset(str + total + dtoa->dec, '0', pref->prec);
+	if (val == 0 && x != 0)
+		ft_memset(str + total, '0', pref->prec);
 	i = total;
 	if (dtoa->dec)
 		str[i] = '.';
@@ -107,7 +108,6 @@ static void	frac_sum(int prec, t_dtoa *dtoa, int nine, int round)
 		if (i % 10 == 0 && nine >= prec)
 			dtoa->int_val += 1;
 	}
-	dtoa->frac = (t_u128)dtoa->frac;
 }
 
 void		ft_round(t_ldb frac, t_ntoa *pref, t_dtoa *dtoa)
@@ -121,7 +121,7 @@ void		ft_round(t_ldb frac, t_ntoa *pref, t_dtoa *dtoa)
 	int_val = dtoa->int_val;
 	nine = 0;
 	round = 0;
-	x = pref->prec;
+	x = (pref->prec < 0) ? 0 : pref->prec;
 	frac = dtoa->ldb_val - dtoa->int_val;
 	frac = (frac * ft_pow(10, 1));
 	i = (t_ull)frac;
@@ -135,4 +135,5 @@ void		ft_round(t_ldb frac, t_ntoa *pref, t_dtoa *dtoa)
 	i = (t_ull)dtoa->frac;
 	dtoa->len = (x > 0 && x != 9) ? x : i;
 	frac_sum(pref->prec, dtoa, nine, round);
+	dtoa->frac = (t_u128)dtoa->frac;
 }

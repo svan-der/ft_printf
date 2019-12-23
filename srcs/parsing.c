@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/15 11:23:28 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/21 16:41:48 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/23 00:27:57 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,17 +54,26 @@ static void		set_flags(t_format *fmt, const char *str, t_flags *flag)
 {
 	int			i;
 	int			j;
-	char		*flags;
 
-	flags = "#0- +'";
-	flag->val = 0;
 	i = fmt->index;
-	j = ft_strchri(flags, str[i]);
+	ft_memset(flag, 0, sizeof(*flag));
+	j = ft_strchri("#0- +'", str[i]);
 	while (j >= 0)
 	{
-		flag->arr[j] = 1;
+		if (j == 0)
+			flag->hash = 1;
+		if (j == 1)
+			flag->zero = 1;
+		if (j == 2)
+			flag->min = 1;
+		if (j == 3)
+			flag->space = 1;
+		if (j == 4)
+			flag->plus = 1;
+		if (j == 5)
+			flag->apos = 1;
 		i++;
-		j = ft_strchri(flags, str[i]);
+		j = ft_strchri("#0- +'", str[i]);
 	}
 	fmt->index = i;
 }
@@ -114,11 +123,9 @@ static int		print_arg(t_format *fmt, const char *str, va_list ap)
 	while (*alst != tail)
 		alst = &(*alst)->next;
 	ret = dispatch(alst, &spec, ap);
-	if (ret == 0)
-		return (0);
 	if (ret == -1)
-		return (-1);
-	return (1);
+		ft_lstpop(&fmt->buffer, fmt->buffer);
+	return (ret);
 }
 
 /*
@@ -144,15 +151,10 @@ int				process(t_format *fmt, const char *str, va_list ap)
 		{
 			fmt->argc += 1;
 			ret = print_arg(fmt, str, ap);
-			if (ret == 0 && i == fmt->argc)
-				return (0);
-			if (ret == -1)
-			{
-				ft_lstpop(&fmt->buffer, fmt->buffer);
-				return (-1);
-			}
+			if (ret == -1 || (ret == 0 && i == fmt->argc))
+				return (ret);
 		}
 		i = fmt->index;
 	}
-	return (1);
+	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/22 17:57:12 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/22 01:05:00 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/23 03:41:53 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	make(char *str, t_ull n, t_uint base, t_ntoa *pref)
 			i--;
 			if ((-i % 3 == 1) && i < -3 && pref->delimit)
 			{
-				str[i] = '.';
+				str[i] = ',';
 				str--;
 			}
 			str[i] = digit[n % base];
@@ -56,7 +56,7 @@ void	make_signstr(char *str, t_llong n, t_uint base, t_ntoa *pref)
 			i--;
 			if ((-i % 3 == 1) && i < -3 && pref->delimit)
 			{
-				str[i] = '.';
+				str[i] = ',';
 				str--;
 			}
 			str[i] = digit[n % base];
