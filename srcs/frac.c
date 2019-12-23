@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/22 01:29:46 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/23 10:08:23 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/23 10:51:29 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int	frac_calc(t_ldbl *value, t_ull *i, int x, int *nine)
 		x = (*nine == prec && x == 0 && *i == 9) ? 1 : x;
 		x = (*value > MAX_UINT && x == 0) ? 1 + round : x;
 	}
-	if (*i == 9)
+	if (*i > 4)
 		round = 1;
 	*value = val;
 	return (round);

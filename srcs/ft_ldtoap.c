@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/10 14:54:16 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/23 10:06:59 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/23 11:06:20 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static char		*make_flstr(char *str, t_dtoa *dtoa, t_ntoa *pref, size_t len)
 {
 	char	*digit;
 	t_u128	val;
-	t_u128	i;
+	t_i128	i;
 
 	val = dtoa->int_val;
 	digit = (pref->upper) ? HEX_UP : HEX;
@@ -60,6 +60,14 @@ static size_t	ft_dtoa_base(t_ldbl n, t_uint base)
 
 	len = 1;
 	val = (t_u128)n;
+	if (val == 9)
+	{
+		n -= val;
+		n *= 10;
+		val = (t_u128)n;
+		if (val == 9)
+			len++;
+	}
 	while (val / base)
 	{
 		val /= base;
@@ -97,7 +105,7 @@ size_t			ft_ldtoap(char **astr, t_dtoa *dtoa, t_ntoa *pref, int lng)
 	dtoa->neg = (pref->sign && pref->pref) ? 1 : 0;
 	dtoa->int_val = (t_u128)ft_ldabs(dtoa->ldb_val);
 	len[0] = (dtoa->dec + dtoa->neg);
-	len[1] = ft_dtoa_base(dtoa->int_val, dtoa->base);
+	len[1] = ft_dtoa_base(dtoa->ldb_val, dtoa->base);
 	len[2] = (pref->delimit) ? (len[1] / 3) - !(len[1] % 3) : 0;
 	total = (len[0] + ft_max_size(pref->prec + len[1], len[1]) + len[2]);
 	if (!*astr)
