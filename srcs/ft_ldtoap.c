@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/10 14:54:16 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/23 05:25:45 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/23 05:30:38 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static size_t	ft_dtoa_base(t_ldb n, t_uint base)
 	return (len);
 }
 
-static char		*ft_ldtoa_base(char *astr, t_dtoa *dtoa, t_ntoa *pref, size_t len)
+static char		*ft_ldtoa_base(char *astr, t_dtoa *dtoa, t_ntoa *pref, size_t i)
 {
 	t_ldb	frac;
 	int		base;
@@ -78,7 +78,7 @@ static char		*ft_ldtoa_base(char *astr, t_dtoa *dtoa, t_ntoa *pref, size_t len)
 	dtoa->ldb_val = ft_ldabs(dtoa->ldb_val);
 	dtoa->frac = (dtoa->ldb_val - dtoa->int_val) * ft_pow(base, pref->prec + 1);
 	ft_round(frac, pref, dtoa);
-	astr = make_flstr(astr, dtoa, pref, len);
+	astr = make_flstr(astr, dtoa, pref, i);
 	return (astr);
 }
 
@@ -94,7 +94,6 @@ size_t			ft_ldtoap(char **astr, t_dtoa *dtoa, t_ntoa *pref, int lng)
 	if (lng)
 		if (check_ldbval(val, &dtoa->inval))
 			return (handle_invalid(astr, &dtoa->inval, pref));
-	// dtoa->dec = (dtoa->dec) ? 1 : 0;
 	dtoa->neg = (pref->sign && pref->pref) ? 1 : 0;
 	dtoa->int_val = (t_u128)ft_ldabs(dtoa->ldb_val);
 	len[0] = (dtoa->dec + dtoa->neg);
@@ -107,6 +106,6 @@ size_t			ft_ldtoap(char **astr, t_dtoa *dtoa, t_ntoa *pref, int lng)
 	dtoa->int_len = len[1];
 	dtoa->total = total;
 	*astr = ft_ldtoa_base(*astr, dtoa, pref, len[0]);
-	// free(*astr);
+	free(*astr);
 	return (total);
 }

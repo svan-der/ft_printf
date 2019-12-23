@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/22 01:29:46 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/23 04:54:41 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/23 05:32:30 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int	frac_calc(t_ldb *value, t_ull *i, int x, int *nine)
 	return (round);
 }
 
-char	*ft_addfrac(char *str, t_dtoa *dtoa, t_ntoa *pref)
+char		*ft_addfrac(char *str, t_dtoa *dtoa, t_ntoa *pref)
 {
 	int		i;
 	t_uint	x;
