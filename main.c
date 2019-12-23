@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/22 22:39:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/23 10:45:27 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/23 11:41:24 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,13 @@
 
 int main(void)
 {
-	double f;
-	f = 9.99999999;
-	ft_printf("[%f]\n", f);
-	printf("{%f}\n", f);
+
+	ft_printf("[%f]\n", 0.0894255);
+	printf("{%f}\n", 0.0894255);
+	ft_printf("[%f]\n", 9.99999999);
+	printf("{%f}\n", 9.99999999);
+    ft_printf("[%.0f]\n", 3.5);
+	printf("{%.0f}\n", 3.5);
+
 	return (0);
 }

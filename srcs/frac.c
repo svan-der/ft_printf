@@ -6,18 +6,16 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/22 01:29:46 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/23 10:51:29 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/23 11:32:04 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ftoa.h"
 
-static int	check_five(t_ldbl val, t_ull i, int x)
+static int	check_five(t_ldbl val, t_ull i, int x, int round)
 {
 	int	bank;
-	int round;
-
-	round = 0;
+	
 	x = (i == 5 && x == 0) ? 500 : x;
 	x = (i == 5 && x != 500) ? x + 1 : x;
 	bank = (x == 500) ? 1 : 0;
@@ -42,6 +40,7 @@ static int	frac_calc(t_ldbl *value, t_ull *i, int x, int *nine)
 	int		round;
 	int		prec;
 
+	round = 0;
 	prec = x;
 	val = *value;
 	while (x)
@@ -54,11 +53,11 @@ static int	frac_calc(t_ldbl *value, t_ull *i, int x, int *nine)
 		val = (val * 10);
 		*i = (t_ull)val;
 		if (x == 1 && *i >= 5)
-			round = check_five(val, *i, x);
+			round = check_five(val, *i, x, round);
 		x = (*nine == prec && x == 0 && *i == 9) ? 1 : x;
 		x = (*value > MAX_UINT && x == 0) ? 1 + round : x;
 	}
-	if (*i > 4)
+	if (*i == 9)
 		round = 1;
 	*value = val;
 	return (round);
@@ -123,12 +122,15 @@ void		ft_round(t_ldbl frac, t_ntoa *pref, t_dtoa *dtoa)
 	round = 0;
 	x = (pref->prec < 0) ? 0 : pref->prec;
 	frac = dtoa->ldb_val - dtoa->int_val;
-	frac = (frac * ft_pow(10, 1));
+	frac = (frac * 10);
 	i = (t_ull)frac;
 	if (i == 5 && pref->prec == 0)
-		round = check_five(frac, i, x);
+	{
+		dtoa->even = (int_val % 2 == 0) ? 1 : 0;
+		round = check_five(frac, i, x, round);
+	}
 	round = frac_calc(&frac, &i, x, &nine);
-	round = (round || i > 4 || (i > 4 && !pref->prec)) ? 1 : round;
+	round = (i > 4 && !dtoa->even) ? 1 : round;
 	dtoa->int_val = (round == -1 && i % 2 == 0) ? int_val - 1 : int_val;
 	dtoa->int_val = (pref->prec == 0 && round) ? int_val + 1 : int_val;
 	x = i;

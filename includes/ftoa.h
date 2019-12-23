@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/10 14:11:54 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/23 10:12:05 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/23 11:18:39 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct	s_dtoa
 	t_uint		total;
 	t_u128		int_len;
 	size_t		len;
+	t_uchar		even;
 	t_uchar		dec;
 	t_uchar		neg;
 	t_uint		base;
