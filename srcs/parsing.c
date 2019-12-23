@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/15 11:23:28 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/23 00:27:57 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/23 08:27:26 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ static int		print_arg(t_format *fmt, const char *str, va_list ap)
 	t_spec			spec;
 	int				ret;
 
+	ft_memset(&spec, 0, sizeof(spec));
 	fmt->index++;
 	set_flags(fmt, str, &spec.flags);
 	argi_minfw_prec(fmt, str, &spec);

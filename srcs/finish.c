@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/11/04 15:53:26 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/21 16:51:02 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/23 09:16:34 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ int		print_buffer(t_list *buffer, int fd, char **astr, size_t size)
 		write(fd, buffer->content, len);
 	else if (ret != -1)
 		ft_memcpy(*astr + ret, buffer->content, len);
-	free(buffer->content);
-	free(buffer);
+	if (buffer->content != NULL)
+		free(buffer->content);
+	if (buffer != NULL)
+		free(buffer);
 	return ((ret != -1) ? (signed)(ret + len) : -1);
 }

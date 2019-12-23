@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:35:10 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/23 02:02:35 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/23 09:19:47 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,17 @@ static t_list	print_float(char c, t_spec *spec, t_ntoa *pref)
 	t_ldb		*val;
 	t_dtoa		dtoa;
 
-	dtoa = (t_dtoa){{0}, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-	if (spec->prec == 0)
-		pref->prec_set = 0;
-	else if (spec->prec != 0)
-		pref->prec_set = 1;
+	ft_memset(&dtoa, 0, sizeof(dtoa));
+	if (c == 'f')
+	{
+		if (spec->prec == 0)
+			pref->prec_set = 0;
+		else
+			pref->prec_set = 1;
+	}
 	pref->prec = (spec->prec == -1 && !spec->prec_set) ? 6 : spec->prec;
 	dtoa.dec = (spec->flags.hash || pref->prec > 0) ? 1 : 0;
 	val = &spec->val.fl;
-	(void)c;
 	if (spec->mod == L)
 		return (ft_ldtoa(&dtoa, spec, pref));
 	return (ft_dtoa(&dtoa, spec, pref));
@@ -134,8 +136,8 @@ int				dispatch(t_list **tail, t_spec *spec, va_list ap)
 	t_flags *const	flag = &spec->flags;
 	t_list			ret[2];
 
-	pref = (t_ntoa){0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, NULL, 0, 0};
-	spec->index = ft_strchri("csp%diouxXfF", spec->c);
+	ft_memset(&pref, 0, sizeof(pref));
+	spec->index = ft_strchri("csp%diouxXf", spec->c);
 	if (spec->index == -1)
 		return (-1);
 	if (!get_arg(spec->index, spec, flag, ap)\
