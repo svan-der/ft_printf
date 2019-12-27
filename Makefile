@@ -6,28 +6,16 @@
 #    By: svan-der <svan-der@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/11/08 17:46:48 by svan-der       #+#    #+#                 #
-#    Updated: 2019/12/23 07:50:45 by svan-der      ########   odam.nl          #
+#    Updated: 2019/12/27 16:06:04 by svan-der      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libftprintf.a
 
 HEADER = ./includes
-SRC = $(addprefix srcs/,dispatch.c finish.c ft_vprintf.c ntoap.c parsing.c\
-	ft_memchr.c ft_putnbr_fd.c ft_abs.c ftoa.c ft_ldtoap.c ft_ftoap.c\
-	ft_striter.c ft_strnew.c ft_atoi.c ft_pow.c utils.c padding.c\
-	ft_memcmp.c ft_putstr.c ft_itoa.c ft_gridset.c getarg.c frac.c\
-	ft_bzero.c ft_memcpy.c ft_putstr_fd.c ft_strjoin.c ft_strrchr.c\
-	ft_isalnum.c ft_memdel.c ft_strcat.c ft_strlcat.c ft_strstr.c\
-	ft_memmove.c ft_strchr.c ft_strlen.c ft_strsub.c ft_printf.c\
-	ft_isascii.c ft_memset.c ft_tolower.c\
-	ft_isdigit.c ft_strcmp.c ft_min_max.c ft_numlen.c\
-	ft_strcpy.c ft_strncat.c ft_strsplit.c\
-	ft_strdel.c ft_memalloc.c \
-	ft_memccpy.c ft_putnbr.c \
-	ft_strtrim.c ft_strarrdel.c ft_find_word.c ft_lstmap.c\
-	ft_count_words.c ft_lstnew.c ft_lstdelone.c ft_lstdel.c\
-	ft_lstadd.c ft_lstiter.c ft_memdup.c)
+SRC = $(addprefix srcs/,ft_printf.c dispatch.c finish.c ft_vprintf.c ntoap.c\
+	parsing.c ftoa.c ft_ldtoap.c ft_ftoap.c utils.c padding.c getarg.c frac.c)\
+
 SRCDIR = srcs
 OBJ = $(SRC:.c=.o)
 

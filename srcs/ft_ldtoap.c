@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/10 14:54:16 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/27 15:31:50 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/27 15:48:10 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,11 @@ static char		*ft_ldtoa_base(char *astr, t_dtoa *dtoa, t_ntoa *pref, size_t i)
 	t_ldbl	frac;
 	int		base;
 
-	frac = 0;
 	base = dtoa->base;
 	dtoa->ldb_val = ft_ldabs(dtoa->ldb_val);
 	dtoa->frac = (dtoa->ldb_val - dtoa->int_val) * ft_pow(base, pref->prec + 1);
+	frac = dtoa->ldb_val - dtoa->int_val;
+	frac = (frac * 10);
 	ft_round(frac, pref, dtoa);
 	astr = make_flstr(astr, dtoa, pref, i);
 	return (astr);

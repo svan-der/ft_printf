@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/22 01:29:46 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/27 14:47:40 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/27 15:43:53 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,8 +121,6 @@ void		ft_round(t_ldbl frac, t_ntoa *pref, t_dtoa *dtoa)
 	nine = 0;
 	round = 0;
 	x = (pref->prec < 0) ? 0 : pref->prec;
-	frac = dtoa->ldb_val - dtoa->int_val;
-	frac = (frac * 10);
 	i = (t_ull)frac;
 	if (i == 5 && pref->prec == 0)
 	{
