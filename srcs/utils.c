@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/21 13:42:55 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/22 20:58:52 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/27 15:29:14 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void			parse_flags(t_ntoa *pref, int sign, t_spec *spec, t_flags *flag)
 		pref->zero = 1;
 	if (flag->min)
 		pref->min = 1;
-	if ((sign || spec->c == 'f' || spec->c == 'F') && flag->apos)
+	if (sign && flag->apos)
 		pref->delimit = 1;
 	if (sign || spec->c == 'f' || spec->c == 'F')
 		ft_spsign(pref, &spec->val, flag, sign);

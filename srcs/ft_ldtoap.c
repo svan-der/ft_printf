@@ -6,27 +6,11 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/10 14:54:16 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/23 11:40:03 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/27 15:31:50 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ftoa.h"
-
-static int		check_ldbval(t_ldbl val, t_opt *inval)
-{
-	t_ldbl tmp;
-
-	tmp = val;
-	if (val != val)
-		inval->nan = 1;
-	if (val >= __LDBL_MAX__)
-		inval->inf = 1;
-	if (val <= -1 * __LDBL_MAX__)
-		inval->neg_inf = 1;
-	if (inval->nan || inval->inf || inval->neg_inf)
-		return (1);
-	return (0);
-}
 
 static char		*make_flstr(char *str, t_dtoa *dtoa, t_ntoa *pref, size_t len)
 {
@@ -92,7 +76,7 @@ static char		*ft_ldtoa_base(char *astr, t_dtoa *dtoa, t_ntoa *pref, size_t i)
 	return (astr);
 }
 
-size_t			ft_ldtoap(char **astr, t_dtoa *dtoa, t_ntoa *pref, int lng)
+size_t			ft_ftoap(char **astr, t_dtoa *dtoa, t_ntoa *pref)
 {
 	t_ldbl	val;
 	size_t	len[3];
@@ -101,9 +85,6 @@ size_t			ft_ldtoap(char **astr, t_dtoa *dtoa, t_ntoa *pref, int lng)
 	val = dtoa->ldb_val;
 	if (!astr)
 		return (-1);
-	if (lng)
-		if (check_ldbval(val, &dtoa->inval))
-			return (handle_invalid(astr, &dtoa->inval, pref));
 	dtoa->neg = (pref->sign && pref->pref) ? 1 : 0;
 	dtoa->int_val = (t_u128)ft_ldabs(dtoa->ldb_val);
 	len[0] = (dtoa->dec + dtoa->neg);

@@ -6,7 +6,7 @@
 /*   By: svan-der <svan-der@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/12/22 01:29:46 by svan-der       #+#    #+#                */
-/*   Updated: 2019/12/23 11:32:04 by svan-der      ########   odam.nl         */
+/*   Updated: 2019/12/27 14:47:40 by svan-der      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	check_five(t_ldbl val, t_ull i, int x, int round)
 {
 	int	bank;
-	
+
 	x = (i == 5 && x == 0) ? 500 : x;
 	x = (i == 5 && x != 500) ? x + 1 : x;
 	bank = (x == 500) ? 1 : 0;
