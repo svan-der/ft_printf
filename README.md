@@ -19,8 +19,9 @@ Manages:
 + You must manage the **minimum field-width**
 + You must manage the **precision**
 + My bonuses: 
-  + **%r** to print a string of nonprintable characters
-  
+  + flag character: `'` for decimal conversion the output is to be grouped with thousands' grouping characters
+  + vas_printf print to allocated string
+  + ft_dprintf write output to the given output stream
 
 ## Usage
 Use the same way as the libc `printf`
